@@ -2,11 +2,9 @@
     ...
 
 ### SOON ###
-    add statement parser
     add bracket parser
-    add function header parser
-    add structure parser
-    add variable parser
+    add statement parser
+    add entity parsers
 
 ### LATER ###
     ...
