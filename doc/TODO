@@ -1,8 +1,7 @@
 ### NOW ###
-    ...
+    add bracket parser test
 
 ### SOON ###
-    add bracket parser
     add statement parser
     add entity parsers
 
