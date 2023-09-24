@@ -6,6 +6,8 @@ import cz.mg.annotations.requirement.Optional;
 import cz.mg.c.parser.entities.groups.Brackets;
 import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.collections.list.List;
+import cz.mg.collections.list.ReadableList;
+import cz.mg.collections.list.WriteableList;
 import cz.mg.tokenizer.components.TokenReader;
 import cz.mg.tokenizer.entities.Token;
 import cz.mg.tokenizer.entities.tokens.BracketToken;
@@ -29,7 +31,7 @@ public @Component class BracketParser {
         this.bracketFactory = bracketFactory;
     }
 
-    public @Mandatory List<Token> parse(@Mandatory List<Token> input) {
+    public @Mandatory List<Token> parse(@Mandatory ReadableList<Token> input) {
         TokenReader reader = new TokenReader(input, ParseException::new);
         List<Token> output = new List<>();
         parse(reader, output, null);
@@ -38,7 +40,7 @@ public @Component class BracketParser {
 
     private void parse(
         @Mandatory TokenReader reader,
-        @Mandatory List<Token> output,
+        @Mandatory WriteableList<Token> output,
         @Optional Integer openingPosition
     ) {
         while (reader.has()) {
