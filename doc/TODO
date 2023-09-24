@@ -5,5 +5,12 @@
     add statement parser
     add entity parsers
 
+    parsing order
+        1. curly bracket parsing
+        2. statement parsing
+        3. round bracket parsing
+        4. square bracket parsing
+        5. entity parsing
+
 ### LATER ###
     ...
