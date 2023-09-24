@@ -3,6 +3,12 @@
 
 ### SOON ###
     add statement parser
+
+    make bracket parsers and statement parser recursive somehow
+        when a group token is encountered
+        then parser should run on its tokens
+        and replace its tokens
+
     add entity parsers
 
     parsing order
