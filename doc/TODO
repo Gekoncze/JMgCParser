@@ -1,5 +1,5 @@
 ### NOW ###
-    implement c main entity parser
+    ...
 
 ### SOON ###
     add main entity parsers
@@ -17,3 +17,4 @@
 
 ### LATER ###
     add parser test
+    add c main entity parsers test
