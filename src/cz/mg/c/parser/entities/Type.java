@@ -6,7 +6,7 @@ import cz.mg.annotations.storage.Link;
 import cz.mg.annotations.storage.Part;
 import cz.mg.collections.list.List;
 
-public @Entity class Type {
+public @Entity class Type implements CEntity {
     private Typename typename;
     private List<Pointer> pointers = new List<>();
     private List<Array> arrays = new List<>();

@@ -1,8 +1,12 @@
 ### NOW ###
-    ...
+    implement c main entity parser
 
 ### SOON ###
-    add entity parsers
+    add main entity parsers
+        function
+        struct
+        typedef
+        (global) variable
 
     parsing order
         1. curly bracket parsing
@@ -12,4 +16,4 @@
         5. entity parsing
 
 ### LATER ###
-    ...
+    add parser test

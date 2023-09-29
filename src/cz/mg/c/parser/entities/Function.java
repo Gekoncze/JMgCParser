@@ -9,7 +9,7 @@ import cz.mg.annotations.storage.Value;
 import cz.mg.collections.list.List;
 import cz.mg.tokenizer.entities.Token;
 
-public @Entity class Function extends Typename {
+public @Entity class Function extends Typename implements CMainEntity {
     private Type output;
     private List<Variable> input;
     private List<Token> implementation = new List<>();

@@ -5,7 +5,7 @@ import cz.mg.annotations.requirement.Required;
 import cz.mg.annotations.storage.Value;
 import cz.mg.tokenizer.entities.tokens.NameToken;
 
-public @Entity class Typename {
+public @Entity class Typename implements CEntity {
     private NameToken name;
 
     public Typename() {

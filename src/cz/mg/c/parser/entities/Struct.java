@@ -5,7 +5,7 @@ import cz.mg.annotations.requirement.Optional;
 import cz.mg.annotations.storage.Part;
 import cz.mg.collections.list.List;
 
-public @Entity class Struct extends Typename {
+public @Entity class Struct extends Typename implements CMainEntity {
     private List<Variable> variables;
 
     public Struct() {

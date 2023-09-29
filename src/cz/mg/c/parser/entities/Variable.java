@@ -6,7 +6,7 @@ import cz.mg.annotations.storage.Shared;
 import cz.mg.annotations.storage.Value;
 import cz.mg.tokenizer.entities.tokens.NameToken;
 
-public @Entity class Variable {
+public @Entity class Variable implements CMainEntity {
     private Type type;
     private NameToken name;
 

@@ -4,7 +4,7 @@ import cz.mg.annotations.classes.Entity;
 import cz.mg.annotations.requirement.Required;
 import cz.mg.annotations.storage.Shared;
 
-public @Entity class Typedef extends Typename {
+public @Entity class Typedef extends Typename implements CMainEntity {
     private Type type;
 
     public Typedef() {
