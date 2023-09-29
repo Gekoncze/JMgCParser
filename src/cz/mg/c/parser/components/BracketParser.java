@@ -4,6 +4,7 @@ import cz.mg.annotations.classes.Component;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.annotations.requirement.Optional;
 import cz.mg.c.parser.entities.groups.Brackets;
+import cz.mg.c.parser.entities.groups.Group;
 import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.collections.list.List;
 import cz.mg.collections.list.ReadableList;
@@ -54,7 +55,7 @@ public @Component class BracketParser {
                     throw new ParseException(position, "Missing left " + name + " parenthesis.");
                 }
             } else {
-                output.addLast(reader.read());
+                output.addLast(parse(reader.read()));
             }
         }
 
@@ -69,5 +70,13 @@ public @Component class BracketParser {
         brackets.setText("");
         parse(reader, brackets.getTokens(), brackets.getPosition());
         return brackets;
+    }
+
+    private @Mandatory Token parse(@Mandatory Token token) {
+        if (token instanceof Group) {
+            Group group = (Group) token;
+            group.setTokens(parse(group.getTokens()));
+        }
+        return token;
     }
 }

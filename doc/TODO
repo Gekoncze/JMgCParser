@@ -4,7 +4,7 @@
 ### SOON ###
     add statement parser
 
-    make bracket parsers and statement parser recursive somehow
+    make statement parser recursive
         when a group token is encountered
         then parser should run on its tokens
         and replace its tokens
