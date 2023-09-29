@@ -1,7 +1,9 @@
 package cz.mg.c.parser.components;
 
+import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
 import cz.mg.c.parser.entities.groups.CurlyBrackets;
+import cz.mg.c.parser.services.CurlyBracketParser;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
 import cz.mg.tokenizer.entities.Token;
@@ -17,9 +19,11 @@ public @Test class CurlyBracketParserTest {
         System.out.println("OK");
     }
 
+    private final @Service CurlyBracketParser parser = CurlyBracketParser.getInstance();
+
     private void testParse() {
         List<Token> input = new List<>(new BracketToken("{", 1), new BracketToken("}", 2));
-        List<Token> output = new CurlyBracketParser().parse(input);
+        List<Token> output = parser.parse(input);
         Assert.assertEquals(1, output.count());
         Assert.assertEquals(CurlyBrackets.class, output.getFirst().getClass());
     }
