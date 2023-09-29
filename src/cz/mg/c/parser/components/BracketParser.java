@@ -3,8 +3,7 @@ package cz.mg.c.parser.components;
 import cz.mg.annotations.classes.Component;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.annotations.requirement.Optional;
-import cz.mg.c.parser.entities.groups.Brackets;
-import cz.mg.c.parser.entities.groups.Group;
+import cz.mg.c.parser.entities.brackets.Brackets;
 import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.collections.list.List;
 import cz.mg.collections.list.ReadableList;
@@ -72,9 +71,9 @@ public @Component class BracketParser {
     }
 
     private @Mandatory Token parse(@Mandatory Token token) {
-        if (token instanceof Group) {
-            Group group = (Group) token;
-            group.setTokens(parse(group.getTokens()));
+        if (token instanceof Brackets) {
+            Brackets brackets = (Brackets) token;
+            brackets.setTokens(parse(brackets.getTokens()));
         }
         return token;
     }

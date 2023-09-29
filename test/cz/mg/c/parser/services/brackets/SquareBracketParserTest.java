@@ -1,9 +1,8 @@
-package cz.mg.c.parser.components;
+package cz.mg.c.parser.services.brackets;
 
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
-import cz.mg.c.parser.entities.groups.SquareBrackets;
-import cz.mg.c.parser.services.SquareBracketParser;
+import cz.mg.c.parser.entities.brackets.SquareBrackets;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
 import cz.mg.tokenizer.entities.Token;

@@ -1,11 +1,9 @@
-package cz.mg.c.parser.components;
+package cz.mg.c.parser.services.lists;
 
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
-import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.c.parser.entities.lists.Statement;
 import cz.mg.c.parser.exceptions.ParseException;
-import cz.mg.c.parser.services.StatementParser;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
 import cz.mg.tokenizer.entities.Token;

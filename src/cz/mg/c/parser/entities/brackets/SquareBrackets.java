@@ -1,4 +1,4 @@
-package cz.mg.c.parser.entities.groups;
+package cz.mg.c.parser.entities.brackets;
 
 import cz.mg.annotations.classes.Entity;
 import cz.mg.collections.list.List;

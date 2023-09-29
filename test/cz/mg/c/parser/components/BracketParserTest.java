@@ -2,8 +2,8 @@ package cz.mg.c.parser.components;
 
 import cz.mg.annotations.classes.Test;
 import cz.mg.annotations.requirement.Mandatory;
-import cz.mg.c.parser.entities.groups.Group;
-import cz.mg.c.parser.entities.groups.RoundBrackets;
+import cz.mg.c.parser.entities.brackets.Brackets;
+import cz.mg.c.parser.entities.brackets.RoundBrackets;
 import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
@@ -113,7 +113,7 @@ public @Test class BracketParserTest {
         List<Token> input = new List<>(
             new BracketToken("(", 3),
             new BracketToken(")", 4),
-            new Group("", 10, new List<>(
+            new Brackets("", 10, new List<>(
                 new BracketToken("(", 12),
                 new BracketToken(")", 13)
             ))
@@ -126,11 +126,11 @@ public @Test class BracketParserTest {
         Assert.assertEquals(3, output.getFirst().getPosition());
         Assert.assertEquals("", output.getFirst().getText());
 
-        Group group = (Group) output.getLast();
-        Assert.assertEquals(1, group.getTokens().count());
+        Brackets brackets = (Brackets) output.getLast();
+        Assert.assertEquals(1, brackets.getTokens().count());
 
-        Assert.assertEquals(RoundBrackets.class, group.getTokens().getFirst().getClass());
-        Assert.assertEquals(12, group.getTokens().getFirst().getPosition());
-        Assert.assertEquals("", group.getTokens().getFirst().getText());
+        Assert.assertEquals(RoundBrackets.class, brackets.getTokens().getFirst().getClass());
+        Assert.assertEquals(12, brackets.getTokens().getFirst().getPosition());
+        Assert.assertEquals("", brackets.getTokens().getFirst().getText());
     }
 }

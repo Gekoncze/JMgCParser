@@ -1,4 +1,4 @@
-package cz.mg.c.parser.entities.groups;
+package cz.mg.c.parser.entities.brackets;
 
 import cz.mg.annotations.classes.Entity;
 import cz.mg.annotations.requirement.Required;
@@ -6,13 +6,13 @@ import cz.mg.annotations.storage.Shared;
 import cz.mg.collections.list.List;
 import cz.mg.tokenizer.entities.Token;
 
-public @Entity class Group extends Token {
+public @Entity class Brackets extends Token {
     private List<Token> tokens = new List<>();
 
-    public Group() {
+    public Brackets() {
     }
 
-    public Group(String text, int position, List<Token> tokens) {
+    public Brackets(String text, int position, List<Token> tokens) {
         super(text, position);
         this.tokens = tokens;
     }
