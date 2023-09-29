@@ -19,7 +19,6 @@ public @Component class BracketParser {
     private final @Mandatory String closingBracket;
     private final @Mandatory BracketFactory bracketFactory;
 
-    @Mandatory
     public BracketParser(
         @Mandatory String name,
         @Mandatory String openingBracket,
@@ -78,5 +77,9 @@ public @Component class BracketParser {
             group.setTokens(parse(group.getTokens()));
         }
         return token;
+    }
+
+    protected @Component interface BracketFactory {
+        Brackets create();
     }
 }
