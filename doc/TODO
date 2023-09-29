@@ -2,13 +2,6 @@
     ...
 
 ### SOON ###
-    add statement parser
-
-    make statement parser recursive
-        when a group token is encountered
-        then parser should run on its tokens
-        and replace its tokens
-
     add entity parsers
 
     parsing order
