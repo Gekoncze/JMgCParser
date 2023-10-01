@@ -13,7 +13,8 @@
         2. statement parsing
         3. round bracket parsing
         4. square bracket parsing
-        5. entity parsing
+        5. block statement parsing
+        6. entity parsing
 
 ### LATER ###
     add parser test
