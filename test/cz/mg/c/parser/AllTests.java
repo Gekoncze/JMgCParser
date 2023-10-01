@@ -2,6 +2,7 @@ package cz.mg.c.parser;
 
 import cz.mg.annotations.classes.Test;
 import cz.mg.c.parser.components.BracketParserTest;
+import cz.mg.c.parser.services.TypeParserTest;
 import cz.mg.c.parser.services.brackets.CurlyBracketParserTest;
 import cz.mg.c.parser.services.brackets.RoundBracketParserTest;
 import cz.mg.c.parser.services.brackets.SquareBracketParserTest;
@@ -19,5 +20,8 @@ public @Test class AllTests {
 
         // cz.mg.c.parser.services.lists
         StatementParserTest.main(args);
+
+        // cz.mg.c.parser.services
+        TypeParserTest.main(args);
     }
 }
