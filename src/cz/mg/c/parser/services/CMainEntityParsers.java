@@ -5,10 +5,7 @@ import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.c.parser.entities.CMainEntity;
 import cz.mg.c.parser.entities.lists.Statement;
 import cz.mg.c.parser.exceptions.ParseException;
-import cz.mg.c.parser.services.brackets.RoundBracketParser;
-import cz.mg.c.parser.services.brackets.SquareBracketParser;
 import cz.mg.collections.list.List;
-import cz.mg.collections.list.ReadableList;
 import cz.mg.collections.pair.Pair;
 import cz.mg.collections.pair.ReadablePair;
 import cz.mg.tokenizer.components.TokenReader;
@@ -22,8 +19,6 @@ public @Service class CMainEntityParsers {
             synchronized (Service.class) {
                 if (instance == null) {
                     instance = new CMainEntityParsers();
-                    instance.roundBracketParser = RoundBracketParser.getInstance();
-                    instance.squareBracketParser = SquareBracketParser.getInstance();
                     instance.entityParsers = new List<>(); // TODO - add entity parsers
                 }
             }
@@ -31,14 +26,12 @@ public @Service class CMainEntityParsers {
         return instance;
     }
 
-    private @Service RoundBracketParser roundBracketParser;
-    private @Service SquareBracketParser squareBracketParser;
     private @Service List<Pair<Pattern, CMainEntityParser>> entityParsers;
 
     private CMainEntityParsers() {
     }
 
-    public @Mandatory List<CMainEntity> parse(@Mandatory ReadableList<Statement> statements) {
+    public @Mandatory List<CMainEntity> parse(@Mandatory List<Statement> statements) {
         List<CMainEntity> entities = new List<>();
         for (Statement statement : statements) {
             if (!statement.getTokens().isEmpty()) {
@@ -49,15 +42,15 @@ public @Service class CMainEntityParsers {
     }
 
     private @Mandatory CMainEntity parseStatement(@Mandatory Statement statement) {
-        List<Token> tokens = squareBracketParser.parse(
-            roundBracketParser.parse(
-                statement.getTokens()
-            )
-        );
+        CMainEntityParser parser = findParser(statement);
+        TokenReader reader = new TokenReader(statement.getTokens(), ParseException::new);
+        return parser.parse(reader);
+    }
 
+    private @Mandatory CMainEntityParser findParser(@Mandatory Statement statement) {
         for (ReadablePair<Pattern, CMainEntityParser> pair : entityParsers) {
-            if (pair.getKey().matches(tokens)) {
-                return pair.getValue().parse(new TokenReader(tokens, ParseException::new));
+            if (pair.getKey().matches(statement.getTokens())) {
+                return pair.getValue();
             }
         }
 
