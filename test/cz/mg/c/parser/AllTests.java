@@ -7,7 +7,7 @@ import cz.mg.c.parser.services.brackets.CurlyBracketParserTest;
 import cz.mg.c.parser.services.brackets.RoundBracketParserTest;
 import cz.mg.c.parser.services.brackets.SquareBracketParserTest;
 import cz.mg.c.parser.services.lists.BlockStatementParserTest;
-import cz.mg.c.parser.services.lists.StatementParserTest;
+import cz.mg.c.parser.services.lists.SemicolonStatementParserTest;
 
 public @Test class AllTests {
     public static void main(String[] args) {
@@ -21,7 +21,7 @@ public @Test class AllTests {
 
         // cz.mg.c.parser.services.lists
         BlockStatementParserTest.main(args);
-        StatementParserTest.main(args);
+        SemicolonStatementParserTest.main(args);
 
         // cz.mg.c.parser.services
         TypeParserTest.main(args);

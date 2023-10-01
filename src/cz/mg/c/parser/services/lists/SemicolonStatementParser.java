@@ -9,21 +9,21 @@ import cz.mg.tokenizer.components.TokenReader;
 import cz.mg.tokenizer.entities.Token;
 import cz.mg.tokenizer.entities.tokens.SeparatorToken;
 
-public @Service class StatementParser {
-    private static volatile @Service StatementParser instance;
+public @Service class SemicolonStatementParser {
+    private static volatile @Service SemicolonStatementParser instance;
 
-    public static @Service StatementParser getInstance() {
+    public static @Service SemicolonStatementParser getInstance() {
         if (instance == null) {
             synchronized (Service.class) {
                 if (instance == null) {
-                    instance = new StatementParser();
+                    instance = new SemicolonStatementParser();
                 }
             }
         }
         return instance;
     }
 
-    private StatementParser() {
+    private SemicolonStatementParser() {
     }
 
     public @Mandatory List<Statement> parse(@Mandatory List<Token> tokens) {

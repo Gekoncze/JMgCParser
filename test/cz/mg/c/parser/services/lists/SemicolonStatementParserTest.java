@@ -11,11 +11,11 @@ import cz.mg.tokenizer.entities.tokens.NameToken;
 import cz.mg.tokenizer.entities.tokens.NumberToken;
 import cz.mg.tokenizer.entities.tokens.SeparatorToken;
 
-public @Test class StatementParserTest {
+public @Test class SemicolonStatementParserTest {
     public static void main(String[] args) {
-        System.out.print("Running " + StatementParserTest.class.getSimpleName() + " ... ");
+        System.out.print("Running " + SemicolonStatementParserTest.class.getSimpleName() + " ... ");
 
-        StatementParserTest test = new StatementParserTest();
+        SemicolonStatementParserTest test = new SemicolonStatementParserTest();
         test.testParseEmpty();
         test.testParseSingle();
         test.testParseMultiple();
@@ -25,7 +25,7 @@ public @Test class StatementParserTest {
         System.out.println("OK");
     }
 
-    private final @Service StatementParser parser = StatementParser.getInstance();
+    private final @Service SemicolonStatementParser parser = SemicolonStatementParser.getInstance();
 
     private void testParseEmpty() {
         List<Token> input = new List<>();
