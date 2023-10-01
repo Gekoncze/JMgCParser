@@ -1,10 +1,11 @@
-package cz.mg.c.parser.services;
+package cz.mg.c.parser.services.entity;
 
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.c.parser.entities.Pointer;
 import cz.mg.c.parser.entities.Type;
 import cz.mg.c.parser.exceptions.ParseException;
+import cz.mg.c.parser.services.CEntityParser;
 import cz.mg.collections.list.List;
 import cz.mg.tokenizer.components.TokenReader;
 import cz.mg.tokenizer.entities.Token;

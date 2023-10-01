@@ -1,4 +1,4 @@
-package cz.mg.c.parser.services.lists;
+package cz.mg.c.parser.services.statement;
 
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;

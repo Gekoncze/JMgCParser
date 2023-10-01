@@ -4,7 +4,7 @@ import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.c.parser.entities.CMainEntity;
 import cz.mg.c.parser.services.CMainEntityParsers;
-import cz.mg.c.parser.services.lists.StatementParser;
+import cz.mg.c.parser.services.statement.StatementParser;
 import cz.mg.c.preprocessor.Preprocessor;
 import cz.mg.c.preprocessor.processors.macro.entities.Macros;
 import cz.mg.collections.list.List;
