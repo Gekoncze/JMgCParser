@@ -33,9 +33,10 @@ public @Service class StatementParser {
 
         while (reader.has()) {
             if (reader.has(";", SeparatorToken.class)) {
-                int position = reader.read().getPosition();
-                statement.setPosition(position);
-                statements.addLast(statement);
+                reader.read();
+                if (!statement.getTokens().isEmpty()) {
+                    statements.addLast(statement);
+                }
                 statement = new Statement();
             } else {
                 statement.getTokens().addLast(reader.read());

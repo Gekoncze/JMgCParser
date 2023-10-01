@@ -45,7 +45,6 @@ public @Test class StatementParserTest {
         Assert.assertEquals(Statement.class, output.getFirst().getClass());
 
         Statement statement = output.getFirst();
-        Assert.assertEquals(8, statement.getPosition());
         Assert.assertEquals(2, statement.getTokens().count());
 
         Token foo = statement.getTokens().getFirst();
@@ -72,7 +71,6 @@ public @Test class StatementParserTest {
         Assert.assertEquals(Statement.class, output.getLast().getClass());
 
         Statement statement = output.getLast();
-        Assert.assertEquals(14, statement.getPosition());
         Assert.assertEquals(1, statement.getTokens().count());
 
         Token number = statement.getTokens().getFirst();

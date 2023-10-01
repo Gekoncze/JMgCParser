@@ -61,6 +61,8 @@ public @Service class CMainEntityParsers {
             }
         }
 
-        throw new ParseException(statement.getPosition(), "Could not recognize statement.");
+        Token firstToken = statement.getTokens().getFirst();
+        int position = firstToken != null ? firstToken.getPosition() : -1;
+        throw new ParseException(position, "Could not recognize statement.");
     }
 }
