@@ -2,11 +2,18 @@
     ...
 
 ### SOON ###
+    add entity parsers
+        variable parser
+
     add main entity parsers
+        global variable parser
         function
         struct
+        enum
         typedef
-        (global) variable
+
+        notes:
+            don't forget to add read end for main entity parsers
 
 ### LATER ###
     add parser test
