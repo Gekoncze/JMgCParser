@@ -11,6 +11,7 @@ import cz.mg.collections.list.List;
 import cz.mg.collections.list.ReadableList;
 import cz.mg.collections.pair.Pair;
 import cz.mg.collections.pair.ReadablePair;
+import cz.mg.tokenizer.components.TokenReader;
 import cz.mg.tokenizer.entities.Token;
 
 public @Service class CMainEntityParsers {
@@ -56,7 +57,7 @@ public @Service class CMainEntityParsers {
 
         for (ReadablePair<Pattern, CMainEntityParser> pair : entityParsers) {
             if (pair.getKey().matches(tokens)) {
-                return pair.getValue().parse(tokens);
+                return pair.getValue().parse(new TokenReader(tokens, ParseException::new));
             }
         }
 
