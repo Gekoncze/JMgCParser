@@ -3,7 +3,7 @@ package cz.mg.c.parser.services;
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.c.parser.entities.CMainEntity;
-import cz.mg.c.parser.entities.lists.Statement;
+import cz.mg.c.parser.entities.Statement;
 import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.collections.list.List;
 import cz.mg.collections.pair.Pair;

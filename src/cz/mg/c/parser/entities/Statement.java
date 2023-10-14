@@ -1,4 +1,4 @@
-package cz.mg.c.parser.entities.lists;
+package cz.mg.c.parser.entities;
 
 import cz.mg.annotations.classes.Entity;
 import cz.mg.annotations.requirement.Required;
