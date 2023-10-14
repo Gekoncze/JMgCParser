@@ -2,9 +2,6 @@
     ...
 
 ### SOON ###
-    add entity parsers
-        variable parser
-
     add main entity parsers
         global variable parser
         function
@@ -14,8 +11,12 @@
 
         notes:
             don't forget to add read end for main entity parsers
+            should it be in CMainEntityParsers or in individual implementations?
 
 ### LATER ###
     add parser test
     add c main entity parsers test
     add statement parser test
+    check if TokenValidator can be shared somehow
+        possibly move it to tokenizer project
+        or maybe create tokenizer test project

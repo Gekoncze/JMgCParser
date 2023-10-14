@@ -6,6 +6,7 @@ import cz.mg.c.parser.services.entity.TypeParserTest;
 import cz.mg.c.parser.services.bracket.CurlyBracketParserTest;
 import cz.mg.c.parser.services.bracket.RoundBracketParserTest;
 import cz.mg.c.parser.services.bracket.SquareBracketParserTest;
+import cz.mg.c.parser.services.entity.VariableParserTest;
 import cz.mg.c.parser.services.statement.BlockStatementParserTest;
 import cz.mg.c.parser.services.statement.SemicolonStatementParserTest;
 
@@ -21,6 +22,7 @@ public @Test class AllTests {
 
         // cz.mg.c.parser.services.entity
         TypeParserTest.main(args);
+        VariableParserTest.main(args);
 
         // cz.mg.c.parser.services.statement
         BlockStatementParserTest.main(args);

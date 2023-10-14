@@ -2,20 +2,26 @@ package cz.mg.c.parser.entities;
 
 import cz.mg.annotations.classes.Entity;
 import cz.mg.annotations.requirement.Required;
-import cz.mg.annotations.storage.Value;
+import cz.mg.annotations.storage.Shared;
+import cz.mg.collections.list.List;
+import cz.mg.tokenizer.entities.Token;
 
 public @Entity class Array implements CEntity {
-    private int size;
+    private List<Token> expression = new List<>();
 
     public Array() {
     }
 
-    @Required @Value
-    public int getSize() {
-        return size;
+    public Array(List<Token> expression) {
+        this.expression = expression;
     }
 
-    public void setSize(int size) {
-        this.size = size;
+    @Required @Shared
+    public List<Token> getExpression() {
+        return expression;
+    }
+
+    public void setExpression(List<Token> expression) {
+        this.expression = expression;
     }
 }
