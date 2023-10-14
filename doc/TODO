@@ -3,15 +3,10 @@
 
 ### SOON ###
     add main entity parsers
-        global variable parser
         function
         struct
         enum
         typedef
-
-        notes:
-            don't forget to add read end for main entity parsers
-            should it be in CMainEntityParsers or in individual implementations?
 
 ### LATER ###
     add parser test

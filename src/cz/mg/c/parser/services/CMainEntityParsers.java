@@ -44,7 +44,9 @@ public @Service class CMainEntityParsers {
     private @Mandatory CMainEntity parseStatement(@Mandatory Statement statement) {
         CMainEntityParser parser = findParser(statement);
         TokenReader reader = new TokenReader(statement.getTokens(), ParseException::new);
-        return parser.parse(reader);
+        CMainEntity entity = parser.parse(reader);
+        reader.readEnd();
+        return entity;
     }
 
     private @Mandatory CMainEntityParser findParser(@Mandatory Statement statement) {
