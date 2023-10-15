@@ -22,6 +22,7 @@ public @Test class AllTests {
 
         // cz.mg.c.parser.services.entity
         EnumEntryParserTest.main(args);
+        EnumParserTest.main(args);
         FunctionParserTest.main(args);
         StructParserTest.main(args);
         TypeParserTest.main(args);
