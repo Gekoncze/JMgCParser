@@ -12,7 +12,7 @@ import cz.mg.tokenizer.entities.Token;
 public @Entity class Function extends Typename implements CMainEntity {
     private Type output;
     private List<Variable> input;
-    private List<Token> implementation = new List<>();
+    private List<Token> implementation;
 
     public Function() {
     }

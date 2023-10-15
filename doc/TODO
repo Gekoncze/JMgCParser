@@ -3,7 +3,6 @@
 
 ### SOON ###
     add main entity parsers
-        function
         struct
         enum
         typedef
@@ -15,3 +14,4 @@
     check if TokenValidator can be shared somehow
         possibly move it to tokenizer project
         or maybe create tokenizer test project
+    think about renaming NameToken to WordToken
