@@ -23,6 +23,7 @@ public @Test class StructParserTest {
         test.testNoVariables();
         test.testSingleVariable();
         test.testMultipleVariables();
+        test.testInvalid();
 
         System.out.println("OK");
     }
@@ -102,5 +103,20 @@ public @Test class StructParserTest {
         Assert.assertEquals("i", struct.getVariables().get(0).getName().getText());
         Assert.assertEquals("l", struct.getVariables().get(1).getName().getText());
         Assert.assertEquals("s", struct.getVariables().get(2).getName().getText());
+    }
+
+    private void testInvalid() {
+        Assert.assertThatCode(() -> {
+            parser.parse(new TokenReader(new List<>(
+                new NameToken("struct", 0),
+                new NameToken("FooBar", 10),
+                new CurlyBrackets("", 20, new List<>(
+                    new NameToken("int", 25),
+                    new NameToken("i", 30),
+                    new NameToken("iii", 30),
+                    new SeparatorToken(";", 35)
+                ))
+            )));
+        }).throwsException(ParseException.class);
     }
 }

@@ -15,4 +15,8 @@ public @Entity class Enum extends Typename implements CMainEntity {
     public List<EnumEntry> getEntries() {
         return entries;
     }
+
+    public void setEntries(List<EnumEntry> entries) {
+        this.entries = entries;
+    }
 }

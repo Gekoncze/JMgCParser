@@ -47,7 +47,9 @@ public @Service class StructParser {
         List<Statement> statements = statementParser.parse(brackets.getTokens());
         List<Variable> variables = new List<>();
         for (Statement statement : statements) {
-            variables.addLast(variableParser.parse(new TokenReader(statement.getTokens())));
+            TokenReader reader = new TokenReader(statement.getTokens());
+            variables.addLast(variableParser.parse(reader));
+            reader.readEnd();
         }
         return variables;
     }

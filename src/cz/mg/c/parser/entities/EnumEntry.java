@@ -20,8 +20,16 @@ public @Entity class EnumEntry implements CEntity {
         return name;
     }
 
+    public void setName(NameToken name) {
+        this.name = name;
+    }
+
     @Optional @Shared
     public List<Token> getExpression() {
         return expression;
+    }
+
+    public void setExpression(List<Token> expression) {
+        this.expression = expression;
     }
 }
