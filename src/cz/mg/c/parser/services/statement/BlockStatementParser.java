@@ -2,12 +2,11 @@ package cz.mg.c.parser.services.statement;
 
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
+import cz.mg.c.parser.components.TokenReader;
+import cz.mg.c.parser.entities.Statement;
 import cz.mg.c.parser.entities.brackets.CurlyBrackets;
 import cz.mg.c.parser.entities.brackets.RoundBrackets;
-import cz.mg.c.parser.entities.Statement;
-import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.collections.list.List;
-import cz.mg.tokenizer.components.TokenReader;
 
 public @Service class BlockStatementParser {
     private static volatile @Service BlockStatementParser instance;
@@ -38,7 +37,7 @@ public @Service class BlockStatementParser {
     private @Mandatory List<Statement> parse(@Mandatory Statement statement) {
         List<Statement> newStatements = new List<>();
         newStatements.addLast(new Statement());
-        TokenReader reader = new TokenReader(statement.getTokens(), ParseException::new);
+        TokenReader reader = new TokenReader(statement.getTokens());
         while (reader.has()) {
             boolean roundBrackets = reader.hasPrevious(RoundBrackets.class);
             boolean curlyBrackets = reader.has(CurlyBrackets.class);

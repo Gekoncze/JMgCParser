@@ -2,15 +2,14 @@ package cz.mg.c.parser.services.entity;
 
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
+import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.parser.entities.Function;
 import cz.mg.c.parser.entities.Variable;
 import cz.mg.c.parser.entities.brackets.CurlyBrackets;
 import cz.mg.c.parser.entities.brackets.RoundBrackets;
-import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.c.parser.services.CMainEntityParser;
 import cz.mg.c.parser.services.ListParser;
 import cz.mg.collections.list.List;
-import cz.mg.tokenizer.components.TokenReader;
 import cz.mg.tokenizer.entities.Token;
 import cz.mg.tokenizer.entities.tokens.NameToken;
 
@@ -51,11 +50,11 @@ public @Service class FunctionParser implements CMainEntityParser {
     }
 
     private @Mandatory List<Variable> readInput(@Mandatory RoundBrackets brackets) {
-        List<List<Token>> parameters = listParser.parse(new TokenReader(brackets.getTokens(), ParseException::new));
+        List<List<Token>> parameters = listParser.parse(new TokenReader(brackets.getTokens()));
         List<Variable> input = new List<>();
         if (hasParameters(parameters)) {
             for (List<Token> parameter : parameters) {
-                TokenReader reader = new TokenReader(parameter, ParseException::new);
+                TokenReader reader = new TokenReader(parameter);
                 input.addLast(variableParser.parse(reader));
                 reader.readEnd();
             }

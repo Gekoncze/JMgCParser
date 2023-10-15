@@ -2,12 +2,12 @@ package cz.mg.c.parser.services.entity;
 
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
+import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.parser.entities.Pointer;
 import cz.mg.c.parser.entities.Type;
 import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.c.parser.services.CEntityParser;
 import cz.mg.collections.list.List;
-import cz.mg.tokenizer.components.TokenReader;
 import cz.mg.tokenizer.entities.Token;
 import cz.mg.tokenizer.entities.tokens.NameToken;
 import cz.mg.tokenizer.entities.tokens.OperatorToken;
@@ -28,7 +28,7 @@ public @Service class TypeParser implements CEntityParser {
     public @Mandatory Type parse(@Mandatory TokenReader reader) {
         Type type = new Type();
         type.setConstant(type.isConstant() | readConst(reader));
-        type.setTypename(readTypename(reader));
+        type.setTypename(reader.read(NameToken.class));
         type.setConstant(type.isConstant() | readConst(reader));
         type.setPointers(readPointers(reader));
         return type;
@@ -41,10 +41,6 @@ public @Service class TypeParser implements CEntityParser {
             constant = true;
         }
         return constant;
-    }
-
-    private @Mandatory NameToken readTypename(@Mandatory TokenReader reader) {
-        return (NameToken) reader.read(NameToken.class);
     }
 
     private @Mandatory List<Pointer> readPointers(@Mandatory TokenReader reader) {

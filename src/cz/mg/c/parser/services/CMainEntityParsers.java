@@ -2,13 +2,13 @@ package cz.mg.c.parser.services;
 
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
+import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.parser.entities.CMainEntity;
 import cz.mg.c.parser.entities.Statement;
 import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.collections.list.List;
 import cz.mg.collections.pair.Pair;
 import cz.mg.collections.pair.ReadablePair;
-import cz.mg.tokenizer.components.TokenReader;
 import cz.mg.tokenizer.entities.Token;
 
 public @Service class CMainEntityParsers {
@@ -43,7 +43,7 @@ public @Service class CMainEntityParsers {
 
     private @Mandatory CMainEntity parseStatement(@Mandatory Statement statement) {
         CMainEntityParser parser = findParser(statement);
-        TokenReader reader = new TokenReader(statement.getTokens(), ParseException::new);
+        TokenReader reader = new TokenReader(statement.getTokens());
         CMainEntity entity = parser.parse(reader);
         reader.readEnd();
         return entity;

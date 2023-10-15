@@ -2,11 +2,11 @@ package cz.mg.c.parser.services;
 
 import cz.mg.annotations.classes.Test;
 import cz.mg.annotations.requirement.Mandatory;
+import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.c.parser.test.TokenValidator;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
-import cz.mg.tokenizer.components.TokenReader;
 import cz.mg.tokenizer.entities.Token;
 import cz.mg.tokenizer.entities.tokens.NameToken;
 import cz.mg.tokenizer.entities.tokens.NumberToken;
@@ -31,14 +31,14 @@ public @Test class ListParserTest {
 
     private void testParseEmpty() {
         List<Token> input = new List<>();
-        List<List<Token>> output = parser.parse(new TokenReader(input, ParseException::new));
+        List<List<Token>> output = parser.parse(new TokenReader(input));
         Assert.assertEquals(1, output.count());
         Assert.assertEquals(true, output.getFirst().isEmpty());
     }
 
     private void testParseSingle() {
         List<Token> input = new List<>(new NameToken("foo", 2));
-        List<List<Token>> output = parser.parse(new TokenReader(input, ParseException::new));
+        List<List<Token>> output = parser.parse(new TokenReader(input));
         Assert.assertEquals(1, output.count());
         Assert.assertEquals(1, output.getFirst().count());
         Assert.assertEquals("foo", output.getFirst().getFirst().getText());
@@ -55,7 +55,7 @@ public @Test class ListParserTest {
             new OperatorToken("+", 14),
             new NumberToken("0", 16)
         );
-        List<List<Token>> output = parser.parse(new TokenReader(input, ParseException::new));
+        List<List<Token>> output = parser.parse(new TokenReader(input));
         Assert.assertEquals(3, output.count());
         validator.assertEquals(new List<>(
             new NameToken("foo", 0),
@@ -73,7 +73,7 @@ public @Test class ListParserTest {
 
     private void testParseMultipleEmpty() {
         List<Token> input = new List<>(new SeparatorToken(",", 2), new SeparatorToken(",", 2));
-        List<List<Token>> output = parser.parse(new TokenReader(input, ParseException::new));
+        List<List<Token>> output = parser.parse(new TokenReader(input));
         Assert.assertEquals(3, output.count());
         Assert.assertEquals(0, output.get(0).count());
         Assert.assertEquals(0, output.get(1).count());

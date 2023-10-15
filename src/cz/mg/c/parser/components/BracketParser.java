@@ -8,7 +8,6 @@ import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.collections.list.List;
 import cz.mg.collections.list.ReadableList;
 import cz.mg.collections.list.WriteableList;
-import cz.mg.tokenizer.components.TokenReader;
 import cz.mg.tokenizer.entities.Token;
 import cz.mg.tokenizer.entities.tokens.BracketToken;
 
@@ -31,7 +30,7 @@ public @Component class BracketParser {
     }
 
     public @Mandatory List<Token> parse(@Mandatory ReadableList<Token> input) {
-        TokenReader reader = new TokenReader(input, ParseException::new);
+        TokenReader reader = new TokenReader(input);
         List<Token> output = new List<>();
         parse(reader, output, null);
         return output;

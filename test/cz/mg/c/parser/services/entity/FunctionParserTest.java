@@ -2,13 +2,13 @@ package cz.mg.c.parser.services.entity;
 
 import cz.mg.annotations.classes.Test;
 import cz.mg.annotations.requirement.Mandatory;
+import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.parser.entities.Function;
 import cz.mg.c.parser.entities.brackets.CurlyBrackets;
 import cz.mg.c.parser.entities.brackets.RoundBrackets;
 import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
-import cz.mg.tokenizer.components.TokenReader;
 import cz.mg.tokenizer.entities.Token;
 import cz.mg.tokenizer.entities.tokens.NameToken;
 import cz.mg.tokenizer.entities.tokens.OperatorToken;
@@ -35,7 +35,7 @@ public @Test class FunctionParserTest {
 
     private void testEmpty() {
         Assert.assertThatCode(() -> {
-            parser.parse(new TokenReader(new List<>(), ParseException::new));
+            parser.parse(new TokenReader(new List<>()));
         }).throwsException(ParseException.class);
     }
 
@@ -45,7 +45,7 @@ public @Test class FunctionParserTest {
             new NameToken("foo", 7),
             new RoundBrackets("", 8, new List<>())
         );
-        Function function = parser.parse(new TokenReader(input, ParseException::new));
+        Function function = parser.parse(new TokenReader(input));
         Assert.assertEquals("void", function.getOutput().getTypename().getText());
         Assert.assertEquals("foo", function.getName().getText());
         Assert.assertEquals(true, function.getInput().isEmpty());
@@ -59,7 +59,7 @@ public @Test class FunctionParserTest {
             new NameToken("foobar", 7),
             new RoundBrackets("", 8, new List<>())
         );
-        Function function = parser.parse(new TokenReader(input, ParseException::new));
+        Function function = parser.parse(new TokenReader(input));
         Assert.assertEquals("int", function.getOutput().getTypename().getText());
         Assert.assertEquals(1, function.getOutput().getPointers().count());
         Assert.assertEquals("foobar", function.getName().getText());
@@ -77,7 +77,7 @@ public @Test class FunctionParserTest {
                 new NameToken("floating", 20)
             ))
         );
-        Function function = parser.parse(new TokenReader(input, ParseException::new));
+        Function function = parser.parse(new TokenReader(input));
         Assert.assertEquals("int", function.getOutput().getTypename().getText());
         Assert.assertEquals(true, function.getOutput().isConstant());
         Assert.assertEquals("constantin", function.getName().getText());
@@ -104,7 +104,7 @@ public @Test class FunctionParserTest {
                 new NameToken("voiding", 53)
             ))
         );
-        Function function = parser.parse(new TokenReader(input, ParseException::new));
+        Function function = parser.parse(new TokenReader(input));
         Assert.assertEquals("void", function.getOutput().getTypename().getText());
         Assert.assertEquals("foobar", function.getName().getText());
         Assert.assertEquals(3, function.getInput().count());
@@ -130,7 +130,7 @@ public @Test class FunctionParserTest {
                     new NameToken("doubling", 35)
                 ))
             );
-            parser.parse(new TokenReader(input, ParseException::new));
+            parser.parse(new TokenReader(input));
         }).throwsException(ParseException.class);
     }
 
@@ -141,7 +141,7 @@ public @Test class FunctionParserTest {
             new RoundBrackets("", 11, new List<>()),
             new CurlyBrackets("", 13, new List<>())
         );
-        Function function = parser.parse(new TokenReader(input, ParseException::new));
+        Function function = parser.parse(new TokenReader(input));
         Assert.assertEquals("void", function.getOutput().getTypename().getText());
         Assert.assertEquals("space", function.getName().getText());
         Assert.assertEquals(true, function.getInput().isEmpty());
@@ -169,7 +169,7 @@ public @Test class FunctionParserTest {
                 new SeparatorToken(";", 52)
             ))
         );
-        Function function = parser.parse(new TokenReader(input, ParseException::new));
+        Function function = parser.parse(new TokenReader(input));
         Assert.assertEquals("void", function.getOutput().getTypename().getText());
         Assert.assertEquals(1, function.getOutput().getPointers().count());
         Assert.assertEquals("foobar", function.getName().getText());

@@ -2,13 +2,13 @@ package cz.mg.c.parser.services.entity;
 
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
+import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.parser.entities.Variable;
 import cz.mg.c.parser.entities.brackets.SquareBrackets;
 import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.c.parser.test.TokenValidator;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
-import cz.mg.tokenizer.components.TokenReader;
 import cz.mg.tokenizer.entities.tokens.NameToken;
 import cz.mg.tokenizer.entities.tokens.NumberToken;
 import cz.mg.tokenizer.entities.tokens.OperatorToken;
@@ -33,14 +33,14 @@ public @Test class VariableParserTest {
 
     private void testParseEmpty() {
         Assert.assertThatCode(() -> {
-            parser.parse(new TokenReader(new List<>(), ParseException::new));
+            parser.parse(new TokenReader(new List<>()));
         }).throwsException(ParseException.class);
     }
 
     private void testParseSimple() {
         TokenReader reader = new TokenReader(new List<>(
             new NameToken("int", 2), new NameToken("foo", 5)
-        ), ParseException::new);
+        ));
 
         Variable variable = parser.parse(reader);
 
@@ -59,7 +59,7 @@ public @Test class VariableParserTest {
             new SquareBrackets("", 6, new List<>(
                 new NumberToken("12", 7)
             ))
-        ), ParseException::new);
+        ));
 
         Variable variable = parser.parse(reader);
 
@@ -88,7 +88,7 @@ public @Test class VariableParserTest {
             new SquareBrackets("", 6, new List<>(
                 new NumberToken("1", 7)
             ))
-        ), ParseException::new);
+        ));
 
         Variable variable = parser.parse(reader);
 
@@ -121,7 +121,7 @@ public @Test class VariableParserTest {
                 new OperatorToken("+", 8),
                 new NumberToken("1.5", 9)
             ))
-        ), ParseException::new);
+        ));
 
         Variable variable = parser.parse(reader);
 
@@ -153,7 +153,7 @@ public @Test class VariableParserTest {
                 new OperatorToken("+", 24),
                 new NumberToken("1.5", 25)
             ))
-        ), ParseException::new);
+        ));
 
         Variable variable = parser.parse(reader);
 

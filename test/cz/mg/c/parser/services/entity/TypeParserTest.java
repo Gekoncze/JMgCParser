@@ -3,12 +3,12 @@ package cz.mg.c.parser.services.entity;
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
 import cz.mg.annotations.requirement.Mandatory;
+import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.parser.entities.Pointer;
 import cz.mg.c.parser.entities.Type;
 import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
-import cz.mg.tokenizer.components.TokenReader;
 import cz.mg.tokenizer.entities.Token;
 import cz.mg.tokenizer.entities.tokens.NameToken;
 import cz.mg.tokenizer.entities.tokens.OperatorToken;
@@ -35,14 +35,14 @@ public @Test class TypeParserTest {
 
     private void testParseEmpty() {
         Assert.assertThatCode(() -> {
-            parser.parse(new TokenReader(new List<>(), ParseException::new));
+            parser.parse(new TokenReader(new List<>()));
         }).throwsException(ParseException.class);
     }
 
     private void testParseSimple() {
         TokenReader reader = new TokenReader(new List<>(
             new NameToken("foo", 1)
-        ), ParseException::new);
+        ));
 
         Type type = parser.parse(reader);
 
@@ -56,7 +56,7 @@ public @Test class TypeParserTest {
         TokenReader reader = new TokenReader(new List<>(
             new NameToken("const", 0),
             new NameToken("foo", 12)
-        ), ParseException::new);
+        ));
 
         Type type = parser.parse(reader);
 
@@ -70,7 +70,7 @@ public @Test class TypeParserTest {
         TokenReader reader = new TokenReader(new List<>(
             new NameToken("foo", 0),
             new NameToken("const", 12)
-        ), ParseException::new);
+        ));
 
         Type type = parser.parse(reader);
 
@@ -84,7 +84,7 @@ public @Test class TypeParserTest {
         TokenReader reader = new TokenReader(new List<>(
             new NameToken("foo", 0),
             new NameToken("bar", 5)
-        ), ParseException::new);
+        ));
 
         Type type = parser.parse(reader);
 
@@ -101,7 +101,7 @@ public @Test class TypeParserTest {
             new OperatorToken("*", 4),
             new OperatorToken("*", 5),
             new OperatorToken("*", 6)
-        ), ParseException::new);
+        ));
 
         Type type = parser.parse(reader);
 
@@ -120,7 +120,7 @@ public @Test class TypeParserTest {
         TokenReader reader = new TokenReader(new List<>(
             new NameToken("dst", 1),
             new OperatorToken("***", 4)
-        ), ParseException::new);
+        ));
 
         Type type = parser.parse(reader);
 
@@ -202,7 +202,7 @@ public @Test class TypeParserTest {
         boolean typenameConst,
         boolean... pointersConst
     ) {
-        TokenReader reader = new TokenReader(input, ParseException::new);
+        TokenReader reader = new TokenReader(input);
 
         Type type = parser.parse(reader);
 
@@ -224,7 +224,7 @@ public @Test class TypeParserTest {
             parser.parse(new TokenReader(new List<>(
                 new NameToken("foo", 0),
                 new OperatorToken("*/", 4)
-            ), ParseException::new));
+            )));
         }).throwsException(ParseException.class);
     }
 }

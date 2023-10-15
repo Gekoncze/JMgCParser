@@ -2,12 +2,12 @@ package cz.mg.c.parser.services.entity;
 
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
+import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.parser.entities.Array;
 import cz.mg.c.parser.entities.Variable;
 import cz.mg.c.parser.entities.brackets.SquareBrackets;
 import cz.mg.c.parser.services.CMainEntityParser;
 import cz.mg.collections.list.List;
-import cz.mg.tokenizer.components.TokenReader;
 import cz.mg.tokenizer.entities.tokens.NameToken;
 
 public @Service class VariableParser implements CMainEntityParser {
