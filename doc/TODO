@@ -1,5 +1,5 @@
 ### NOW ###
-    implement StructureType parsing inside TypeParser
+    implement StructureType and UnionType parsing inside TypeParser
         cases for testing
             struct {int a; int b;}
             struct FooBar {int a; int b;}
@@ -15,6 +15,12 @@
             maybe also add test for above inside variable, function and struct parser
 
 ### SOON ###
+    for NameType (+ parser)
+        add boolean field for struct and union keyword
+        it has implications for variable declarations when generating c code
+        alternatively have sub types for both
+
+    add union parser
     add typedef parser
         cases for testing
             typedef struct Bar {}; // unnamed typedef
@@ -26,8 +32,6 @@
         or both
         either of these could allow easier unit testing
 
-    add union entity
-    add union parser
 
 ### LATER ###
     add parser test

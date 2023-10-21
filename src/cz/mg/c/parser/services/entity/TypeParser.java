@@ -3,11 +3,8 @@ package cz.mg.c.parser.services.entity;
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.c.parser.components.TokenReader;
-import cz.mg.c.parser.entities.types.NameType;
+import cz.mg.c.parser.entities.types.*;
 import cz.mg.c.parser.entities.Pointer;
-import cz.mg.c.parser.entities.types.FunctionType;
-import cz.mg.c.parser.entities.types.StructType;
-import cz.mg.c.parser.entities.types.Type;
 import cz.mg.c.parser.entities.brackets.RoundBrackets;
 import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.c.parser.services.CEntityParser;
@@ -32,6 +29,8 @@ public @Service class TypeParser implements CEntityParser {
     public @Mandatory Type parse(@Mandatory TokenReader reader) {
         if (reader.has("struct", NameToken.class)) {
             return parseStructType(reader);
+        } else if (reader.has("union", NameToken.class)) {
+            return parseUnionType(reader);
         } else {
             NameType type = parseNameType(reader);
             if (reader.has(this::functionPointer)) {
@@ -56,6 +55,10 @@ public @Service class TypeParser implements CEntityParser {
     }
 
     private @Mandatory StructType parseStructType(@Mandatory TokenReader reader) {
+        throw new UnsupportedOperationException("TODO"); // TODO - implement
+    }
+
+    private @Mandatory UnionType parseUnionType(@Mandatory TokenReader reader) {
         throw new UnsupportedOperationException("TODO"); // TODO - implement
     }
 
