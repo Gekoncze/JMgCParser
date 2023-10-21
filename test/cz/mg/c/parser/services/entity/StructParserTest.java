@@ -4,8 +4,10 @@ import cz.mg.annotations.classes.Test;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.parser.entities.Struct;
+import cz.mg.c.parser.entities.Variable;
 import cz.mg.c.parser.entities.brackets.CurlyBrackets;
 import cz.mg.c.parser.exceptions.ParseException;
+import cz.mg.c.parser.test.TypeValidator;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
 import cz.mg.tokenizer.entities.Token;
@@ -29,6 +31,7 @@ public @Test class StructParserTest {
     }
 
     private final @Mandatory StructParser parser = StructParser.getInstance();
+    private final @Mandatory TypeValidator validator = TypeValidator.getInstance();
 
     private void testEmpty() {
         Assert.assertThatCode(() -> {
@@ -75,8 +78,9 @@ public @Test class StructParserTest {
         Assert.assertNotNull(struct.getVariables());
         Assert.assertEquals(1, struct.getVariables().count());
         Assert.assertEquals("bar", struct.getVariables().getFirst().getName().getText());
-        Assert.assertEquals("int", struct.getVariables().getFirst().getType().getTypename().getText());
-        Assert.assertEquals(true, struct.getVariables().getFirst().getType().isConstant());
+        Variable variable = struct.getVariables().getFirst();
+        Assert.assertEquals("int", validator.nameType(variable.getType()).getTypename().getText());
+        Assert.assertEquals(true, validator.nameType(variable.getType()).isConstant());
         Assert.assertEquals(1, struct.getVariables().getFirst().getType().getPointers().count());
     }
 

@@ -1,21 +1,17 @@
-package cz.mg.c.parser.entities;
+package cz.mg.c.parser.entities.types;
 
 import cz.mg.annotations.classes.Entity;
-import cz.mg.annotations.requirement.Optional;
 import cz.mg.annotations.requirement.Required;
 import cz.mg.annotations.storage.Part;
 import cz.mg.annotations.storage.Shared;
-import cz.mg.annotations.storage.Value;
-import cz.mg.c.parser.entities.types.Type;
+import cz.mg.c.parser.entities.Variable;
 import cz.mg.collections.list.List;
-import cz.mg.tokenizer.entities.Token;
 
-public @Entity class Function extends Typename implements CMainEntity {
+public @Entity class FunctionType extends Type {
     private Type output;
     private List<Variable> input;
-    private List<Token> implementation;
 
-    public Function() {
+    public FunctionType() {
     }
 
     @Required @Shared
@@ -34,14 +30,5 @@ public @Entity class Function extends Typename implements CMainEntity {
 
     public void setInput(List<Variable> input) {
         this.input = input;
-    }
-
-    @Optional @Value
-    public List<Token> getImplementation() {
-        return implementation;
-    }
-
-    public void setImplementation(List<Token> implementation) {
-        this.implementation = implementation;
     }
 }

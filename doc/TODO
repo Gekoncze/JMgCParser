@@ -1,9 +1,33 @@
 ### NOW ###
-    ...
+    implement StructureType parsing inside TypeParser
+        cases for testing
+            struct {int a; int b;}
+            struct FooBar {int a; int b;}
+
+    implement FunctionType parsing inside TypeParser
+        cases for testing
+            int (*fooptr)(int a, int b);
+            int (**fooptrptr)(int a, int b);
+            int (*const*fooptrptrarr[1])(int a, int b);
+            int (*fooptr)(int, int);
+            int (**fooptrptr)(int, int);
+            int (*const*fooptrptrarr[1])(int, int);
+            maybe also add test for above inside variable, function and struct parser
 
 ### SOON ###
-    add main entity parsers
-        typedef
+    add typedef parser
+        cases for testing
+            typedef struct Bar {}; // unnamed typedef
+            typedef void (*Foo); // named typedef
+
+    add patterns for main entity parsers
+        maybe extract parser matching to separate service
+        or include patterns inside parsers
+        or both
+        either of these could allow easier unit testing
+
+    add union entity
+    add union parser
 
 ### LATER ###
     add parser test

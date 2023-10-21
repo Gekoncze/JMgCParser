@@ -4,9 +4,10 @@ import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.c.parser.components.TokenReader;
+import cz.mg.c.parser.entities.types.NameType;
 import cz.mg.c.parser.entities.Pointer;
-import cz.mg.c.parser.entities.Type;
 import cz.mg.c.parser.exceptions.ParseException;
+import cz.mg.c.parser.test.TypeValidator;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
 import cz.mg.tokenizer.entities.Token;
@@ -32,6 +33,7 @@ public @Test class TypeParserTest {
     }
 
     private final @Service TypeParser parser = TypeParser.getInstance();
+    private final @Service TypeValidator validator = TypeValidator.getInstance();
 
     private void testParseEmpty() {
         Assert.assertThatCode(() -> {
@@ -44,7 +46,7 @@ public @Test class TypeParserTest {
             new NameToken("foo", 1)
         ));
 
-        Type type = parser.parse(reader);
+        NameType type = validator.nameType(parser.parse(reader));
 
         Assert.assertEquals(false, type.isConstant());
         Assert.assertEquals("foo", type.getTypename().getText());
@@ -58,7 +60,7 @@ public @Test class TypeParserTest {
             new NameToken("foo", 12)
         ));
 
-        Type type = parser.parse(reader);
+        NameType type = validator.nameType(parser.parse(reader));
 
         Assert.assertEquals(true, type.isConstant());
         Assert.assertEquals("foo", type.getTypename().getText());
@@ -72,7 +74,7 @@ public @Test class TypeParserTest {
             new NameToken("const", 12)
         ));
 
-        Type type = parser.parse(reader);
+        NameType type = validator.nameType(parser.parse(reader));
 
         Assert.assertEquals(true, type.isConstant());
         Assert.assertEquals("foo", type.getTypename().getText());
@@ -86,7 +88,7 @@ public @Test class TypeParserTest {
             new NameToken("bar", 5)
         ));
 
-        Type type = parser.parse(reader);
+        NameType type = validator.nameType(parser.parse(reader));
 
         Assert.assertEquals(false, type.isConstant());
         Assert.assertEquals("foo", type.getTypename().getText());
@@ -103,7 +105,7 @@ public @Test class TypeParserTest {
             new OperatorToken("*", 6)
         ));
 
-        Type type = parser.parse(reader);
+        NameType type = validator.nameType(parser.parse(reader));
 
         Assert.assertEquals(false, type.isConstant());
         Assert.assertEquals("foo", type.getTypename().getText());
@@ -122,7 +124,7 @@ public @Test class TypeParserTest {
             new OperatorToken("***", 4)
         ));
 
-        Type type = parser.parse(reader);
+        NameType type = validator.nameType(parser.parse(reader));
 
         Assert.assertEquals(false, type.isConstant());
         Assert.assertEquals("dst", type.getTypename().getText());
@@ -204,7 +206,7 @@ public @Test class TypeParserTest {
     ) {
         TokenReader reader = new TokenReader(input);
 
-        Type type = parser.parse(reader);
+        NameType type = validator.nameType(parser.parse(reader));
 
         Assert.assertEquals(typenameConst, type.isConstant());
         Assert.assertEquals("foo", type.getTypename().getText());

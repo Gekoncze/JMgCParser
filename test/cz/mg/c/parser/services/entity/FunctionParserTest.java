@@ -7,6 +7,7 @@ import cz.mg.c.parser.entities.Function;
 import cz.mg.c.parser.entities.brackets.CurlyBrackets;
 import cz.mg.c.parser.entities.brackets.RoundBrackets;
 import cz.mg.c.parser.exceptions.ParseException;
+import cz.mg.c.parser.test.TypeValidator;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
 import cz.mg.tokenizer.entities.Token;
@@ -32,6 +33,7 @@ public @Test class FunctionParserTest {
     }
 
     private final @Mandatory FunctionParser parser = FunctionParser.getInstance();
+    private final @Mandatory TypeValidator validator = TypeValidator.getInstance();
 
     private void testEmpty() {
         Assert.assertThatCode(() -> {
@@ -46,7 +48,7 @@ public @Test class FunctionParserTest {
             new RoundBrackets("", 8, new List<>())
         );
         Function function = parser.parse(new TokenReader(input));
-        Assert.assertEquals("void", function.getOutput().getTypename().getText());
+        Assert.assertEquals("void", validator.nameType(function.getOutput()).getTypename().getText());
         Assert.assertEquals("foo", function.getName().getText());
         Assert.assertEquals(true, function.getInput().isEmpty());
         Assert.assertNull(function.getImplementation());
@@ -60,7 +62,7 @@ public @Test class FunctionParserTest {
             new RoundBrackets("", 8, new List<>())
         );
         Function function = parser.parse(new TokenReader(input));
-        Assert.assertEquals("int", function.getOutput().getTypename().getText());
+        Assert.assertEquals("int", validator.nameType(function.getOutput()).getTypename().getText());
         Assert.assertEquals(1, function.getOutput().getPointers().count());
         Assert.assertEquals("foobar", function.getName().getText());
         Assert.assertEquals(true, function.getInput().isEmpty());
@@ -78,11 +80,13 @@ public @Test class FunctionParserTest {
             ))
         );
         Function function = parser.parse(new TokenReader(input));
-        Assert.assertEquals("int", function.getOutput().getTypename().getText());
-        Assert.assertEquals(true, function.getOutput().isConstant());
+        Assert.assertEquals("int", validator.nameType(function.getOutput()).getTypename().getText());
+        Assert.assertEquals(true, validator.nameType(function.getOutput()).isConstant());
         Assert.assertEquals("constantin", function.getName().getText());
         Assert.assertEquals(1, function.getInput().count());
-        Assert.assertEquals("float", function.getInput().getFirst().getType().getTypename().getText());
+        Assert.assertEquals(
+            "float", validator.nameType(function.getInput().getFirst().getType()).getTypename().getText()
+        );
         Assert.assertEquals("floating", function.getInput().getFirst().getName().getText());
         Assert.assertNull(function.getImplementation());
     }
@@ -105,14 +109,14 @@ public @Test class FunctionParserTest {
             ))
         );
         Function function = parser.parse(new TokenReader(input));
-        Assert.assertEquals("void", function.getOutput().getTypename().getText());
+        Assert.assertEquals("void", validator.nameType(function.getOutput()).getTypename().getText());
         Assert.assertEquals("foobar", function.getName().getText());
         Assert.assertEquals(3, function.getInput().count());
-        Assert.assertEquals("float", function.getInput().get(0).getType().getTypename().getText());
+        Assert.assertEquals("float", validator.nameType(function.getInput().get(0).getType()).getTypename().getText());
         Assert.assertEquals("floating", function.getInput().get(0).getName().getText());
-        Assert.assertEquals("double", function.getInput().get(1).getType().getTypename().getText());
+        Assert.assertEquals("double", validator.nameType(function.getInput().get(1).getType()).getTypename().getText());
         Assert.assertEquals("doubling", function.getInput().get(1).getName().getText());
-        Assert.assertEquals("void", function.getInput().get(2).getType().getTypename().getText());
+        Assert.assertEquals("void", validator.nameType(function.getInput().get(2).getType()).getTypename().getText());
         Assert.assertEquals(2, function.getInput().get(2).getType().getPointers().count());
         Assert.assertEquals("voiding", function.getInput().get(2).getName().getText());
         Assert.assertNull(function.getImplementation());
@@ -142,7 +146,7 @@ public @Test class FunctionParserTest {
             new CurlyBrackets("", 13, new List<>())
         );
         Function function = parser.parse(new TokenReader(input));
-        Assert.assertEquals("void", function.getOutput().getTypename().getText());
+        Assert.assertEquals("void", validator.nameType(function.getOutput()).getTypename().getText());
         Assert.assertEquals("space", function.getName().getText());
         Assert.assertEquals(true, function.getInput().isEmpty());
         Assert.assertNotNull(function.getImplementation());
@@ -170,13 +174,13 @@ public @Test class FunctionParserTest {
             ))
         );
         Function function = parser.parse(new TokenReader(input));
-        Assert.assertEquals("void", function.getOutput().getTypename().getText());
+        Assert.assertEquals("void", validator.nameType(function.getOutput()).getTypename().getText());
         Assert.assertEquals(1, function.getOutput().getPointers().count());
         Assert.assertEquals("foobar", function.getName().getText());
         Assert.assertEquals(2, function.getInput().count());
-        Assert.assertEquals("float", function.getInput().get(0).getType().getTypename().getText());
+        Assert.assertEquals("float", validator.nameType(function.getInput().get(0).getType()).getTypename().getText());
         Assert.assertEquals("floating", function.getInput().get(0).getName().getText());
-        Assert.assertEquals("double", function.getInput().get(1).getType().getTypename().getText());
+        Assert.assertEquals("double", validator.nameType(function.getInput().get(1).getType()).getTypename().getText());
         Assert.assertEquals("doubling", function.getInput().get(1).getName().getText());
         Assert.assertNotNull(function.getImplementation());
         Assert.assertEquals(3, function.getImplementation().count());

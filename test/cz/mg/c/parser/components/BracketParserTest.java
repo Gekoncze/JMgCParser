@@ -113,7 +113,7 @@ public @Test class BracketParserTest {
         List<Token> input = new List<>(
             new BracketToken("(", 3),
             new BracketToken(")", 4),
-            new Brackets("", 10, new List<>(
+            new RoundBrackets("", 10, new List<>(
                 new BracketToken("(", 12),
                 new BracketToken(")", 13)
             ))

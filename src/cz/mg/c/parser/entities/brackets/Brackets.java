@@ -6,7 +6,7 @@ import cz.mg.annotations.storage.Shared;
 import cz.mg.collections.list.List;
 import cz.mg.tokenizer.entities.Token;
 
-public @Entity class Brackets extends Token {
+public abstract @Entity class Brackets extends Token {
     private List<Token> tokens = new List<>();
 
     public Brackets() {

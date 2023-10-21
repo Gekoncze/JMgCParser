@@ -5,6 +5,7 @@ import cz.mg.annotations.requirement.Required;
 import cz.mg.annotations.storage.Part;
 import cz.mg.annotations.storage.Shared;
 import cz.mg.annotations.storage.Value;
+import cz.mg.c.parser.entities.types.Type;
 import cz.mg.collections.list.List;
 import cz.mg.tokenizer.entities.tokens.NameToken;
 
