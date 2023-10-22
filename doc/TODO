@@ -7,6 +7,9 @@
         const struct FooBar {int a; int b;} const * const
 
 ### SOON ###
+    add union parser
+        implement inline union type parsing inside TypeParser
+
     implement inline enum type parsing
         cases for testing
             enum {one, two}
@@ -21,26 +24,23 @@
             int (*const*fooptrptrarr[1])(int, int);
             maybe also add test for above inside variable, function and struct parser
 
+    add inline type parsers test
     add test for inline type parsing in type parser test
     add test for function pointer type parsing in type parser test
-    add inline type parsers test
-
-    add union parser
-    implement inline union type parsing inside TypeParser
 
     add typedef parser
         cases for testing
             typedef struct Bar {}; // unnamed typedef
             typedef void (*Foo); // named typedef
 
+
+### LATER ###
     add patterns for main entity parsers
         maybe extract parser matching to separate service
         or include patterns inside parsers
         or both
         either of these could allow easier unit testing
 
-
-### LATER ###
     add parser test
     add c main entity parsers test
     add statement parser test
