@@ -1,8 +1,10 @@
 ### NOW ###
-    implement inline struct type and inline union type parsing inside TypeParser
-        cases for testing
-            struct {int a; int b;}
-            struct FooBar {int a; int b;}
+    add const parser test
+    add pointer parser test
+    add struct type parser test
+        struct {int a; int b;}
+        struct FooBar {int a; int b;}
+        const struct FooBar {int a; int b;} const * const
 
 ### SOON ###
     implement inline enum type parsing
@@ -24,6 +26,8 @@
     add inline type parsers test
 
     add union parser
+    implement inline union type parsing inside TypeParser
+
     add typedef parser
         cases for testing
             typedef struct Bar {}; // unnamed typedef
