@@ -1,12 +1,12 @@
 ### NOW ###
-    implement StructureType and UnionType parsing inside TypeParser
+    implement inline struct type and inline union type parsing inside TypeParser
         cases for testing
             struct {int a; int b;}
             struct FooBar {int a; int b;}
 
-    implement EnumType parsing inside TypeParser
+    implement inline enum type parsing
 
-    implement FunctionType parsing inside TypeParser
+    implement inline function type parsing
         cases for testing
             int (*fooptr)(int a, int b);
             int (**fooptrptr)(int a, int b);
@@ -17,11 +17,6 @@
             maybe also add test for above inside variable, function and struct parser
 
 ### SOON ###
-    for NameType (+ parser)
-        add boolean field for struct, union and enum keywords
-        it has implications for variable declarations when generating c code
-        alternatively have sub types for both
-
     add union parser
     add typedef parser
         cases for testing

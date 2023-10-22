@@ -7,7 +7,6 @@ import cz.mg.c.parser.entities.Variable;
 import cz.mg.c.parser.entities.brackets.SquareBrackets;
 import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.c.parser.test.TokenValidator;
-import cz.mg.c.parser.test.TypeValidator;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
 import cz.mg.tokenizer.entities.tokens.NameToken;
@@ -31,7 +30,6 @@ public @Test class VariableParserTest {
 
     private final @Service VariableParser parser = VariableParser.getInstance();
     private final @Service TokenValidator tokenValidator = TokenValidator.getInstance();
-    private final @Service TypeValidator typeValidator = TypeValidator.getInstance();
 
     private void testParseEmpty() {
         Assert.assertThatCode(() -> {
@@ -48,8 +46,8 @@ public @Test class VariableParserTest {
 
         Assert.assertEquals("foo", variable.getName().getText());
         Assert.assertEquals(true, variable.getArrays().isEmpty());
-        Assert.assertEquals(false, typeValidator.nameType(variable.getType()).isConstant());
-        Assert.assertEquals("int", typeValidator.nameType(variable.getType()).getTypename().getText());
+        Assert.assertEquals(false, variable.getType().isConstant());
+        Assert.assertEquals("int", variable.getType().getTypename().getName().getText());
         Assert.assertEquals(true, variable.getType().getPointers().isEmpty());
         reader.readEnd();
     }
@@ -71,8 +69,8 @@ public @Test class VariableParserTest {
             new List<>(new NumberToken("12", 7)),
             variable.getArrays().getFirst().getExpression()
         );
-        Assert.assertEquals(false, typeValidator.nameType(variable.getType()).isConstant());
-        Assert.assertEquals("float", typeValidator.nameType(variable.getType()).getTypename().getText());
+        Assert.assertEquals(false, variable.getType().isConstant());
+        Assert.assertEquals("float", variable.getType().getTypename().getName().getText());
         Assert.assertEquals(true, variable.getType().getPointers().isEmpty());
         reader.readEnd();
     }
@@ -108,8 +106,8 @@ public @Test class VariableParserTest {
             new List<>(new NumberToken("1", 7)),
             variable.getArrays().get(2).getExpression()
         );
-        Assert.assertEquals(false, typeValidator.nameType(variable.getType()).isConstant());
-        Assert.assertEquals("double", typeValidator.nameType(variable.getType()).getTypename().getText());
+        Assert.assertEquals(false, variable.getType().isConstant());
+        Assert.assertEquals("double", variable.getType().getTypename().getName().getText());
         Assert.assertEquals(true, variable.getType().getPointers().isEmpty());
         reader.readEnd();
     }
@@ -137,8 +135,8 @@ public @Test class VariableParserTest {
             ),
             variable.getArrays().getFirst().getExpression()
         );
-        Assert.assertEquals(false, typeValidator.nameType(variable.getType()).isConstant());
-        Assert.assertEquals("float", typeValidator.nameType(variable.getType()).getTypename().getText());
+        Assert.assertEquals(false, variable.getType().isConstant());
+        Assert.assertEquals("float", variable.getType().getTypename().getName().getText());
         Assert.assertEquals(true, variable.getType().getPointers().isEmpty());
         reader.readEnd();
     }
@@ -169,8 +167,8 @@ public @Test class VariableParserTest {
             ),
             variable.getArrays().getFirst().getExpression()
         );
-        Assert.assertEquals(true, typeValidator.nameType(variable.getType()).isConstant());
-        Assert.assertEquals("float", typeValidator.nameType(variable.getType()).getTypename().getText());
+        Assert.assertEquals(true, variable.getType().isConstant());
+        Assert.assertEquals("float", variable.getType().getTypename().getName().getText());
         Assert.assertEquals(1, variable.getType().getPointers().count());
         Assert.assertEquals(true, variable.getType().getPointers().getFirst().isConstant());
         reader.readEnd();

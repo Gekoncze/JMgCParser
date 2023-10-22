@@ -7,7 +7,6 @@ import cz.mg.c.parser.entities.Struct;
 import cz.mg.c.parser.entities.Variable;
 import cz.mg.c.parser.entities.brackets.CurlyBrackets;
 import cz.mg.c.parser.exceptions.ParseException;
-import cz.mg.c.parser.test.TypeValidator;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
 import cz.mg.tokenizer.entities.Token;
@@ -31,7 +30,6 @@ public @Test class StructParserTest {
     }
 
     private final @Mandatory StructParser parser = StructParser.getInstance();
-    private final @Mandatory TypeValidator validator = TypeValidator.getInstance();
 
     private void testEmpty() {
         Assert.assertThatCode(() -> {
@@ -79,8 +77,8 @@ public @Test class StructParserTest {
         Assert.assertEquals(1, struct.getVariables().count());
         Assert.assertEquals("bar", struct.getVariables().getFirst().getName().getText());
         Variable variable = struct.getVariables().getFirst();
-        Assert.assertEquals("int", validator.nameType(variable.getType()).getTypename().getText());
-        Assert.assertEquals(true, validator.nameType(variable.getType()).isConstant());
+        Assert.assertEquals("int", variable.getType().getTypename().getName().getText());
+        Assert.assertEquals(true, variable.getType().isConstant());
         Assert.assertEquals(1, struct.getVariables().getFirst().getType().getPointers().count());
     }
 

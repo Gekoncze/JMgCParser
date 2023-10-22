@@ -3,7 +3,8 @@ package cz.mg.c.parser.services.entity;
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.c.parser.components.TokenReader;
-import cz.mg.c.parser.entities.types.*;
+import cz.mg.c.parser.entities.Type;
+import cz.mg.c.parser.entities.Typename;
 import cz.mg.c.parser.entities.Pointer;
 import cz.mg.c.parser.entities.brackets.RoundBrackets;
 import cz.mg.c.parser.exceptions.ParseException;
@@ -32,7 +33,7 @@ public @Service class TypeParser implements CEntityParser {
         } else if (reader.has("union", NameToken.class)) {
             return parseUnionType(reader);
         } else {
-            NameType type = parseNameType(reader);
+            Type type = parsePlainType(reader);
             if (reader.has(this::functionPointer)) {
                 return parseFunctionType(reader.read(RoundBrackets.class), type);
             } else {
@@ -41,24 +42,28 @@ public @Service class TypeParser implements CEntityParser {
         }
     }
 
-    private @Mandatory NameType parseNameType(@Mandatory TokenReader reader) {
-        NameType type = new NameType();
+    private @Mandatory Type parsePlainType(@Mandatory TokenReader reader) {
+        Type type = new Type();
         type.setConstant(type.isConstant() | readConst(reader));
-        type.setTypename(reader.read(NameToken.class));
+        type.setTypename(new Typename(reader.read(NameToken.class)));
         type.setConstant(type.isConstant() | readConst(reader));
         type.setPointers(readPointers(reader));
         return type;
     }
 
-    private @Mandatory FunctionType parseFunctionType(@Mandatory RoundBrackets brackets, @Mandatory NameType output) {
+    private @Mandatory Type parseFunctionType(@Mandatory RoundBrackets brackets, @Mandatory Type output) {
         throw new UnsupportedOperationException("TODO"); // TODO - implement
     }
 
-    private @Mandatory StructType parseStructType(@Mandatory TokenReader reader) {
+    private @Mandatory Type parseStructType(@Mandatory TokenReader reader) {
         throw new UnsupportedOperationException("TODO"); // TODO - implement
     }
 
-    private @Mandatory UnionType parseUnionType(@Mandatory TokenReader reader) {
+    private @Mandatory Type parseUnionType(@Mandatory TokenReader reader) {
+        throw new UnsupportedOperationException("TODO"); // TODO - implement
+    }
+
+    private @Mandatory Type parseEnumType(@Mandatory TokenReader reader) {
         throw new UnsupportedOperationException("TODO"); // TODO - implement
     }
 

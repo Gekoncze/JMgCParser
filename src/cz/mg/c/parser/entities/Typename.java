@@ -11,6 +11,10 @@ public @Entity class Typename implements CEntity {
     public Typename() {
     }
 
+    public Typename(NameToken name) {
+        this.name = name;
+    }
+
     @Required @Value
     public NameToken getName() {
         return name;
