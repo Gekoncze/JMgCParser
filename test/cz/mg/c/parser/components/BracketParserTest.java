@@ -1,14 +1,17 @@
 package cz.mg.c.parser.components;
 
+import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
-import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.c.parser.entities.brackets.Brackets;
 import cz.mg.c.parser.entities.brackets.RoundBrackets;
 import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
 import cz.mg.tokenizer.entities.Token;
-import cz.mg.tokenizer.entities.tokens.*;
+import cz.mg.tokenizer.entities.tokens.BracketToken;
+import cz.mg.tokenizer.entities.tokens.DoubleQuoteToken;
+import cz.mg.tokenizer.entities.tokens.NameToken;
+import cz.mg.tokenizer.entities.tokens.OperatorToken;
 
 public @Test class BracketParserTest {
     public static void main(String[] args) {
@@ -26,7 +29,7 @@ public @Test class BracketParserTest {
         System.out.println("OK");
     }
 
-    private final @Mandatory BracketParser parser = new BracketParser("test", "(", ")", RoundBrackets::new);
+    private final @Service BracketParser parser = new BracketParser("test", "(", ")", RoundBrackets::new);
 
     private void testParseEmpty() {
         Assert.assertEquals(true, parser.parse(new List<>()).isEmpty());

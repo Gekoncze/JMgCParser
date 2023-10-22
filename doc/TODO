@@ -44,7 +44,4 @@
     add parser test
     add c main entity parsers test
     add statement parser test
-    check if TokenValidator can be shared somehow
-        possibly move it to tokenizer project
-        or maybe create tokenizer test project
     think about renaming NameToken to WordToken

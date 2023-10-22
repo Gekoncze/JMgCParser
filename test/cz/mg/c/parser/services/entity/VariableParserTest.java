@@ -6,12 +6,12 @@ import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.parser.entities.Variable;
 import cz.mg.c.parser.entities.brackets.SquareBrackets;
 import cz.mg.c.parser.exceptions.ParseException;
-import cz.mg.c.parser.test.TokenValidator;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
 import cz.mg.tokenizer.entities.tokens.NameToken;
 import cz.mg.tokenizer.entities.tokens.NumberToken;
 import cz.mg.tokenizer.entities.tokens.OperatorToken;
+import cz.mg.tokenizer.test.TokenValidator;
 
 public @Test class VariableParserTest {
     public static void main(String[] args) {

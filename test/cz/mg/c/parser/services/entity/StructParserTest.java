@@ -1,7 +1,7 @@
 package cz.mg.c.parser.services.entity;
 
+import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
-import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.parser.entities.Struct;
 import cz.mg.c.parser.entities.Variable;
@@ -29,7 +29,7 @@ public @Test class StructParserTest {
         System.out.println("OK");
     }
 
-    private final @Mandatory StructParser parser = StructParser.getInstance();
+    private final @Service StructParser parser = StructParser.getInstance();
 
     private void testEmpty() {
         Assert.assertThatCode(() -> {

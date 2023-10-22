@@ -1,7 +1,7 @@
 package cz.mg.c.parser.services.entity;
 
+import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
-import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.parser.entities.Enum;
 import cz.mg.c.parser.entities.brackets.CurlyBrackets;
@@ -29,7 +29,7 @@ public @Test class EnumParserTest {
         System.out.println("OK");
     }
 
-    private final @Mandatory EnumParser parser = EnumParser.getInstance();
+    private final @Service EnumParser parser = EnumParser.getInstance();
 
     private void testEmpty() {
         Assert.assertThatCode(() -> {

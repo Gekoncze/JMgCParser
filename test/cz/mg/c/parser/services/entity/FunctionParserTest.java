@@ -1,7 +1,7 @@
 package cz.mg.c.parser.services.entity;
 
+import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
-import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.parser.entities.Function;
 import cz.mg.c.parser.entities.brackets.CurlyBrackets;
@@ -31,7 +31,7 @@ public @Test class FunctionParserTest {
         System.out.println("OK");
     }
 
-    private final @Mandatory FunctionParser parser = FunctionParser.getInstance();
+    private final @Service FunctionParser parser = FunctionParser.getInstance();
 
     private void testEmpty() {
         Assert.assertThatCode(() -> {
