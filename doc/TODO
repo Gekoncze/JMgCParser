@@ -4,11 +4,11 @@
             struct {int a; int b;}
             struct FooBar {int a; int b;}
 
+### SOON ###
     implement inline enum type parsing
         cases for testing
             enum {one, two}
 
-### SOON ###
     implement inline function type parsing
         cases for testing
             int (*fooptr)(int a, int b);
@@ -18,6 +18,10 @@
             int (**fooptrptr)(int, int);
             int (*const*fooptrptrarr[1])(int, int);
             maybe also add test for above inside variable, function and struct parser
+
+    add test for inline type parsing in type parser test
+    add test for function pointer type parsing in type parser test
+    add inline type parsers test
 
     add union parser
     add typedef parser

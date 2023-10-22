@@ -9,6 +9,8 @@ import cz.mg.c.parser.entities.Pointer;
 import cz.mg.c.parser.entities.brackets.RoundBrackets;
 import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.c.parser.services.CEntityParser;
+import cz.mg.c.parser.services.entity.type.FunctionTypeParser;
+import cz.mg.c.parser.services.entity.type.InlineTypeParsers;
 import cz.mg.collections.list.List;
 import cz.mg.tokenizer.entities.Token;
 import cz.mg.tokenizer.entities.tokens.NameToken;
@@ -21,25 +23,26 @@ public @Service class TypeParser implements CEntityParser {
         if (instance == null) {
             synchronized (Service.class) {
                 instance = new TypeParser();
+                instance.inlineTypeParsers = InlineTypeParsers.getInstance();
+                instance.functionTypeParser = FunctionTypeParser.getInstance();
             }
         }
         return instance;
     }
 
+    private @Service InlineTypeParsers inlineTypeParsers;
+    private @Service FunctionTypeParser functionTypeParser;
+
     @Override
     public @Mandatory Type parse(@Mandatory TokenReader reader) {
-        if (reader.has("struct", NameToken.class)) {
-            return parseStructType(reader);
-        } else if (reader.has("union", NameToken.class)) {
-            return parseUnionType(reader);
-        } else {
-            Type type = parsePlainType(reader);
-            if (reader.has(this::functionPointer)) {
-                return parseFunctionType(reader.read(RoundBrackets.class), type);
-            } else {
-                return type;
+        Type type = inlineTypeParsers.parse(reader);
+        if (type == null) {
+            type = parsePlainType(reader);
+            if (reader.has(functionTypeParser::matches)) {
+                type = functionTypeParser.parse(reader, type);
             }
         }
+        return type;
     }
 
     private @Mandatory Type parsePlainType(@Mandatory TokenReader reader) {
@@ -49,34 +52,6 @@ public @Service class TypeParser implements CEntityParser {
         type.setConstant(type.isConstant() | readConst(reader));
         type.setPointers(readPointers(reader));
         return type;
-    }
-
-    private @Mandatory Type parseFunctionType(@Mandatory RoundBrackets brackets, @Mandatory Type output) {
-        throw new UnsupportedOperationException("TODO"); // TODO - implement
-    }
-
-    private @Mandatory Type parseStructType(@Mandatory TokenReader reader) {
-        throw new UnsupportedOperationException("TODO"); // TODO - implement
-    }
-
-    private @Mandatory Type parseUnionType(@Mandatory TokenReader reader) {
-        throw new UnsupportedOperationException("TODO"); // TODO - implement
-    }
-
-    private @Mandatory Type parseEnumType(@Mandatory TokenReader reader) {
-        throw new UnsupportedOperationException("TODO"); // TODO - implement
-    }
-
-    private boolean functionPointer(@Mandatory Token token) {
-        if (token instanceof RoundBrackets) {
-            RoundBrackets brackets = (RoundBrackets) token;
-            if (!brackets.getTokens().isEmpty()) {
-                token = brackets.getTokens().getFirst();
-                return token instanceof OperatorToken && token.getText().startsWith("*");
-            }
-        }
-
-        return false;
     }
 
     private boolean readConst(@Mandatory TokenReader reader) {
