@@ -1,5 +1,4 @@
 ### NOW ###
-    add const parser test
     add pointer parser test
     add struct type parser test
         struct {int a; int b;}
