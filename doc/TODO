@@ -16,8 +16,9 @@
             int (*const*fooptrptrarr[1])(int, int);
             maybe also add test for above inside variable, function and struct parser
 
+        consider if this should be re-tested in type and variable parser tests
+
     add inline type parsers test
-    add test for function pointer type parsing in type parser test
 
     add typedef parser
         cases for testing
