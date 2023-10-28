@@ -3,6 +3,7 @@ package cz.mg.c.parser.services.entity;
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
 import cz.mg.c.parser.components.TokenReader;
+import cz.mg.c.parser.entities.Anonymous;
 import cz.mg.c.parser.entities.Struct;
 import cz.mg.c.parser.entities.Variable;
 import cz.mg.c.parser.entities.brackets.CurlyBrackets;
@@ -22,6 +23,7 @@ public @Test class StructParserTest {
         test.testEmpty();
         test.testDeclaration();
         test.testNoVariables();
+        test.testAnonymous();
         test.testSingleVariable();
         test.testMultipleVariables();
         test.testInvalid();
@@ -55,6 +57,17 @@ public @Test class StructParserTest {
         );
         Struct struct = parser.parse(new TokenReader(input));
         Assert.assertEquals("Foo", struct.getName().getText());
+        Assert.assertNotNull(struct.getVariables());
+        Assert.assertEquals(true, struct.getVariables().isEmpty());
+    }
+
+    private void testAnonymous() {
+        List<Token> input = new List<>(
+            new NameToken("struct", 0),
+            new CurlyBrackets("", 15, new List<>())
+        );
+        Struct struct = parser.parse(new TokenReader(input));
+        Assert.assertSame(Anonymous.NAME, struct.getName());
         Assert.assertNotNull(struct.getVariables());
         Assert.assertEquals(true, struct.getVariables().isEmpty());
     }

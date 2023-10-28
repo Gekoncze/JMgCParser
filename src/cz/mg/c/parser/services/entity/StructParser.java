@@ -3,6 +3,7 @@ package cz.mg.c.parser.services.entity;
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.c.parser.components.TokenReader;
+import cz.mg.c.parser.entities.Anonymous;
 import cz.mg.c.parser.entities.Statement;
 import cz.mg.c.parser.entities.Struct;
 import cz.mg.c.parser.entities.Variable;
@@ -36,7 +37,11 @@ public @Service class StructParser {
     public @Mandatory Struct parse(@Mandatory TokenReader reader) {
         reader.read("struct", NameToken.class);
         Struct struct = new Struct();
-        struct.setName(reader.read(NameToken.class));
+        if (reader.has(NameToken.class)) {
+            struct.setName(reader.read(NameToken.class));
+        } else {
+            struct.setName(Anonymous.NAME);
+        }
         if (reader.has(CurlyBrackets.class)) {
             struct.setVariables(readVariables(reader.read(CurlyBrackets.class)));
         }

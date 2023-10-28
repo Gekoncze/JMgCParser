@@ -11,6 +11,8 @@ import cz.mg.tokenizer.entities.tokens.DoubleQuoteToken;
 import cz.mg.tokenizer.entities.tokens.NameToken;
 import cz.mg.tokenizer.entities.tokens.OperatorToken;
 
+import javax.naming.Name;
+
 public @Test class PointerParserTest {
     public static void main(String[] args) {
         System.out.print("Running " + PointerParserTest.class.getSimpleName() + " ... ");
@@ -24,6 +26,7 @@ public @Test class PointerParserTest {
         test.testParseMultiple();
         test.testParseMultipleGroup();
         test.testMixed();
+        test.testParseRemainingTokens();
 
         System.out.println("OK");
     }
@@ -113,5 +116,14 @@ public @Test class PointerParserTest {
         Assert.assertEquals(false, pointers.get(2).isConstant());
         Assert.assertEquals(false, pointers.get(3).isConstant());
         Assert.assertEquals(false, pointers.get(4).isConstant());
+    }
+
+    private void testParseRemainingTokens() {
+        List<Token> tokens = new List<>(new OperatorToken("*", 0), new NameToken("foo", 2));
+        TokenReader reader = new TokenReader(tokens);
+        List<Pointer> pointers = parser.parse(reader);
+        Assert.assertEquals(1, pointers.count());
+        Assert.assertEquals(false, pointers.getFirst().isConstant());
+        Assert.assertEquals(true, reader.has());
     }
 }
