@@ -2,7 +2,6 @@
     ...
 
 ### SOON ###
-    add union parser
     implement inline union type parsing
     implement inline enum type parsing
 
