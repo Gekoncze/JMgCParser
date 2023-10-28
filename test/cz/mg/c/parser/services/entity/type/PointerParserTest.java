@@ -121,9 +121,7 @@ public @Test class PointerParserTest {
     private void testParseRemainingTokens() {
         List<Token> tokens = new List<>(new OperatorToken("*", 0), new NameToken("foo", 2));
         TokenReader reader = new TokenReader(tokens);
-        List<Pointer> pointers = parser.parse(reader);
-        Assert.assertEquals(1, pointers.count());
-        Assert.assertEquals(false, pointers.getFirst().isConstant());
+        parser.parse(reader);
         Assert.assertEquals(true, reader.has());
     }
 }

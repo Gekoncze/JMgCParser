@@ -1,8 +1,5 @@
 ### NOW ###
-    add struct type parser test
-        struct {int a;}
-        struct FooBar {int a; int b;}
-        const struct FooBar {int a; int b;} const * const
+    ...
 
 ### SOON ###
     add union parser
