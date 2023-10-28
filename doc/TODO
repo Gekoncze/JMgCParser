@@ -1,11 +1,4 @@
 ### NOW ###
-    extend enum parser
-        add anonymous parsing
-        cases for testing
-            enum {one, two}
-            enum numbers {one, two}
-            enum numbers {one = 1, two = 2}
-
     extend variable parser test with inline type parsing
 
 ### SOON ###

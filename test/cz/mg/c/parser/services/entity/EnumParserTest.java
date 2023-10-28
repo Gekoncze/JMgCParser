@@ -3,6 +3,7 @@ package cz.mg.c.parser.services.entity;
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
 import cz.mg.c.parser.components.TokenReader;
+import cz.mg.c.parser.entities.Anonymous;
 import cz.mg.c.parser.entities.Enum;
 import cz.mg.c.parser.entities.brackets.CurlyBrackets;
 import cz.mg.c.parser.exceptions.ParseException;
@@ -22,6 +23,7 @@ public @Test class EnumParserTest {
         test.testEmpty();
         test.testDeclaration();
         test.testNoEntries();
+        test.testAnonymous();
         test.testSingleEntry();
         test.testMultipleEntries();
         test.testIllegalEntry();
@@ -55,6 +57,17 @@ public @Test class EnumParserTest {
         );
         Enum enom = parser.parse(new TokenReader(input));
         Assert.assertEquals("NomNom", enom.getName().getText());
+        Assert.assertNotNull(enom.getEntries());
+        Assert.assertEquals(true, enom.getEntries().isEmpty());
+    }
+
+    private void testAnonymous() {
+        List<Token> input = new List<>(
+            new NameToken("enum", 0),
+            new CurlyBrackets("", 15, new List<>())
+        );
+        Enum enom = parser.parse(new TokenReader(input));
+        Assert.assertSame(Anonymous.NAME, enom.getName());
         Assert.assertNotNull(enom.getEntries());
         Assert.assertEquals(true, enom.getEntries().isEmpty());
     }

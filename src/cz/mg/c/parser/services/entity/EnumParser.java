@@ -3,6 +3,7 @@ package cz.mg.c.parser.services.entity;
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.c.parser.components.TokenReader;
+import cz.mg.c.parser.entities.Anonymous;
 import cz.mg.c.parser.entities.Enum;
 import cz.mg.c.parser.entities.EnumEntry;
 import cz.mg.c.parser.entities.brackets.CurlyBrackets;
@@ -36,7 +37,11 @@ public @Service class EnumParser {
     public @Mandatory Enum parse(@Mandatory TokenReader reader) {
         reader.read("enum", NameToken.class);
         Enum enom = new Enum();
-        enom.setName(reader.read(NameToken.class));
+        if (reader.has(NameToken.class)) {
+            enom.setName(reader.read(NameToken.class));
+        } else {
+            enom.setName(Anonymous.NAME);
+        }
         if (reader.has(CurlyBrackets.class)) {
             enom.setEntries(readEntries(reader.read(CurlyBrackets.class)));
         }
