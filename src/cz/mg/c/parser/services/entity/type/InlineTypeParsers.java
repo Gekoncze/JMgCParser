@@ -31,7 +31,15 @@ public @Service class InlineTypeParsers {
     private InlineTypeParsers() {
     }
 
-    public @Optional Type parse(@Mandatory TokenReader reader) {
+    public @Optional Type parse(@Mandatory TokenReader reader, boolean constant) {
+        Type type = parse(reader);
+        if (type != null) {
+            type.setConstant(constant);
+        }
+        return type;
+    }
+
+    private @Optional Type parse(@Mandatory TokenReader reader) {
         if (reader.has("struct", NameToken.class)) {
             return structTypeParser.parse(reader);
         } else if (reader.has("union", NameToken.class)) {

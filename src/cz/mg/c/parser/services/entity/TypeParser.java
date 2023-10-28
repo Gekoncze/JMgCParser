@@ -35,9 +35,10 @@ public @Service class TypeParser implements CEntityParser {
 
     @Override
     public @Mandatory Type parse(@Mandatory TokenReader reader) {
-        Type type = inlineTypeParsers.parse(reader);
+        boolean constant = constParser.parse(reader);
+        Type type = inlineTypeParsers.parse(reader, constant);
         if (type == null) {
-            type = parsePlainType(reader);
+            type = parsePlainType(reader, constant);
             if (reader.has(functionTypeParser::matches)) {
                 type = functionTypeParser.parse(reader, type);
             }
@@ -45,9 +46,9 @@ public @Service class TypeParser implements CEntityParser {
         return type;
     }
 
-    private @Mandatory Type parsePlainType(@Mandatory TokenReader reader) {
+    private @Mandatory Type parsePlainType(@Mandatory TokenReader reader, boolean constant) {
         Type type = new Type();
-        type.setConstant(type.isConstant() | constParser.parse(reader));
+        type.setConstant(type.isConstant() | constant);
         type.setTypename(new Typename(reader.read(NameToken.class)));
         type.setConstant(type.isConstant() | constParser.parse(reader));
         type.setPointers(pointerParser.parse(reader));

@@ -3,7 +3,10 @@ package cz.mg.c.parser.services.entity;
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
 import cz.mg.c.parser.components.TokenReader;
+import cz.mg.c.parser.entities.Anonymous;
+import cz.mg.c.parser.entities.Struct;
 import cz.mg.c.parser.entities.Variable;
+import cz.mg.c.parser.entities.brackets.CurlyBrackets;
 import cz.mg.c.parser.entities.brackets.SquareBrackets;
 import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.collections.list.List;
@@ -11,6 +14,7 @@ import cz.mg.test.Assert;
 import cz.mg.tokenizer.entities.tokens.NameToken;
 import cz.mg.tokenizer.entities.tokens.NumberToken;
 import cz.mg.tokenizer.entities.tokens.OperatorToken;
+import cz.mg.tokenizer.entities.tokens.SeparatorToken;
 import cz.mg.tokenizer.test.TokenValidator;
 
 public @Test class VariableParserTest {
@@ -24,6 +28,7 @@ public @Test class VariableParserTest {
         test.testParseArrays();
         test.testParseArrayExpression();
         test.testParseComplex();
+        test.testParseInlineType();
 
         System.out.println("OK");
     }
@@ -172,5 +177,31 @@ public @Test class VariableParserTest {
         Assert.assertEquals(1, variable.getType().getPointers().count());
         Assert.assertEquals(true, variable.getType().getPointers().getFirst().isConstant());
         reader.readEnd();
+    }
+
+    private void testParseInlineType() {
+        TokenReader reader = new TokenReader(new List<>(
+            new NameToken("const", 0),
+            new NameToken("struct", 7),
+            new CurlyBrackets("", 10, new List<>(
+                new NameToken("int", 15),
+                new NameToken("a", 17),
+                new SeparatorToken(";", 18)
+            )),
+            new OperatorToken("*", 20),
+            new NameToken("foobar", 22),
+            new SquareBrackets("", 24, new List<>(
+                new NumberToken("2", 26)
+            ))
+        ));
+
+        Variable variable = parser.parse(reader);
+
+        Assert.assertEquals("foobar", variable.getName().getText());
+        Assert.assertEquals(1, variable.getArrays().count());
+        Assert.assertEquals(1, variable.getType().getPointers().count());
+        Assert.assertEquals(true, variable.getType().isConstant());
+        Assert.assertEquals(true, variable.getType().getTypename() instanceof Struct);
+        Assert.assertSame(Anonymous.NAME, variable.getType().getTypename().getName());
     }
 }
