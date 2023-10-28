@@ -3,11 +3,10 @@
 
 ### SOON ###
     add union parser
-        implement inline union type parsing inside TypeParser
-
+    implement inline union type parsing
     implement inline enum type parsing
 
-    implement inline function type parsing
+    implement inline function type parsing (function pointers)
         cases for testing
             int (*fooptr)(int a, int b);
             int (**fooptrptr)(int a, int b);
@@ -18,7 +17,6 @@
             maybe also add test for above inside variable, function and struct parser
 
     add inline type parsers test
-    add test for inline type parsing in type parser test
     add test for function pointer type parsing in type parser test
 
     add typedef parser

@@ -4,14 +4,18 @@ import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.c.parser.components.TokenReader;
+import cz.mg.c.parser.entities.Anonymous;
 import cz.mg.c.parser.entities.Pointer;
+import cz.mg.c.parser.entities.Struct;
 import cz.mg.c.parser.entities.Type;
+import cz.mg.c.parser.entities.brackets.CurlyBrackets;
 import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
 import cz.mg.tokenizer.entities.Token;
 import cz.mg.tokenizer.entities.tokens.NameToken;
 import cz.mg.tokenizer.entities.tokens.OperatorToken;
+import cz.mg.tokenizer.entities.tokens.SeparatorToken;
 
 public @Test class TypeParserTest {
     public static void main(String[] args) {
@@ -27,6 +31,7 @@ public @Test class TypeParserTest {
         test.testParsePointersTogether();
         test.testParsePointersConst();
         test.testParsePointersInvalid();
+        test.testParseInlineType();
 
         System.out.println("OK");
     }
@@ -226,5 +231,25 @@ public @Test class TypeParserTest {
                 new OperatorToken("*/", 4)
             )));
         }).throwsException(ParseException.class);
+    }
+
+    private void testParseInlineType() {
+        TokenReader reader = new TokenReader(new List<>(
+            new NameToken("const", 0),
+            new NameToken("struct", 7),
+            new CurlyBrackets("", 10, new List<>(
+                new NameToken("int", 15),
+                new NameToken("a", 17),
+                new SeparatorToken(";", 18)
+            )),
+            new OperatorToken("*", 20)
+        ));
+
+        Type type = parser.parse(reader);
+
+        Assert.assertEquals(1, type.getPointers().count());
+        Assert.assertEquals(true, type.isConstant());
+        Assert.assertEquals(true, type.getTypename() instanceof Struct);
+        Assert.assertSame(Anonymous.NAME, type.getTypename().getName());
     }
 }
