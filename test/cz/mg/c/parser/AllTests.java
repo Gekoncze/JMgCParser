@@ -33,6 +33,7 @@ public @Test class AllTests {
         EnumEntryParserTest.main(args);
         EnumParserTest.main(args);
         FunctionParserTest.main(args);
+        NameParserTest.main(args);
         StructParserTest.main(args);
         TypeParserTest.main(args);
         UnionParserTest.main(args);
