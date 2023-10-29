@@ -50,7 +50,7 @@ public @Test class VariableParserTest {
         Variable variable = parser.parse(reader);
 
         Assert.assertEquals("foo", variable.getName().getText());
-        Assert.assertEquals(true, variable.getArrays().isEmpty());
+        Assert.assertEquals(true, variable.getType().getArrays().isEmpty());
         Assert.assertEquals(false, variable.getType().isConstant());
         Assert.assertEquals("int", variable.getType().getTypename().getName().getText());
         Assert.assertEquals(true, variable.getType().getPointers().isEmpty());
@@ -69,10 +69,10 @@ public @Test class VariableParserTest {
         Variable variable = parser.parse(reader);
 
         Assert.assertEquals("bar", variable.getName().getText());
-        Assert.assertEquals(1, variable.getArrays().count());
+        Assert.assertEquals(1, variable.getType().getArrays().count());
         tokenValidator.assertEquals(
             new List<>(new NumberToken("12", 7)),
-            variable.getArrays().getFirst().getExpression()
+            variable.getType().getArrays().getFirst().getExpression()
         );
         Assert.assertEquals(false, variable.getType().isConstant());
         Assert.assertEquals("float", variable.getType().getTypename().getName().getText());
@@ -98,18 +98,18 @@ public @Test class VariableParserTest {
         Variable variable = parser.parse(reader);
 
         Assert.assertEquals("foobar", variable.getName().getText());
-        Assert.assertEquals(3, variable.getArrays().count());
+        Assert.assertEquals(3, variable.getType().getArrays().count());
         tokenValidator.assertEquals(
             new List<>(new NumberToken("9", 7)),
-            variable.getArrays().get(0).getExpression()
+            variable.getType().getArrays().get(0).getExpression()
         );
         tokenValidator.assertEquals(
             new List<>(new NumberToken("3", 7)),
-            variable.getArrays().get(1).getExpression()
+            variable.getType().getArrays().get(1).getExpression()
         );
         tokenValidator.assertEquals(
             new List<>(new NumberToken("1", 7)),
-            variable.getArrays().get(2).getExpression()
+            variable.getType().getArrays().get(2).getExpression()
         );
         Assert.assertEquals(false, variable.getType().isConstant());
         Assert.assertEquals("double", variable.getType().getTypename().getName().getText());
@@ -131,14 +131,14 @@ public @Test class VariableParserTest {
         Variable variable = parser.parse(reader);
 
         Assert.assertEquals("bar", variable.getName().getText());
-        Assert.assertEquals(1, variable.getArrays().count());
+        Assert.assertEquals(1, variable.getType().getArrays().count());
         tokenValidator.assertEquals(
             new List<>(
                 new NumberToken("12", 7),
                 new OperatorToken("+", 8),
                 new NumberToken("1.5", 9)
             ),
-            variable.getArrays().getFirst().getExpression()
+            variable.getType().getArrays().getFirst().getExpression()
         );
         Assert.assertEquals(false, variable.getType().isConstant());
         Assert.assertEquals("float", variable.getType().getTypename().getName().getText());
@@ -163,14 +163,14 @@ public @Test class VariableParserTest {
         Variable variable = parser.parse(reader);
 
         Assert.assertEquals("bar", variable.getName().getText());
-        Assert.assertEquals(1, variable.getArrays().count());
+        Assert.assertEquals(1, variable.getType().getArrays().count());
         tokenValidator.assertEquals(
             new List<>(
                 new NumberToken("12", 22),
                 new OperatorToken("+", 24),
                 new NumberToken("1.5", 25)
             ),
-            variable.getArrays().getFirst().getExpression()
+            variable.getType().getArrays().getFirst().getExpression()
         );
         Assert.assertEquals(true, variable.getType().isConstant());
         Assert.assertEquals("float", variable.getType().getTypename().getName().getText());
@@ -198,7 +198,7 @@ public @Test class VariableParserTest {
         Variable variable = parser.parse(reader);
 
         Assert.assertEquals("foobar", variable.getName().getText());
-        Assert.assertEquals(1, variable.getArrays().count());
+        Assert.assertEquals(1, variable.getType().getArrays().count());
         Assert.assertEquals(1, variable.getType().getPointers().count());
         Assert.assertEquals(true, variable.getType().isConstant());
         Assert.assertEquals(true, variable.getType().getTypename() instanceof Struct);

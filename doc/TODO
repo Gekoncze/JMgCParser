@@ -1,7 +1,4 @@
 ### NOW ###
-    move array from variable to type
-
-### SOON ###
     implement inline function type parsing (function pointers)
         cases for testing
             int (*fooptr)(int a, int b);
@@ -14,6 +11,7 @@
 
         consider if this should be re-tested in type and variable parser tests
 
+### SOON ###
     add inline type parsers test
 
     add typedef parser

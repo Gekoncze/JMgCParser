@@ -11,6 +11,7 @@ public @Entity class Type implements CEntity {
     private Typename typename;
     private boolean constant;
     private List<Pointer> pointers = new List<>();
+    private List<Array> arrays = new List<>();
 
     public Type() {
     }
@@ -40,5 +41,14 @@ public @Entity class Type implements CEntity {
 
     public void setPointers(List<Pointer> pointers) {
         this.pointers = pointers;
+    }
+
+    @Required @Part
+    public List<Array> getArrays() {
+        return arrays;
+    }
+
+    public void setArrays(List<Array> arrays) {
+        this.arrays = arrays;
     }
 }
