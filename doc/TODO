@@ -1,4 +1,8 @@
 ### NOW ###
+    add support for anonymous variable in function parser
+        cases for testing
+            void foobar(int, int);
+
     implement inline function type parsing (function pointers)
         cases for testing
             int (*fooptr)(int a, int b);
