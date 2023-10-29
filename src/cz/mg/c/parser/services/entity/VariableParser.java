@@ -3,11 +3,9 @@ package cz.mg.c.parser.services.entity;
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.c.parser.components.TokenReader;
-import cz.mg.c.parser.entities.Array;
 import cz.mg.c.parser.entities.Variable;
-import cz.mg.c.parser.entities.brackets.SquareBrackets;
 import cz.mg.c.parser.services.CMainEntityParser;
-import cz.mg.collections.list.List;
+import cz.mg.c.parser.services.entity.type.ArrayParser;
 import cz.mg.tokenizer.entities.tokens.NameToken;
 
 public @Service class VariableParser implements CMainEntityParser {
@@ -18,33 +16,21 @@ public @Service class VariableParser implements CMainEntityParser {
             synchronized (Service.class) {
                 instance = new VariableParser();
                 instance.typeParser = TypeParser.getInstance();
+                instance.arrayParser = ArrayParser.getInstance();
             }
         }
         return instance;
     }
 
     private @Service TypeParser typeParser;
+    private @Service ArrayParser arrayParser;
 
     @Override
     public @Mandatory Variable parse(@Mandatory TokenReader reader) {
         Variable variable = new Variable();
         variable.setType(typeParser.parse(reader));
         variable.setName(reader.read(NameToken.class));
-        variable.setArrays(readArrays(reader));
+        variable.setArrays(arrayParser.parse(reader));
         return variable;
-    }
-
-    private @Mandatory List<Array> readArrays(@Mandatory TokenReader reader) {
-        List<Array> arrays = new List<>();
-        while (reader.has(SquareBrackets.class)) {
-            arrays.addLast(
-                new Array(
-                    new List<>(
-                        reader.read(SquareBrackets.class).getTokens()
-                    )
-                )
-            );
-        }
-        return arrays;
     }
 }
