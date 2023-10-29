@@ -22,6 +22,7 @@ public @Test class AllTests {
         SquareBracketParserTest.main(args);
 
         // cz.mg.c.parser.services.entity.type
+        ArrayParserTest.main(args);
         ConstParserTest.main(args);
         EnumTypeParserTest.main(args);
         PointerParserTest.main(args);
