@@ -10,6 +10,7 @@ import cz.mg.c.parser.services.bracket.SquareBracketParserTest;
 import cz.mg.c.parser.services.entity.type.ConstParserTest;
 import cz.mg.c.parser.services.entity.type.PointerParserTest;
 import cz.mg.c.parser.services.entity.type.StructTypeParserTest;
+import cz.mg.c.parser.services.entity.type.UnionTypeParserTest;
 import cz.mg.c.parser.services.statement.BlockStatementParserTest;
 import cz.mg.c.parser.services.statement.SemicolonStatementParserTest;
 
@@ -27,6 +28,7 @@ public @Test class AllTests {
         ConstParserTest.main(args);
         PointerParserTest.main(args);
         StructTypeParserTest.main(args);
+        UnionTypeParserTest.main(args);
 
         // cz.mg.c.parser.services.entity
         EnumEntryParserTest.main(args);
