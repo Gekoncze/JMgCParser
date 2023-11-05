@@ -24,6 +24,7 @@ public @Test class VariableParserTest {
         VariableParserTest test = new VariableParserTest();
         test.testParseEmpty();
         test.testParseSimple();
+        test.testParseAnonymous();
         test.testParseArray();
         test.testParseArrays();
         test.testParseArrayExpression();
@@ -50,6 +51,19 @@ public @Test class VariableParserTest {
         Variable variable = parser.parse(reader);
 
         Assert.assertEquals("foo", variable.getName().getText());
+        Assert.assertEquals(true, variable.getType().getArrays().isEmpty());
+        Assert.assertEquals(false, variable.getType().isConstant());
+        Assert.assertEquals("int", variable.getType().getTypename().getName().getText());
+        Assert.assertEquals(true, variable.getType().getPointers().isEmpty());
+        reader.readEnd();
+    }
+
+    private void testParseAnonymous() {
+        TokenReader reader = new TokenReader(new List<>(new NameToken("int", 2)));
+
+        Variable variable = parser.parse(reader);
+
+        Assert.assertSame(Anonymous.NAME, variable.getName());
         Assert.assertEquals(true, variable.getType().getArrays().isEmpty());
         Assert.assertEquals(false, variable.getType().isConstant());
         Assert.assertEquals("int", variable.getType().getTypename().getName().getText());
