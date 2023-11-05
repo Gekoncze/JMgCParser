@@ -11,7 +11,6 @@ import cz.mg.c.parser.services.CMainEntityParser;
 import cz.mg.c.parser.services.ListParser;
 import cz.mg.collections.list.List;
 import cz.mg.tokenizer.entities.Token;
-import cz.mg.tokenizer.entities.tokens.NameToken;
 
 public @Service class FunctionParser implements CMainEntityParser {
     private static volatile @Service FunctionParser instance;
@@ -24,6 +23,7 @@ public @Service class FunctionParser implements CMainEntityParser {
                     instance.typeParser = TypeParser.getInstance();
                     instance.variableParser = VariableParser.getInstance();
                     instance.listParser = ListParser.getInstance();
+                    instance.nameParser = NameParser.getInstance();
                 }
             }
         }
@@ -33,6 +33,7 @@ public @Service class FunctionParser implements CMainEntityParser {
     private @Service TypeParser typeParser;
     private @Service VariableParser variableParser;
     private @Service ListParser listParser;
+    private @Service NameParser nameParser;
 
     private FunctionParser() {
     }
@@ -41,7 +42,7 @@ public @Service class FunctionParser implements CMainEntityParser {
     public @Mandatory Function parse(@Mandatory TokenReader reader) {
         Function function = new Function();
         function.setOutput(typeParser.parse(reader));
-        function.setName(reader.read(NameToken.class));
+        function.setName(nameParser.parse(reader));
         function.setInput(readInput(reader.read(RoundBrackets.class)));
         if (reader.has(CurlyBrackets.class)) {
             function.setImplementation(readImplementation(reader.read(CurlyBrackets.class)));

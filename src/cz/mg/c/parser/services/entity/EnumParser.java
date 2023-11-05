@@ -3,7 +3,6 @@ package cz.mg.c.parser.services.entity;
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.c.parser.components.TokenReader;
-import cz.mg.c.parser.entities.Anonymous;
 import cz.mg.c.parser.entities.Enum;
 import cz.mg.c.parser.entities.EnumEntry;
 import cz.mg.c.parser.entities.brackets.CurlyBrackets;
@@ -22,6 +21,7 @@ public @Service class EnumParser {
                     instance = new EnumParser();
                     instance.enumEntryParser = EnumEntryParser.getInstance();
                     instance.listParser = ListParser.getInstance();
+                    instance.nameParser = NameParser.getInstance();
                 }
             }
         }
@@ -30,6 +30,7 @@ public @Service class EnumParser {
 
     private @Service EnumEntryParser enumEntryParser;
     private @Service ListParser listParser;
+    private @Service NameParser nameParser;
 
     private EnumParser() {
     }
@@ -37,11 +38,7 @@ public @Service class EnumParser {
     public @Mandatory Enum parse(@Mandatory TokenReader reader) {
         reader.read("enum", NameToken.class);
         Enum enom = new Enum();
-        if (reader.has(NameToken.class)) {
-            enom.setName(reader.read(NameToken.class));
-        } else {
-            enom.setName(Anonymous.NAME);
-        }
+        enom.setName(nameParser.parse(reader));
         if (reader.has(CurlyBrackets.class)) {
             enom.setEntries(readEntries(reader.read(CurlyBrackets.class)));
         }

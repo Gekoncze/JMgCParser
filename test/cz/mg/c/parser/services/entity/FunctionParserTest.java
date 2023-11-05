@@ -3,6 +3,7 @@ package cz.mg.c.parser.services.entity;
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
 import cz.mg.c.parser.components.TokenReader;
+import cz.mg.c.parser.entities.Anonymous;
 import cz.mg.c.parser.entities.Function;
 import cz.mg.c.parser.entities.brackets.CurlyBrackets;
 import cz.mg.c.parser.entities.brackets.RoundBrackets;
@@ -21,6 +22,7 @@ public @Test class FunctionParserTest {
         FunctionParserTest test = new FunctionParserTest();
         test.testEmpty();
         test.testNoOutput();
+        test.testInterfaceAnonymous();
         test.testInterfaceNoInput();
         test.testInterfaceSingleInput();
         test.testInterfaceMultipleInput();
@@ -48,6 +50,18 @@ public @Test class FunctionParserTest {
         Function function = parser.parse(new TokenReader(input));
         Assert.assertEquals("void", function.getOutput().getTypename().getName().getText());
         Assert.assertEquals("foo", function.getName().getText());
+        Assert.assertEquals(true, function.getInput().isEmpty());
+        Assert.assertNull(function.getImplementation());
+    }
+
+    private void testInterfaceAnonymous() {
+        List<Token> input = new List<>(
+            new NameToken("void", 0),
+            new RoundBrackets("", 8, new List<>())
+        );
+        Function function = parser.parse(new TokenReader(input));
+        Assert.assertEquals("void", function.getOutput().getTypename().getName().getText());
+        Assert.assertSame(Anonymous.NAME, function.getName());
         Assert.assertEquals(true, function.getInput().isEmpty());
         Assert.assertNull(function.getImplementation());
     }
