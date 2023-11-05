@@ -3,9 +3,12 @@ package cz.mg.c.parser.services.entity.type;
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.c.parser.components.TokenReader;
+import cz.mg.c.parser.entities.Function;
 import cz.mg.c.parser.entities.Type;
 import cz.mg.c.parser.entities.brackets.RoundBrackets;
+import cz.mg.c.parser.services.entity.VariableListParser;
 import cz.mg.tokenizer.entities.Token;
+import cz.mg.tokenizer.entities.tokens.NameToken;
 import cz.mg.tokenizer.entities.tokens.OperatorToken;
 
 public @Service class FunctionTypeParser {
@@ -16,11 +19,18 @@ public @Service class FunctionTypeParser {
             synchronized (Service.class) {
                 if (instance == null) {
                     instance = new FunctionTypeParser();
+                    instance.pointerParser = PointerParser.getInstance();
+                    instance.arrayParser = ArrayParser.getInstance();
+                    instance.variableListParser = VariableListParser.getInstance();
                 }
             }
         }
         return instance;
     }
+
+    private @Service PointerParser pointerParser;
+    private @Service ArrayParser arrayParser;
+    private @Service VariableListParser variableListParser;
 
     private FunctionTypeParser() {
     }
@@ -38,7 +48,16 @@ public @Service class FunctionTypeParser {
     }
 
     public @Mandatory Type parse(@Mandatory TokenReader reader, @Mandatory Type output) {
-        RoundBrackets brackets = reader.read(RoundBrackets.class);
-        throw new UnsupportedOperationException(); // TODO
+        TokenReader bracketReader = new TokenReader(reader.read(RoundBrackets.class).getTokens());
+        Function function = new Function();
+        function.setOutput(output);
+        Type type = new Type();
+        type.setTypename(function);
+        type.setPointers(pointerParser.parse(bracketReader));
+        function.setName(bracketReader.read(NameToken.class));
+        type.setArrays(arrayParser.parse(bracketReader));
+        function.setInput(variableListParser.parse(reader.read(RoundBrackets.class)));
+        bracketReader.readEnd();
+        return type;
     }
 }
