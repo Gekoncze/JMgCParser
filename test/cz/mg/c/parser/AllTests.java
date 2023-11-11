@@ -37,6 +37,7 @@ public @Test class AllTests {
         StructParserTest.main(args);
         TypeParserTest.main(args);
         UnionParserTest.main(args);
+        VariableListParserTest.main(args);
         VariableParserTest.main(args);
 
         // cz.mg.c.parser.services.statement

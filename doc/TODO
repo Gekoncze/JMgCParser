@@ -1,6 +1,4 @@
 ### NOW ###
-    add variable list parser test
-
     add tests for anonymous variables in function parser
         cases for testing
             void foobar(int, int);
