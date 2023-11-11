@@ -1,10 +1,4 @@
 ### NOW ###
-    add tests for anonymous variables in function parser
-        cases for testing
-            void foobar(int, int);
-            void foobar(int[]);
-            void foobar(int foo[]);
-
     add tests for function type parsing (function pointers)
         cases for testing
             int (*fooptr)(int a, int b);

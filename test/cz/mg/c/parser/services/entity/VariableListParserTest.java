@@ -2,6 +2,7 @@ package cz.mg.c.parser.services.entity;
 
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
+import cz.mg.c.parser.entities.Anonymous;
 import cz.mg.c.parser.entities.Variable;
 import cz.mg.c.parser.entities.brackets.RoundBrackets;
 import cz.mg.c.parser.exceptions.ParseException;
@@ -18,6 +19,7 @@ public @Test class VariableListParserTest {
         VariableListParserTest test = new VariableListParserTest();
         test.testParseEmpty();
         test.testParseIllegalList();
+        test.testParseAnonymous();
         test.testParseSingle();
         test.testParseMultiple();
 
@@ -35,6 +37,15 @@ public @Test class VariableListParserTest {
         Assert.assertThatCode(() -> {
             parser.parse(new RoundBrackets("", 0, new List<>(new SeparatorToken(",", 0))));
         }).throwsException(ParseException.class);
+    }
+
+    private void testParseAnonymous() {
+        List<Variable> variables = parser.parse(new RoundBrackets("", 0, new List<>(
+            new NameToken("int", 0)
+        )));
+        Assert.assertEquals(1, variables.count());
+        Assert.assertEquals("int", variables.getFirst().getType().getTypename().getName().getText());
+        Assert.assertSame(Anonymous.NAME, variables.getFirst().getName());
     }
 
     private void testParseSingle() {
