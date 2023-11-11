@@ -1,8 +1,8 @@
 ### NOW ###
-    ...
+    add inline type parsers test
 
 ### SOON ###
-    add inline type parsers test
+    add statement parser test
 
     add typedef parser
         cases for testing
@@ -11,17 +11,16 @@
             typedef int FooBar[2]; // type array
             typedef void (*FooBar[2])(); // function array
 
-
-### LATER ###
-    vararg support for functions and function pointers
-
     add patterns for main entity parsers
         maybe extract parser matching to separate service
         or include patterns inside parsers
         or both
         either of these could allow easier unit testing
 
-    add parser test
     add c main entity parsers test
-    add statement parser test
+
+
+### LATER ###
+    add parser test
+    vararg support for functions and function pointers
     think about renaming NameToken to WordToken
