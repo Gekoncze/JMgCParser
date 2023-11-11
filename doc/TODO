@@ -1,14 +1,5 @@
 ### NOW ###
-    add tests for function type parsing (function pointers)
-        cases for testing
-            int (*fooptr)(int a, int b);
-            int (**fooptrptr)(int a, int b);
-            int (*const*fooptrptrarr[1])(int a, int b);
-            int (*fooptr)(int, int);
-            int (**fooptrptr)(int, int);
-            int (*const*fooptrptrarr[1])(int, int);
-
-        consider if this should be re-tested in type, variable and other parser tests
+    ...
 
 ### SOON ###
     add inline type parsers test

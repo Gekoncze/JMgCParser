@@ -25,6 +25,7 @@ public @Test class AllTests {
         ArrayParserTest.main(args);
         ConstParserTest.main(args);
         EnumTypeParserTest.main(args);
+        FunctionTypeParserTest.main(args);
         PointerParserTest.main(args);
         StructTypeParserTest.main(args);
         UnionTypeParserTest.main(args);
