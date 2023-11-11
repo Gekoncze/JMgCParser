@@ -11,7 +11,7 @@ import cz.mg.c.parser.entities.brackets.SquareBrackets;
 import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
-import cz.mg.tokenizer.entities.tokens.NameToken;
+import cz.mg.tokenizer.entities.tokens.WordToken;
 import cz.mg.tokenizer.entities.tokens.NumberToken;
 import cz.mg.tokenizer.entities.tokens.OperatorToken;
 import cz.mg.tokenizer.entities.tokens.SeparatorToken;
@@ -45,7 +45,7 @@ public @Test class VariableParserTest {
 
     private void testParseSimple() {
         TokenReader reader = new TokenReader(new List<>(
-            new NameToken("int", 2), new NameToken("foo", 5)
+            new WordToken("int", 2), new WordToken("foo", 5)
         ));
 
         Variable variable = parser.parse(reader);
@@ -59,7 +59,7 @@ public @Test class VariableParserTest {
     }
 
     private void testParseAnonymous() {
-        TokenReader reader = new TokenReader(new List<>(new NameToken("int", 2)));
+        TokenReader reader = new TokenReader(new List<>(new WordToken("int", 2)));
 
         Variable variable = parser.parse(reader);
 
@@ -73,8 +73,8 @@ public @Test class VariableParserTest {
 
     private void testParseArray() {
         TokenReader reader = new TokenReader(new List<>(
-            new NameToken("float", 1),
-            new NameToken("bar", 5),
+            new WordToken("float", 1),
+            new WordToken("bar", 5),
             new SquareBrackets("", 6, new List<>(
                 new NumberToken("12", 7)
             ))
@@ -96,8 +96,8 @@ public @Test class VariableParserTest {
 
     private void testParseArrays() {
         TokenReader reader = new TokenReader(new List<>(
-            new NameToken("double", 1),
-            new NameToken("foobar", 5),
+            new WordToken("double", 1),
+            new WordToken("foobar", 5),
             new SquareBrackets("", 6, new List<>(
                 new NumberToken("9", 7)
             )),
@@ -133,8 +133,8 @@ public @Test class VariableParserTest {
 
     private void testParseArrayExpression() {
         TokenReader reader = new TokenReader(new List<>(
-            new NameToken("float", 1),
-            new NameToken("bar", 5),
+            new WordToken("float", 1),
+            new WordToken("bar", 5),
             new SquareBrackets("", 6, new List<>(
                 new NumberToken("12", 7),
                 new OperatorToken("+", 8),
@@ -162,11 +162,11 @@ public @Test class VariableParserTest {
 
     private void testParseComplex() {
         TokenReader reader = new TokenReader(new List<>(
-            new NameToken("const", 0),
-            new NameToken("float", 6),
+            new WordToken("const", 0),
+            new WordToken("float", 6),
             new OperatorToken("*", 11),
-            new NameToken("const", 12),
-            new NameToken("bar", 20),
+            new WordToken("const", 12),
+            new WordToken("bar", 20),
             new SquareBrackets("", 21, new List<>(
                 new NumberToken("12", 22),
                 new OperatorToken("+", 24),
@@ -195,15 +195,15 @@ public @Test class VariableParserTest {
 
     private void testParseInlineType() {
         TokenReader reader = new TokenReader(new List<>(
-            new NameToken("const", 0),
-            new NameToken("struct", 7),
+            new WordToken("const", 0),
+            new WordToken("struct", 7),
             new CurlyBrackets("", 10, new List<>(
-                new NameToken("int", 15),
-                new NameToken("a", 17),
+                new WordToken("int", 15),
+                new WordToken("a", 17),
                 new SeparatorToken(";", 18)
             )),
             new OperatorToken("*", 20),
-            new NameToken("foobar", 22),
+            new WordToken("foobar", 22),
             new SquareBrackets("", 24, new List<>(
                 new NumberToken("2", 26)
             ))

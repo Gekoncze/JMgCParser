@@ -23,4 +23,3 @@
 ### LATER ###
     add parser test
     vararg support for functions and function pointers
-    think about renaming NameToken to WordToken

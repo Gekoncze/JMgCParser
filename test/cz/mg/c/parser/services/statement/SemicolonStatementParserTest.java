@@ -7,7 +7,7 @@ import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
 import cz.mg.tokenizer.entities.Token;
-import cz.mg.tokenizer.entities.tokens.NameToken;
+import cz.mg.tokenizer.entities.tokens.WordToken;
 import cz.mg.tokenizer.entities.tokens.NumberToken;
 import cz.mg.tokenizer.entities.tokens.SeparatorToken;
 
@@ -35,8 +35,8 @@ public @Test class SemicolonStatementParserTest {
 
     private void testParseSingle() {
         List<Token> input = new List<>(
-            new NameToken("foo", 1),
-            new NameToken("bar", 5),
+            new WordToken("foo", 1),
+            new WordToken("bar", 5),
             new SeparatorToken(";", 8)
         );
         List<Statement> output = parser.parse(input);
@@ -58,8 +58,8 @@ public @Test class SemicolonStatementParserTest {
 
     private void testParseMultiple() {
         List<Token> input = new List<>(
-            new NameToken("foo", 1),
-            new NameToken("bar", 5),
+            new WordToken("foo", 1),
+            new WordToken("bar", 5),
             new SeparatorToken(";", 8),
             new NumberToken("77", 12),
             new SeparatorToken(";", 14)
@@ -81,8 +81,8 @@ public @Test class SemicolonStatementParserTest {
     private void testParseMissingSemicolon() {
         Assert.assertThatCode(() -> {
             List<Token> input = new List<>(
-                new NameToken("foo", 1),
-                new NameToken("bar", 5)
+                new WordToken("foo", 1),
+                new WordToken("bar", 5)
             );
             parser.parse(input);
         }).throwsException(ParseException.class);
@@ -91,8 +91,8 @@ public @Test class SemicolonStatementParserTest {
     private void testParseFakeSemicolon() {
         Assert.assertThatCode(() -> {
             List<Token> input = new List<>(
-                new NameToken("foo", 1),
-                new NameToken("bar", 5),
+                new WordToken("foo", 1),
+                new WordToken("bar", 5),
                 new Token(";", 8)
             );
             parser.parse(input);

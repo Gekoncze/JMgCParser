@@ -8,7 +8,7 @@ import cz.mg.c.parser.entities.Type;
 import cz.mg.c.parser.entities.brackets.RoundBrackets;
 import cz.mg.c.parser.services.entity.VariableListParser;
 import cz.mg.tokenizer.entities.Token;
-import cz.mg.tokenizer.entities.tokens.NameToken;
+import cz.mg.tokenizer.entities.tokens.WordToken;
 import cz.mg.tokenizer.entities.tokens.OperatorToken;
 
 public @Service class FunctionTypeParser {
@@ -54,7 +54,7 @@ public @Service class FunctionTypeParser {
         Type type = new Type();
         type.setTypename(function);
         type.setPointers(pointerParser.parse(bracketReader));
-        function.setName(bracketReader.read(NameToken.class));
+        function.setName(bracketReader.read(WordToken.class));
         type.setArrays(arrayParser.parse(bracketReader));
         function.setInput(variableListParser.parse(reader.read(RoundBrackets.class)));
         bracketReader.readEnd();

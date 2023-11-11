@@ -10,7 +10,7 @@ import cz.mg.test.Assert;
 import cz.mg.tokenizer.entities.Token;
 import cz.mg.tokenizer.entities.tokens.BracketToken;
 import cz.mg.tokenizer.entities.tokens.DoubleQuoteToken;
-import cz.mg.tokenizer.entities.tokens.NameToken;
+import cz.mg.tokenizer.entities.tokens.WordToken;
 import cz.mg.tokenizer.entities.tokens.OperatorToken;
 
 public @Test class BracketParserTest {
@@ -36,7 +36,7 @@ public @Test class BracketParserTest {
     }
 
     private void testParseNoGroup() {
-        List<Token> input = new List<>(new NameToken("foo", 7));
+        List<Token> input = new List<>(new WordToken("foo", 7));
         List<Token> output = parser.parse(input);
         Assert.assertEquals(1, output.count());
         Assert.assertEquals(7, output.getFirst().getPosition());
@@ -74,11 +74,11 @@ public @Test class BracketParserTest {
         List<Token> input = new List<>(
             new OperatorToken("+", 0),
             new BracketToken("(", 1),
-            new NameToken("foo", 2),
+            new WordToken("foo", 2),
             new BracketToken("(", 5),
             new DoubleQuoteToken("(", 6),
             new BracketToken(")", 9),
-            new NameToken("bar", 10),
+            new WordToken("bar", 10),
             new BracketToken(")", 13),
             new OperatorToken("*", 14)
         );

@@ -6,7 +6,7 @@ import cz.mg.c.parser.components.TokenReader;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
 import cz.mg.tokenizer.entities.Token;
-import cz.mg.tokenizer.entities.tokens.NameToken;
+import cz.mg.tokenizer.entities.tokens.WordToken;
 import cz.mg.tokenizer.entities.tokens.NumberToken;
 import cz.mg.tokenizer.entities.tokens.OperatorToken;
 import cz.mg.tokenizer.entities.tokens.SeparatorToken;
@@ -36,7 +36,7 @@ public @Test class ListParserTest {
     }
 
     private void testParseSingle() {
-        List<Token> input = new List<>(new NameToken("foo", 2));
+        List<Token> input = new List<>(new WordToken("foo", 2));
         List<List<Token>> output = parser.parse(new TokenReader(input));
         Assert.assertEquals(1, output.count());
         Assert.assertEquals(1, output.getFirst().count());
@@ -45,8 +45,8 @@ public @Test class ListParserTest {
 
     private void testParseMultiple() {
         List<Token> input = new List<>(
-            new NameToken("foo", 0),
-            new NameToken("bar", 4),
+            new WordToken("foo", 0),
+            new WordToken("bar", 4),
             new SeparatorToken(",", 8),
             new SeparatorToken(".", 9),
             new SeparatorToken(",", 10),
@@ -57,8 +57,8 @@ public @Test class ListParserTest {
         List<List<Token>> output = parser.parse(new TokenReader(input));
         Assert.assertEquals(3, output.count());
         validator.assertEquals(new List<>(
-            new NameToken("foo", 0),
-            new NameToken("bar", 4)
+            new WordToken("foo", 0),
+            new WordToken("bar", 4)
         ), output.get(0));
         validator.assertEquals(new List<>(
             new SeparatorToken(".", 9)

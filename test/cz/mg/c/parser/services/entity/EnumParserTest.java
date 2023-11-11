@@ -10,7 +10,7 @@ import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
 import cz.mg.tokenizer.entities.Token;
-import cz.mg.tokenizer.entities.tokens.NameToken;
+import cz.mg.tokenizer.entities.tokens.WordToken;
 import cz.mg.tokenizer.entities.tokens.NumberToken;
 import cz.mg.tokenizer.entities.tokens.OperatorToken;
 import cz.mg.tokenizer.entities.tokens.SeparatorToken;
@@ -41,8 +41,8 @@ public @Test class EnumParserTest {
 
     private void testDeclaration() {
         List<Token> input = new List<>(
-            new NameToken("enum", 0),
-            new NameToken("Nom", 6)
+            new WordToken("enum", 0),
+            new WordToken("Nom", 6)
         );
         Enum enom = parser.parse(new TokenReader(input));
         Assert.assertEquals("Nom", enom.getName().getText());
@@ -51,8 +51,8 @@ public @Test class EnumParserTest {
 
     private void testNoEntries() {
         List<Token> input = new List<>(
-            new NameToken("enum", 0),
-            new NameToken("NomNom", 6),
+            new WordToken("enum", 0),
+            new WordToken("NomNom", 6),
             new CurlyBrackets("", 15, new List<>())
         );
         Enum enom = parser.parse(new TokenReader(input));
@@ -63,7 +63,7 @@ public @Test class EnumParserTest {
 
     private void testAnonymous() {
         List<Token> input = new List<>(
-            new NameToken("enum", 0),
+            new WordToken("enum", 0),
             new CurlyBrackets("", 15, new List<>())
         );
         Enum enom = parser.parse(new TokenReader(input));
@@ -74,10 +74,10 @@ public @Test class EnumParserTest {
 
     private void testSingleEntry() {
         List<Token> input = new List<>(
-            new NameToken("enum", 0),
-            new NameToken("NomNom", 6),
+            new WordToken("enum", 0),
+            new WordToken("NomNom", 6),
             new CurlyBrackets("", 15, new List<>(
-                new NameToken("NOM", 20)
+                new WordToken("NOM", 20)
             ))
         );
         Enum enom = parser.parse(new TokenReader(input));
@@ -90,14 +90,14 @@ public @Test class EnumParserTest {
 
     private void testMultipleEntries() {
         List<Token> input = new List<>(
-            new NameToken("enum", 0),
-            new NameToken("NomNomNom", 6),
+            new WordToken("enum", 0),
+            new WordToken("NomNomNom", 6),
             new CurlyBrackets("", 15, new List<>(
-                new NameToken("NOM", 20),
+                new WordToken("NOM", 20),
                 new OperatorToken("=", 24),
                 new NumberToken("22", 26),
                 new SeparatorToken(",", 28),
-                new NameToken("NOM2", 30)
+                new WordToken("NOM2", 30)
             ))
         );
         Enum enom = parser.parse(new TokenReader(input));
@@ -114,12 +114,12 @@ public @Test class EnumParserTest {
     private void testIllegalEntry() {
         Assert.assertThatCode(() -> {
             parser.parse(new TokenReader(new List<>(
-                new NameToken("enum", 0),
-                new NameToken("NomNom", 6),
+                new WordToken("enum", 0),
+                new WordToken("NomNom", 6),
                 new CurlyBrackets("", 15, new List<>(
-                    new NameToken("NOM", 20),
-                    new NameToken("NOM", 25),
-                    new NameToken("NOM", 30)
+                    new WordToken("NOM", 20),
+                    new WordToken("NOM", 25),
+                    new WordToken("NOM", 30)
                 ))
             )));
         }).throwsException(ParseException.class);

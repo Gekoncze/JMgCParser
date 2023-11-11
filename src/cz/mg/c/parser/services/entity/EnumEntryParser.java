@@ -8,7 +8,7 @@ import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.c.parser.services.CEntityParser;
 import cz.mg.collections.list.List;
 import cz.mg.tokenizer.entities.Token;
-import cz.mg.tokenizer.entities.tokens.NameToken;
+import cz.mg.tokenizer.entities.tokens.WordToken;
 import cz.mg.tokenizer.entities.tokens.OperatorToken;
 
 public @Service class EnumEntryParser implements CEntityParser {
@@ -31,7 +31,7 @@ public @Service class EnumEntryParser implements CEntityParser {
     @Override
     public @Mandatory EnumEntry parse(@Mandatory TokenReader reader) {
         EnumEntry entry = new EnumEntry();
-        entry.setName(reader.read(NameToken.class));
+        entry.setName(reader.read(WordToken.class));
         if (reader.has("=", OperatorToken.class)) {
             entry.setExpression(readExpression(reader));
         }

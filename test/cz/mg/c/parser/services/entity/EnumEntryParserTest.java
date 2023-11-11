@@ -8,7 +8,7 @@ import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
 import cz.mg.tokenizer.entities.Token;
-import cz.mg.tokenizer.entities.tokens.NameToken;
+import cz.mg.tokenizer.entities.tokens.WordToken;
 import cz.mg.tokenizer.entities.tokens.NumberToken;
 import cz.mg.tokenizer.entities.tokens.OperatorToken;
 
@@ -34,7 +34,7 @@ public @Test class EnumEntryParserTest {
 
     private void testSimple() {
         List<Token> input = new List<>(
-            new NameToken("VALUE", 0)
+            new WordToken("VALUE", 0)
         );
         EnumEntry entry = parser.parse(new TokenReader(input));
         Assert.assertEquals("VALUE", entry.getName().getText());
@@ -43,7 +43,7 @@ public @Test class EnumEntryParserTest {
 
     private void testExpression() {
         List<Token> input = new List<>(
-            new NameToken("COMPLEX_VALUE", 0),
+            new WordToken("COMPLEX_VALUE", 0),
             new OperatorToken("=", 20),
             new NumberToken("11", 22),
             new OperatorToken("+", 24),

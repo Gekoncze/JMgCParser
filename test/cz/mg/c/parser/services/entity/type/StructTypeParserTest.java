@@ -11,7 +11,7 @@ import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
 import cz.mg.tokenizer.entities.Token;
-import cz.mg.tokenizer.entities.tokens.NameToken;
+import cz.mg.tokenizer.entities.tokens.WordToken;
 import cz.mg.tokenizer.entities.tokens.OperatorToken;
 import cz.mg.tokenizer.entities.tokens.SeparatorToken;
 
@@ -40,8 +40,8 @@ public @Test class StructTypeParserTest {
 
     private void testParseNoFields() {
         List<Token> tokens = new List<>(
-            new NameToken("struct", 0),
-            new NameToken("Foo", 7),
+            new WordToken("struct", 0),
+            new WordToken("Foo", 7),
             new CurlyBrackets("", 11, new List<>())
         );
         Type type = parser.parse(new TokenReader(tokens));
@@ -56,10 +56,10 @@ public @Test class StructTypeParserTest {
 
     private void testParseAnonymous() {
         List<Token> tokens = new List<>(
-            new NameToken("struct", 0),
+            new WordToken("struct", 0),
             new CurlyBrackets("", 11, new List<>(
-                new NameToken("int", 13),
-                new NameToken("bar", 17),
+                new WordToken("int", 13),
+                new WordToken("bar", 17),
                 new SeparatorToken(";", 20)
             ))
         );
@@ -77,11 +77,11 @@ public @Test class StructTypeParserTest {
 
     private void testParseNamed() {
         List<Token> tokens = new List<>(
-            new NameToken("struct", 0),
-            new NameToken("Foo", 7),
+            new WordToken("struct", 0),
+            new WordToken("Foo", 7),
             new CurlyBrackets("", 11, new List<>(
-                new NameToken("int", 13),
-                new NameToken("bar", 17),
+                new WordToken("int", 13),
+                new WordToken("bar", 17),
                 new SeparatorToken(";", 20)
             ))
         );
@@ -99,21 +99,21 @@ public @Test class StructTypeParserTest {
 
     private void testParseComplexConst() {
         List<Token> tokens = new List<>(
-            new NameToken("const", 0),
-            new NameToken("struct", 7),
-            new NameToken("FooBar", 14),
+            new WordToken("const", 0),
+            new WordToken("struct", 7),
+            new WordToken("FooBar", 14),
             new CurlyBrackets("", 20, new List<>(
-                new NameToken("const", 22),
-                new NameToken("int", 25),
-                new NameToken("a", 30),
+                new WordToken("const", 22),
+                new WordToken("int", 25),
+                new WordToken("a", 30),
                 new SeparatorToken(";", 35),
-                new NameToken("int", 40),
-                new NameToken("b", 45),
+                new WordToken("int", 40),
+                new WordToken("b", 45),
                 new SeparatorToken(";", 50)
             )),
-            new NameToken("const", 55),
+            new WordToken("const", 55),
             new OperatorToken("*", 60),
-            new NameToken("const", 65)
+            new WordToken("const", 65)
         );
         Type type = parser.parse(new TokenReader(tokens));
         Assert.assertEquals(true, type.isConstant());
@@ -134,10 +134,10 @@ public @Test class StructTypeParserTest {
 
     private void testParseRemainingTokens() {
         List<Token> tokens = new List<>(
-            new NameToken("struct", 0),
-            new NameToken("Foo", 7),
+            new WordToken("struct", 0),
+            new WordToken("Foo", 7),
             new CurlyBrackets("", 11, new List<>()),
-            new NameToken("Foo2", 16)
+            new WordToken("Foo2", 16)
         );
         TokenReader reader = new TokenReader(tokens);
         parser.parse(reader);

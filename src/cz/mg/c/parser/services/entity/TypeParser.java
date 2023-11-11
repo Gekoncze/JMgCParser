@@ -10,7 +10,7 @@ import cz.mg.c.parser.services.entity.type.ConstParser;
 import cz.mg.c.parser.services.entity.type.FunctionTypeParser;
 import cz.mg.c.parser.services.entity.type.InlineTypeParsers;
 import cz.mg.c.parser.services.entity.type.PointerParser;
-import cz.mg.tokenizer.entities.tokens.NameToken;
+import cz.mg.tokenizer.entities.tokens.WordToken;
 
 public @Service class TypeParser implements CEntityParser {
     private static volatile @Service TypeParser instance;
@@ -49,7 +49,7 @@ public @Service class TypeParser implements CEntityParser {
     private @Mandatory Type parsePlainType(@Mandatory TokenReader reader, boolean constant) {
         Type type = new Type();
         type.setConstant(type.isConstant() | constant);
-        type.setTypename(new Typename(reader.read(NameToken.class)));
+        type.setTypename(new Typename(reader.read(WordToken.class)));
         type.setConstant(type.isConstant() | constParser.parse(reader));
         type.setPointers(pointerParser.parse(reader));
         return type;

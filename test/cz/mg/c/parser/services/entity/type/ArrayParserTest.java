@@ -8,7 +8,7 @@ import cz.mg.c.parser.entities.brackets.SquareBrackets;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
 import cz.mg.tokenizer.entities.Token;
-import cz.mg.tokenizer.entities.tokens.NameToken;
+import cz.mg.tokenizer.entities.tokens.WordToken;
 import cz.mg.tokenizer.entities.tokens.NumberToken;
 import cz.mg.tokenizer.entities.tokens.OperatorToken;
 
@@ -29,7 +29,7 @@ public @Test class ArrayParserTest {
 
     private void testParseEmpty() {
         Assert.assertEquals(true, parser.parse(new TokenReader(new List<>())).isEmpty());
-        Assert.assertEquals(true, parser.parse(new TokenReader(new List<>(new NameToken("foo", 0)))).isEmpty());
+        Assert.assertEquals(true, parser.parse(new TokenReader(new List<>(new WordToken("foo", 0)))).isEmpty());
     }
 
     private void testParseSingle() {
@@ -58,7 +58,7 @@ public @Test class ArrayParserTest {
     }
 
     private void testParseRemainingTokens() {
-        List<Token> tokens = new List<>(new SquareBrackets("", 0, new List<>()), new NameToken("foo", 2));
+        List<Token> tokens = new List<>(new SquareBrackets("", 0, new List<>()), new WordToken("foo", 2));
         TokenReader reader = new TokenReader(tokens);
         parser.parse(reader);
         Assert.assertEquals(true, reader.has());

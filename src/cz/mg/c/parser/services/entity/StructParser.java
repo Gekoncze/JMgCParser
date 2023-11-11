@@ -9,7 +9,7 @@ import cz.mg.c.parser.entities.Variable;
 import cz.mg.c.parser.entities.brackets.CurlyBrackets;
 import cz.mg.c.parser.services.statement.StatementParser;
 import cz.mg.collections.list.List;
-import cz.mg.tokenizer.entities.tokens.NameToken;
+import cz.mg.tokenizer.entities.tokens.WordToken;
 
 public @Service class StructParser {
     private static volatile @Service StructParser instance;
@@ -36,7 +36,7 @@ public @Service class StructParser {
     }
 
     public @Mandatory Struct parse(@Mandatory TokenReader reader) {
-        reader.read("struct", NameToken.class);
+        reader.read("struct", WordToken.class);
         Struct struct = new Struct();
         struct.setName(nameParser.parse(reader));
         if (reader.has(CurlyBrackets.class)) {

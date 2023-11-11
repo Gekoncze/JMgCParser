@@ -11,7 +11,7 @@ import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
 import cz.mg.tokenizer.entities.Token;
-import cz.mg.tokenizer.entities.tokens.NameToken;
+import cz.mg.tokenizer.entities.tokens.WordToken;
 import cz.mg.tokenizer.entities.tokens.OperatorToken;
 import cz.mg.tokenizer.entities.tokens.SeparatorToken;
 
@@ -40,8 +40,8 @@ public @Test class EnumTypeParserTest {
 
     private void testParseNoFields() {
         List<Token> tokens = new List<>(
-            new NameToken("enum", 0),
-            new NameToken("Foo", 7),
+            new WordToken("enum", 0),
+            new WordToken("Foo", 7),
             new CurlyBrackets("", 11, new List<>())
         );
         Type type = parser.parse(new TokenReader(tokens));
@@ -56,9 +56,9 @@ public @Test class EnumTypeParserTest {
 
     private void testParseAnonymous() {
         List<Token> tokens = new List<>(
-            new NameToken("enum", 0),
+            new WordToken("enum", 0),
             new CurlyBrackets("", 11, new List<>(
-                new NameToken("foo", 17)
+                new WordToken("foo", 17)
             ))
         );
         Type type = parser.parse(new TokenReader(tokens));
@@ -75,12 +75,12 @@ public @Test class EnumTypeParserTest {
 
     private void testParseNamed() {
         List<Token> tokens = new List<>(
-            new NameToken("enum", 0),
-            new NameToken("FooBar", 7),
+            new WordToken("enum", 0),
+            new WordToken("FooBar", 7),
             new CurlyBrackets("", 11, new List<>(
-                new NameToken("foo", 13),
+                new WordToken("foo", 13),
                 new SeparatorToken(",", 20),
-                new NameToken("bar", 17)
+                new WordToken("bar", 17)
             ))
         );
         Type type = parser.parse(new TokenReader(tokens));
@@ -95,22 +95,22 @@ public @Test class EnumTypeParserTest {
 
     private void testParseComplexConst() {
         List<Token> tokens = new List<>(
-            new NameToken("const", 0),
-            new NameToken("enum", 7),
-            new NameToken("FooBar", 14),
+            new WordToken("const", 0),
+            new WordToken("enum", 7),
+            new WordToken("FooBar", 14),
             new CurlyBrackets("", 20, new List<>(
-                new NameToken("foo", 25),
+                new WordToken("foo", 25),
                 new OperatorToken("=", 35),
-                new NameToken("1", 30),
+                new WordToken("1", 30),
                 new SeparatorToken(",", 32),
-                new NameToken("bar", 25),
+                new WordToken("bar", 25),
                 new OperatorToken("=", 35),
-                new NameToken("2", 30)
+                new WordToken("2", 30)
 
             )),
-            new NameToken("const", 55),
+            new WordToken("const", 55),
             new OperatorToken("*", 60),
-            new NameToken("const", 65)
+            new WordToken("const", 65)
         );
         Type type = parser.parse(new TokenReader(tokens));
         Assert.assertEquals(true, type.isConstant());
@@ -131,10 +131,10 @@ public @Test class EnumTypeParserTest {
 
     private void testParseRemainingTokens() {
         List<Token> tokens = new List<>(
-            new NameToken("enum", 0),
-            new NameToken("Foo", 7),
+            new WordToken("enum", 0),
+            new WordToken("Foo", 7),
             new CurlyBrackets("", 11, new List<>()),
-            new NameToken("Foo2", 16)
+            new WordToken("Foo2", 16)
         );
         TokenReader reader = new TokenReader(tokens);
         parser.parse(reader);

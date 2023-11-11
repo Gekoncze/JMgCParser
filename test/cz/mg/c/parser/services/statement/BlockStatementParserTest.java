@@ -7,7 +7,7 @@ import cz.mg.c.parser.entities.brackets.RoundBrackets;
 import cz.mg.c.parser.entities.Statement;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
-import cz.mg.tokenizer.entities.tokens.NameToken;
+import cz.mg.tokenizer.entities.tokens.WordToken;
 
 public @Test class BlockStatementParserTest {
     public static void main(String[] args) {
@@ -33,10 +33,10 @@ public @Test class BlockStatementParserTest {
     private void testParseUnchanged() {
         List<Statement> input = new List<>(
             new Statement(new List<>(
-                new NameToken("foo", 0),
+                new WordToken("foo", 0),
                 new CurlyBrackets(),
                 new RoundBrackets(),
-                new NameToken("bar", 0)
+                new WordToken("bar", 0)
             ))
         );
         List<Statement> output = parser.parse(input);
@@ -47,10 +47,10 @@ public @Test class BlockStatementParserTest {
     private void testParseSplit() {
         List<Statement> input = new List<>(
             new Statement(new List<>(
-                new NameToken("foo", 0),
+                new WordToken("foo", 0),
                 new RoundBrackets(),
                 new CurlyBrackets(),
-                new NameToken("bar", 0)
+                new WordToken("bar", 0)
             ))
         );
         List<Statement> output = parser.parse(input);
@@ -62,13 +62,13 @@ public @Test class BlockStatementParserTest {
     private void testParseSplitMultiple() {
         List<Statement> input = new List<>(
             new Statement(new List<>(
-                new NameToken("foo", 0),
+                new WordToken("foo", 0),
                 new RoundBrackets(),
                 new CurlyBrackets(),
-                new NameToken("bar", 0),
+                new WordToken("bar", 0),
                 new RoundBrackets(),
                 new CurlyBrackets(),
-                new NameToken("foobar", 0),
+                new WordToken("foobar", 0),
                 new RoundBrackets(),
                 new CurlyBrackets()
             ))

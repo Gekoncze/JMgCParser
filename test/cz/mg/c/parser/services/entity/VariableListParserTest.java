@@ -8,7 +8,7 @@ import cz.mg.c.parser.entities.brackets.RoundBrackets;
 import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
-import cz.mg.tokenizer.entities.tokens.NameToken;
+import cz.mg.tokenizer.entities.tokens.WordToken;
 import cz.mg.tokenizer.entities.tokens.OperatorToken;
 import cz.mg.tokenizer.entities.tokens.SeparatorToken;
 
@@ -41,7 +41,7 @@ public @Test class VariableListParserTest {
 
     private void testParseAnonymous() {
         List<Variable> variables = parser.parse(new RoundBrackets("", 0, new List<>(
-            new NameToken("int", 0)
+            new WordToken("int", 0)
         )));
         Assert.assertEquals(1, variables.count());
         Assert.assertEquals("int", variables.getFirst().getType().getTypename().getName().getText());
@@ -50,8 +50,8 @@ public @Test class VariableListParserTest {
 
     private void testParseSingle() {
         List<Variable> variables = parser.parse(new RoundBrackets("", 0, new List<>(
-            new NameToken("int", 0),
-            new NameToken("a", 5)
+            new WordToken("int", 0),
+            new WordToken("a", 5)
         )));
         Assert.assertEquals(1, variables.count());
         Assert.assertEquals("int", variables.getFirst().getType().getTypename().getName().getText());
@@ -60,12 +60,12 @@ public @Test class VariableListParserTest {
 
     private void testParseMultiple() {
         List<Variable> variables = parser.parse(new RoundBrackets("", 0, new List<>(
-            new NameToken("int", 0),
+            new WordToken("int", 0),
             new OperatorToken("*", 4),
-            new NameToken("a", 5),
+            new WordToken("a", 5),
             new SeparatorToken(",", 6),
-            new NameToken("float", 8),
-            new NameToken("b", 15)
+            new WordToken("float", 8),
+            new WordToken("b", 15)
         )));
         Assert.assertEquals(2, variables.count());
         Assert.assertEquals("int", variables.getFirst().getType().getTypename().getName().getText());

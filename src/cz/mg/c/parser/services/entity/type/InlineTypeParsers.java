@@ -5,7 +5,7 @@ import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.annotations.requirement.Optional;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.parser.entities.Type;
-import cz.mg.tokenizer.entities.tokens.NameToken;
+import cz.mg.tokenizer.entities.tokens.WordToken;
 
 public @Service class InlineTypeParsers {
     private static volatile @Service InlineTypeParsers instance;
@@ -40,11 +40,11 @@ public @Service class InlineTypeParsers {
     }
 
     private @Optional Type parse(@Mandatory TokenReader reader) {
-        if (reader.has("struct", NameToken.class)) {
+        if (reader.has("struct", WordToken.class)) {
             return structTypeParser.parse(reader);
-        } else if (reader.has("union", NameToken.class)) {
+        } else if (reader.has("union", WordToken.class)) {
             return unionTypeParser.parse(reader);
-        } else if (reader.has("enum", NameToken.class)) {
+        } else if (reader.has("enum", WordToken.class)) {
             return enumTypeParser.parse(reader);
         }
         return null;

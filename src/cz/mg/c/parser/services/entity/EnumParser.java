@@ -9,7 +9,7 @@ import cz.mg.c.parser.entities.brackets.CurlyBrackets;
 import cz.mg.c.parser.services.ListParser;
 import cz.mg.collections.list.List;
 import cz.mg.tokenizer.entities.Token;
-import cz.mg.tokenizer.entities.tokens.NameToken;
+import cz.mg.tokenizer.entities.tokens.WordToken;
 
 public @Service class EnumParser {
     private static volatile @Service EnumParser instance;
@@ -36,7 +36,7 @@ public @Service class EnumParser {
     }
 
     public @Mandatory Enum parse(@Mandatory TokenReader reader) {
-        reader.read("enum", NameToken.class);
+        reader.read("enum", WordToken.class);
         Enum enom = new Enum();
         enom.setName(nameParser.parse(reader));
         if (reader.has(CurlyBrackets.class)) {

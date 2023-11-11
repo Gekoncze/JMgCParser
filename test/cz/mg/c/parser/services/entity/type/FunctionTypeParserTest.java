@@ -10,7 +10,7 @@ import cz.mg.c.parser.entities.brackets.SquareBrackets;
 import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
-import cz.mg.tokenizer.entities.tokens.NameToken;
+import cz.mg.tokenizer.entities.tokens.WordToken;
 import cz.mg.tokenizer.entities.tokens.NumberToken;
 import cz.mg.tokenizer.entities.tokens.OperatorToken;
 import cz.mg.tokenizer.entities.tokens.SeparatorToken;
@@ -41,7 +41,7 @@ public @Test class FunctionTypeParserTest {
         Type type = parser.parse(new TokenReader(new List<>(
             new RoundBrackets("", 0, new List<>(
                 new OperatorToken("*", 1),
-                new NameToken("fooptr", 2)
+                new WordToken("fooptr", 2)
             )),
             new RoundBrackets("", 100, new List<>())
         )), output);
@@ -60,12 +60,12 @@ public @Test class FunctionTypeParserTest {
         Type type = parser.parse(new TokenReader(new List<>(
             new RoundBrackets("", 0, new List<>(
                 new OperatorToken("**", 1),
-                new NameToken("fooptrptr", 3)
+                new WordToken("fooptrptr", 3)
             )),
             new RoundBrackets("", 12, new List<>(
-                new NameToken("int", 15),
+                new WordToken("int", 15),
                 new SeparatorToken(",", 19),
-                new NameToken("int", 21)
+                new WordToken("int", 21)
             ))
         )), output);
         Assert.assertEquals(2, type.getPointers().count());
@@ -82,19 +82,19 @@ public @Test class FunctionTypeParserTest {
         Type type = parser.parse(new TokenReader(new List<>(
             new RoundBrackets("", 0, new List<>(
                 new OperatorToken("*", 1),
-                new NameToken("const", 3),
+                new WordToken("const", 3),
                 new OperatorToken("*", 10),
-                new NameToken("fooptrptrarr", 12),
+                new WordToken("fooptrptrarr", 12),
                 new SquareBrackets("", 20, new List<>(
                     new NumberToken("3", 21)
                 ))
             )),
             new RoundBrackets("", 25, new List<>(
-                new NameToken("int", 28),
-                new NameToken("foo", 32),
+                new WordToken("int", 28),
+                new WordToken("foo", 32),
                 new SeparatorToken(",", 36),
-                new NameToken("int", 38),
-                new NameToken("bar", 42)
+                new WordToken("int", 38),
+                new WordToken("bar", 42)
             ))
         )), output);
         Assert.assertEquals(2, type.getPointers().count());

@@ -13,7 +13,7 @@ import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
 import cz.mg.tokenizer.entities.Token;
-import cz.mg.tokenizer.entities.tokens.NameToken;
+import cz.mg.tokenizer.entities.tokens.WordToken;
 import cz.mg.tokenizer.entities.tokens.OperatorToken;
 import cz.mg.tokenizer.entities.tokens.SeparatorToken;
 
@@ -46,7 +46,7 @@ public @Test class TypeParserTest {
 
     private void testParseSimple() {
         TokenReader reader = new TokenReader(new List<>(
-            new NameToken("foo", 1)
+            new WordToken("foo", 1)
         ));
 
         Type type = parser.parse(reader);
@@ -59,8 +59,8 @@ public @Test class TypeParserTest {
 
     private void testParseSimpleConstLeft() {
         TokenReader reader = new TokenReader(new List<>(
-            new NameToken("const", 0),
-            new NameToken("foo", 12)
+            new WordToken("const", 0),
+            new WordToken("foo", 12)
         ));
 
         Type type = parser.parse(reader);
@@ -73,8 +73,8 @@ public @Test class TypeParserTest {
 
     private void testParseSimpleConstRight() {
         TokenReader reader = new TokenReader(new List<>(
-            new NameToken("foo", 0),
-            new NameToken("const", 12)
+            new WordToken("foo", 0),
+            new WordToken("const", 12)
         ));
 
         Type type = parser.parse(reader);
@@ -87,8 +87,8 @@ public @Test class TypeParserTest {
 
     private void testParseSimpleWithRemainingTokens() {
         TokenReader reader = new TokenReader(new List<>(
-            new NameToken("foo", 0),
-            new NameToken("bar", 5)
+            new WordToken("foo", 0),
+            new WordToken("bar", 5)
         ));
 
         Type type = parser.parse(reader);
@@ -102,7 +102,7 @@ public @Test class TypeParserTest {
 
     private void testParsePointersSeparate() {
         TokenReader reader = new TokenReader(new List<>(
-            new NameToken("foo", 1),
+            new WordToken("foo", 1),
             new OperatorToken("*", 4),
             new OperatorToken("*", 5),
             new OperatorToken("*", 6)
@@ -123,7 +123,7 @@ public @Test class TypeParserTest {
 
     private void testParsePointersTogether() {
         TokenReader reader = new TokenReader(new List<>(
-            new NameToken("dst", 1),
+            new WordToken("dst", 1),
             new OperatorToken("***", 4)
         ));
 
@@ -142,63 +142,63 @@ public @Test class TypeParserTest {
 
     private void testParsePointersConst() {
         testParsePointersConst(new List<>(
-            new NameToken("const", 0),
-            new NameToken("foo", 0),
+            new WordToken("const", 0),
+            new WordToken("foo", 0),
             new OperatorToken("*", 0),
             new OperatorToken("*", 0),
             new OperatorToken("*", 0),
-            new NameToken("const", 0)
+            new WordToken("const", 0)
         ), true, false, false, true);
 
         testParsePointersConst(new List<>(
-            new NameToken("foo", 0),
-            new NameToken("const", 0),
+            new WordToken("foo", 0),
+            new WordToken("const", 0),
             new OperatorToken("*", 0),
             new OperatorToken("*", 0),
-            new NameToken("const", 0),
+            new WordToken("const", 0),
             new OperatorToken("*", 0)
         ), true, false, true, false);
 
         testParsePointersConst(new List<>(
-            new NameToken("foo", 0),
+            new WordToken("foo", 0),
             new OperatorToken("*", 0),
-            new NameToken("const", 0),
+            new WordToken("const", 0),
             new OperatorToken("*", 0),
             new OperatorToken("*", 0)
         ), false, true, false, false);
 
         testParsePointersConst(new List<>(
-            new NameToken("const", 0),
-            new NameToken("foo", 0),
-            new NameToken("const", 0),
+            new WordToken("const", 0),
+            new WordToken("foo", 0),
+            new WordToken("const", 0),
             new OperatorToken("*", 0),
-            new NameToken("const", 0),
+            new WordToken("const", 0),
             new OperatorToken("*", 0),
-            new NameToken("const", 0),
+            new WordToken("const", 0),
             new OperatorToken("*", 0),
-            new NameToken("const", 0)
+            new WordToken("const", 0)
         ), true, true, true, true);
 
         testParsePointersConst(new List<>(
-            new NameToken("const", 0),
-            new NameToken("const", 0),
-            new NameToken("const", 0),
-            new NameToken("foo", 0),
-            new NameToken("const", 0),
-            new NameToken("const", 0),
-            new NameToken("const", 0),
+            new WordToken("const", 0),
+            new WordToken("const", 0),
+            new WordToken("const", 0),
+            new WordToken("foo", 0),
+            new WordToken("const", 0),
+            new WordToken("const", 0),
+            new WordToken("const", 0),
             new OperatorToken("*", 0),
-            new NameToken("const", 0),
-            new NameToken("const", 0),
-            new NameToken("const", 0),
+            new WordToken("const", 0),
+            new WordToken("const", 0),
+            new WordToken("const", 0),
             new OperatorToken("*", 0),
-            new NameToken("const", 0),
-            new NameToken("const", 0),
-            new NameToken("const", 0),
+            new WordToken("const", 0),
+            new WordToken("const", 0),
+            new WordToken("const", 0),
             new OperatorToken("*", 0),
-            new NameToken("const", 0),
-            new NameToken("const", 0),
-            new NameToken("const", 0)
+            new WordToken("const", 0),
+            new WordToken("const", 0),
+            new WordToken("const", 0)
         ), true, true, true, true);
     }
 
@@ -227,7 +227,7 @@ public @Test class TypeParserTest {
     private void testParsePointersInvalid() {
         Assert.assertThatCode(() -> {
             parser.parse(new TokenReader(new List<>(
-                new NameToken("foo", 0),
+                new WordToken("foo", 0),
                 new OperatorToken("*/", 4)
             )));
         }).throwsException(ParseException.class);
@@ -235,11 +235,11 @@ public @Test class TypeParserTest {
 
     private void testParseInlineType() {
         TokenReader reader = new TokenReader(new List<>(
-            new NameToken("const", 0),
-            new NameToken("struct", 7),
+            new WordToken("const", 0),
+            new WordToken("struct", 7),
             new CurlyBrackets("", 10, new List<>(
-                new NameToken("int", 15),
-                new NameToken("a", 17),
+                new WordToken("int", 15),
+                new WordToken("a", 17),
                 new SeparatorToken(";", 18)
             )),
             new OperatorToken("*", 20)

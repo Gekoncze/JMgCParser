@@ -6,21 +6,21 @@ import cz.mg.annotations.requirement.Required;
 import cz.mg.annotations.storage.Shared;
 import cz.mg.collections.list.List;
 import cz.mg.tokenizer.entities.Token;
-import cz.mg.tokenizer.entities.tokens.NameToken;
+import cz.mg.tokenizer.entities.tokens.WordToken;
 
 public @Entity class EnumEntry implements CEntity {
-    private NameToken name;
+    private WordToken name;
     private List<Token> expression;
 
     public EnumEntry() {
     }
 
     @Required @Shared
-    public NameToken getName() {
+    public WordToken getName() {
         return name;
     }
 
-    public void setName(NameToken name) {
+    public void setName(WordToken name) {
         this.name = name;
     }
 

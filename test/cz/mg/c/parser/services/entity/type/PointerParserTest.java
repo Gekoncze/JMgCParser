@@ -8,10 +8,8 @@ import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
 import cz.mg.tokenizer.entities.Token;
 import cz.mg.tokenizer.entities.tokens.DoubleQuoteToken;
-import cz.mg.tokenizer.entities.tokens.NameToken;
+import cz.mg.tokenizer.entities.tokens.WordToken;
 import cz.mg.tokenizer.entities.tokens.OperatorToken;
-
-import javax.naming.Name;
 
 public @Test class PointerParserTest {
     public static void main(String[] args) {
@@ -37,7 +35,7 @@ public @Test class PointerParserTest {
         Assert.assertEquals(true, parser.parse(new TokenReader(new List<>())).isEmpty());
         Assert.assertEquals(true, parser.parse(new TokenReader(new List<>(new OperatorToken("+", 0)))).isEmpty());
         Assert.assertEquals(true, parser.parse(new TokenReader(new List<>(new DoubleQuoteToken("*", 0)))).isEmpty());
-        Assert.assertEquals(true, parser.parse(new TokenReader(new List<>(new NameToken("const", 0)))).isEmpty());
+        Assert.assertEquals(true, parser.parse(new TokenReader(new List<>(new WordToken("const", 0)))).isEmpty());
     }
 
     private void testParseSingle() {
@@ -48,7 +46,7 @@ public @Test class PointerParserTest {
     }
 
     private void testParseSingleConst() {
-        List<Token> tokens = new List<>(new OperatorToken("*", 0), new NameToken("const", 2));
+        List<Token> tokens = new List<>(new OperatorToken("*", 0), new WordToken("const", 2));
         List<Pointer> pointers = parser.parse(new TokenReader(tokens));
         Assert.assertEquals(1, pointers.count());
         Assert.assertEquals(true, pointers.getFirst().isConstant());
@@ -64,7 +62,7 @@ public @Test class PointerParserTest {
     }
 
     private void testParseSingleGroupConst() {
-        List<Token> tokens = new List<>(new OperatorToken("***", 0), new NameToken("const", 5));
+        List<Token> tokens = new List<>(new OperatorToken("***", 0), new WordToken("const", 5));
         List<Pointer> pointers = parser.parse(new TokenReader(tokens));
         Assert.assertEquals(3, pointers.count());
         Assert.assertEquals(false, pointers.get(0).isConstant());
@@ -76,7 +74,7 @@ public @Test class PointerParserTest {
         List<Token> tokens = new List<>(
             new OperatorToken("*", 0),
             new OperatorToken("*", 2),
-            new NameToken("const", 4),
+            new WordToken("const", 4),
             new OperatorToken("*", 12)
         );
         List<Pointer> pointers = parser.parse(new TokenReader(tokens));
@@ -89,7 +87,7 @@ public @Test class PointerParserTest {
     private void testParseMultipleGroup() {
         List<Token> tokens = new List<>(
             new OperatorToken("***", 0),
-            new NameToken("const", 5),
+            new WordToken("const", 5),
             new OperatorToken("**", 0)
         );
         List<Pointer> pointers = parser.parse(new TokenReader(tokens));
@@ -104,8 +102,8 @@ public @Test class PointerParserTest {
     private void testMixed() {
         List<Token> tokens = new List<>(
             new OperatorToken("*", 0),
-            new NameToken("const", 2),
-            new NameToken("const", 8),
+            new WordToken("const", 2),
+            new WordToken("const", 8),
             new OperatorToken("***", 15),
             new OperatorToken("*", 17)
         );
@@ -119,7 +117,7 @@ public @Test class PointerParserTest {
     }
 
     private void testParseRemainingTokens() {
-        List<Token> tokens = new List<>(new OperatorToken("*", 0), new NameToken("foo", 2));
+        List<Token> tokens = new List<>(new OperatorToken("*", 0), new WordToken("foo", 2));
         TokenReader reader = new TokenReader(tokens);
         parser.parse(reader);
         Assert.assertEquals(true, reader.has());

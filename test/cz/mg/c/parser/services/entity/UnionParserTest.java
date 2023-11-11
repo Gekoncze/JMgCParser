@@ -11,7 +11,7 @@ import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
 import cz.mg.tokenizer.entities.Token;
-import cz.mg.tokenizer.entities.tokens.NameToken;
+import cz.mg.tokenizer.entities.tokens.WordToken;
 import cz.mg.tokenizer.entities.tokens.OperatorToken;
 import cz.mg.tokenizer.entities.tokens.SeparatorToken;
 
@@ -41,8 +41,8 @@ public @Test class UnionParserTest {
 
     private void testDeclaration() {
         List<Token> input = new List<>(
-            new NameToken("union", 0),
-            new NameToken("Foo", 10)
+            new WordToken("union", 0),
+            new WordToken("Foo", 10)
         );
         Union union = parser.parse(new TokenReader(input));
         Assert.assertEquals("Foo", union.getName().getText());
@@ -51,8 +51,8 @@ public @Test class UnionParserTest {
 
     private void testNoVariables() {
         List<Token> input = new List<>(
-            new NameToken("union", 0),
-            new NameToken("Foo", 10),
+            new WordToken("union", 0),
+            new WordToken("Foo", 10),
             new CurlyBrackets("", 15, new List<>())
         );
         Union union = parser.parse(new TokenReader(input));
@@ -63,7 +63,7 @@ public @Test class UnionParserTest {
 
     private void testAnonymous() {
         List<Token> input = new List<>(
-            new NameToken("union", 0),
+            new WordToken("union", 0),
             new CurlyBrackets("", 15, new List<>())
         );
         Union union = parser.parse(new TokenReader(input));
@@ -74,13 +74,13 @@ public @Test class UnionParserTest {
 
     private void testSingleVariable() {
         List<Token> input = new List<>(
-            new NameToken("union", 0),
-            new NameToken("Foo", 10),
+            new WordToken("union", 0),
+            new WordToken("Foo", 10),
             new CurlyBrackets("", 15, new List<>(
-                new NameToken("const", 17),
-                new NameToken("int", 23),
+                new WordToken("const", 17),
+                new WordToken("int", 23),
                 new OperatorToken("*", 26),
-                new NameToken("bar", 28),
+                new WordToken("bar", 28),
                 new SeparatorToken(";", 32)
             ))
         );
@@ -97,17 +97,17 @@ public @Test class UnionParserTest {
 
     private void testMultipleVariables() {
         List<Token> input = new List<>(
-            new NameToken("union", 0),
-            new NameToken("Bar", 10),
+            new WordToken("union", 0),
+            new WordToken("Bar", 10),
             new CurlyBrackets("", 15, new List<>(
-                new NameToken("int", 20),
-                new NameToken("i", 25),
+                new WordToken("int", 20),
+                new WordToken("i", 25),
                 new SeparatorToken(";", 26),
-                new NameToken("long", 30),
-                new NameToken("l", 35),
+                new WordToken("long", 30),
+                new WordToken("l", 35),
                 new SeparatorToken(";", 36),
-                new NameToken("short", 45),
-                new NameToken("s", 48),
+                new WordToken("short", 45),
+                new WordToken("s", 48),
                 new SeparatorToken(";", 49)
             ))
         );
@@ -123,12 +123,12 @@ public @Test class UnionParserTest {
     private void testInvalid() {
         Assert.assertThatCode(() -> {
             parser.parse(new TokenReader(new List<>(
-                new NameToken("union", 0),
-                new NameToken("FooBar", 10),
+                new WordToken("union", 0),
+                new WordToken("FooBar", 10),
                 new CurlyBrackets("", 20, new List<>(
-                    new NameToken("int", 25),
-                    new NameToken("i", 30),
-                    new NameToken("iii", 30),
+                    new WordToken("int", 25),
+                    new WordToken("i", 30),
+                    new WordToken("iii", 30),
                     new SeparatorToken(";", 35)
                 ))
             )));

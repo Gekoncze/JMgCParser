@@ -3,7 +3,7 @@ package cz.mg.c.parser.services.entity.type;
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.c.parser.components.TokenReader;
-import cz.mg.tokenizer.entities.tokens.NameToken;
+import cz.mg.tokenizer.entities.tokens.WordToken;
 
 public @Service class ConstParser {
     private static volatile @Service ConstParser instance;
@@ -24,7 +24,7 @@ public @Service class ConstParser {
 
     public boolean parse(@Mandatory TokenReader reader) {
         boolean constant = false;
-        while (reader.has("const", NameToken.class)) {
+        while (reader.has("const", WordToken.class)) {
             reader.read();
             constant = true;
         }

@@ -9,7 +9,7 @@ import cz.mg.c.parser.entities.Variable;
 import cz.mg.c.parser.entities.brackets.CurlyBrackets;
 import cz.mg.c.parser.services.statement.StatementParser;
 import cz.mg.collections.list.List;
-import cz.mg.tokenizer.entities.tokens.NameToken;
+import cz.mg.tokenizer.entities.tokens.WordToken;
 
 public @Service class UnionParser {
     private static volatile @Service UnionParser instance;
@@ -36,7 +36,7 @@ public @Service class UnionParser {
     }
 
     public @Mandatory Union parse(@Mandatory TokenReader reader) {
-        reader.read("union", NameToken.class);
+        reader.read("union", WordToken.class);
         Union union = new Union();
         union.setName(nameParser.parse(reader));
         if (reader.has(CurlyBrackets.class)) {
