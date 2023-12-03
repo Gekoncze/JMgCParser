@@ -3,12 +3,12 @@ package cz.mg.c.parser.services.entity;
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.c.parser.components.TokenReader;
-import cz.mg.c.parser.entities.Statement;
 import cz.mg.c.parser.entities.Union;
 import cz.mg.c.parser.entities.Variable;
 import cz.mg.c.parser.entities.brackets.CurlyBrackets;
-import cz.mg.c.parser.services.statement.StatementParser;
+import cz.mg.c.parser.services.list.SemicolonParser;
 import cz.mg.collections.list.List;
+import cz.mg.tokenizer.entities.Token;
 import cz.mg.tokenizer.entities.tokens.WordToken;
 
 public @Service class UnionParser {
@@ -20,7 +20,7 @@ public @Service class UnionParser {
                 if (instance == null) {
                     instance = new UnionParser();
                     instance.variableParser = VariableParser.getInstance();
-                    instance.statementParser = StatementParser.getInstance();
+                    instance.semicolonParser = SemicolonParser.getInstance();
                     instance.nameParser = NameParser.getInstance();
                 }
             }
@@ -29,7 +29,7 @@ public @Service class UnionParser {
     }
 
     private @Service VariableParser variableParser;
-    private @Service StatementParser statementParser;
+    private @Service SemicolonParser semicolonParser;
     private @Service NameParser nameParser;
 
     private UnionParser() {
@@ -46,10 +46,10 @@ public @Service class UnionParser {
     }
 
     private @Mandatory List<Variable> readVariables(CurlyBrackets brackets) {
-        List<Statement> statements = statementParser.parse(brackets.getTokens());
+        List<List<Token>> groups = semicolonParser.parse(brackets.getTokens());
         List<Variable> variables = new List<>();
-        for (Statement statement : statements) {
-            TokenReader reader = new TokenReader(statement.getTokens());
+        for (List<Token> group : groups) {
+            TokenReader reader = new TokenReader(group);
             variables.addLast(variableParser.parse(reader));
             reader.readEnd();
         }

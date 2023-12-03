@@ -6,7 +6,7 @@ import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.parser.entities.Enum;
 import cz.mg.c.parser.entities.EnumEntry;
 import cz.mg.c.parser.entities.brackets.CurlyBrackets;
-import cz.mg.c.parser.services.ListParser;
+import cz.mg.c.parser.services.list.ListParser;
 import cz.mg.collections.list.List;
 import cz.mg.tokenizer.entities.Token;
 import cz.mg.tokenizer.entities.tokens.WordToken;

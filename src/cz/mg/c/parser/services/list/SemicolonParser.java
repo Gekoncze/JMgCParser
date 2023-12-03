@@ -1,56 +1,55 @@
-package cz.mg.c.parser.services.statement;
+package cz.mg.c.parser.services.list;
 
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.c.parser.components.TokenReader;
-import cz.mg.c.parser.entities.Statement;
 import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.collections.list.List;
 import cz.mg.tokenizer.entities.Token;
 import cz.mg.tokenizer.entities.tokens.SeparatorToken;
 
-public @Service class SemicolonStatementParser {
-    private static volatile @Service SemicolonStatementParser instance;
+public @Service class SemicolonParser {
+    private static volatile @Service SemicolonParser instance;
 
-    public static @Service SemicolonStatementParser getInstance() {
+    public static @Service SemicolonParser getInstance() {
         if (instance == null) {
             synchronized (Service.class) {
                 if (instance == null) {
-                    instance = new SemicolonStatementParser();
+                    instance = new SemicolonParser();
                 }
             }
         }
         return instance;
     }
 
-    private SemicolonStatementParser() {
+    private SemicolonParser() {
     }
 
-    public @Mandatory List<Statement> parse(@Mandatory List<Token> tokens) {
-        List<Statement> statements = new List<>();
-        Statement statement = new Statement();
+    public @Mandatory List<List<Token>> parse(@Mandatory List<Token> tokens) {
+        List<List<Token>> groups = new List<>();
+        List<Token> group = new List<>();
         TokenReader reader = new TokenReader(tokens);
 
         while (reader.has()) {
             if (reader.has(";", SeparatorToken.class)) {
                 reader.read();
-                if (!statement.getTokens().isEmpty()) {
-                    statements.addLast(statement);
+                if (!group.isEmpty()) {
+                    groups.addLast(group);
                 }
-                statement = new Statement();
+                group = new List<>();
             } else {
-                statement.getTokens().addLast(reader.read());
+                group.addLast(reader.read());
             }
         }
 
-        if (!statement.getTokens().isEmpty()) {
-            Token last = statement.getTokens().getLast();
+        if (!group.isEmpty()) {
+            Token last = group.getLast();
             throw new ParseException(
                 last.getPosition(),
                 "Missing semicolon after '" + last.getText() + "' token."
             );
         }
 
-        return statements;
+        return groups;
     }
 }
