@@ -6,14 +6,14 @@ import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.parser.entities.Anonymous;
 import cz.mg.c.parser.entities.Struct;
 import cz.mg.c.parser.entities.Variable;
-import cz.mg.c.parser.entities.brackets.CurlyBrackets;
 import cz.mg.c.parser.exceptions.ParseException;
+import cz.mg.c.parser.test.BracketFactory;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
 import cz.mg.tokenizer.entities.Token;
-import cz.mg.tokenizer.entities.tokens.WordToken;
 import cz.mg.tokenizer.entities.tokens.OperatorToken;
 import cz.mg.tokenizer.entities.tokens.SeparatorToken;
+import cz.mg.tokenizer.entities.tokens.WordToken;
 
 public @Test class StructParserTest {
     public static void main(String[] args) {
@@ -32,6 +32,7 @@ public @Test class StructParserTest {
     }
 
     private final @Service StructParser parser = StructParser.getInstance();
+    private final @Service BracketFactory b = BracketFactory.getInstance();
 
     private void testEmpty() {
         Assert.assertThatCode(() -> {
@@ -53,7 +54,7 @@ public @Test class StructParserTest {
         List<Token> input = new List<>(
             new WordToken("struct", 0),
             new WordToken("Foo", 10),
-            new CurlyBrackets("", 15, new List<>())
+            b.curlyBrackets()
         );
         Struct struct = parser.parse(new TokenReader(input));
         Assert.assertEquals("Foo", struct.getName().getText());
@@ -64,7 +65,7 @@ public @Test class StructParserTest {
     private void testAnonymous() {
         List<Token> input = new List<>(
             new WordToken("struct", 0),
-            new CurlyBrackets("", 15, new List<>())
+            b.curlyBrackets()
         );
         Struct struct = parser.parse(new TokenReader(input));
         Assert.assertSame(Anonymous.NAME, struct.getName());
@@ -76,13 +77,13 @@ public @Test class StructParserTest {
         List<Token> input = new List<>(
             new WordToken("struct", 0),
             new WordToken("Foo", 10),
-            new CurlyBrackets("", 15, new List<>(
+            b.curlyBrackets(
                 new WordToken("const", 17),
                 new WordToken("int", 23),
                 new OperatorToken("*", 26),
                 new WordToken("bar", 28),
                 new SeparatorToken(";", 32)
-            ))
+            )
         );
         Struct struct = parser.parse(new TokenReader(input));
         Assert.assertEquals("Foo", struct.getName().getText());
@@ -99,7 +100,7 @@ public @Test class StructParserTest {
         List<Token> input = new List<>(
             new WordToken("struct", 0),
             new WordToken("Bar", 10),
-            new CurlyBrackets("", 15, new List<>(
+            b.curlyBrackets(
                 new WordToken("int", 20),
                 new WordToken("i", 25),
                 new SeparatorToken(";", 26),
@@ -109,7 +110,7 @@ public @Test class StructParserTest {
                 new WordToken("short", 45),
                 new WordToken("s", 48),
                 new SeparatorToken(";", 49)
-            ))
+            )
         );
         Struct struct = parser.parse(new TokenReader(input));
         Assert.assertEquals("Bar", struct.getName().getText());
@@ -125,12 +126,12 @@ public @Test class StructParserTest {
             parser.parse(new TokenReader(new List<>(
                 new WordToken("struct", 0),
                 new WordToken("FooBar", 10),
-                new CurlyBrackets("", 20, new List<>(
+                b.curlyBrackets(
                     new WordToken("int", 25),
                     new WordToken("i", 30),
                     new WordToken("iii", 30),
                     new SeparatorToken(";", 35)
-                ))
+                )
             )));
         }).throwsException(ParseException.class);
     }

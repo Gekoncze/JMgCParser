@@ -12,11 +12,6 @@ public abstract @Entity class Brackets extends Token {
     public Brackets() {
     }
 
-    public Brackets(String text, int position, List<Token> tokens) {
-        super(text, position);
-        this.tokens = tokens;
-    }
-
     @Required @Shared
     public List<Token> getTokens() {
         return tokens;

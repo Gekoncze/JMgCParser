@@ -5,17 +5,15 @@ import cz.mg.annotations.classes.Test;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.parser.entities.Anonymous;
 import cz.mg.c.parser.entities.Function;
-import cz.mg.c.parser.entities.brackets.CurlyBrackets;
-import cz.mg.c.parser.entities.brackets.RoundBrackets;
-import cz.mg.c.parser.entities.brackets.SquareBrackets;
 import cz.mg.c.parser.exceptions.ParseException;
+import cz.mg.c.parser.test.BracketFactory;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
 import cz.mg.tokenizer.entities.Token;
-import cz.mg.tokenizer.entities.tokens.WordToken;
 import cz.mg.tokenizer.entities.tokens.NumberToken;
 import cz.mg.tokenizer.entities.tokens.OperatorToken;
 import cz.mg.tokenizer.entities.tokens.SeparatorToken;
+import cz.mg.tokenizer.entities.tokens.WordToken;
 
 public @Test class FunctionParserTest {
     public static void main(String[] args) {
@@ -39,6 +37,7 @@ public @Test class FunctionParserTest {
     }
 
     private final @Service FunctionParser parser = FunctionParser.getInstance();
+    private final @Service BracketFactory b = BracketFactory.getInstance();
 
     private void testEmpty() {
         Assert.assertThatCode(() -> {
@@ -50,7 +49,7 @@ public @Test class FunctionParserTest {
         List<Token> input = new List<>(
             new WordToken("void", 0),
             new WordToken("foo", 7),
-            new RoundBrackets("", 8, new List<>())
+            b.roundBrackets()
         );
         Function function = parser.parse(new TokenReader(input));
         Assert.assertEquals("void", function.getOutput().getTypename().getName().getText());
@@ -62,7 +61,7 @@ public @Test class FunctionParserTest {
     private void testInterfaceAnonymous() {
         List<Token> input = new List<>(
             new WordToken("void", 0),
-            new RoundBrackets("", 8, new List<>())
+            b.roundBrackets()
         );
         Function function = parser.parse(new TokenReader(input));
         Assert.assertEquals("void", function.getOutput().getTypename().getName().getText());
@@ -76,7 +75,7 @@ public @Test class FunctionParserTest {
             new WordToken("int", 0),
             new OperatorToken("*", 5),
             new WordToken("foobar", 7),
-            new RoundBrackets("", 8, new List<>())
+            b.roundBrackets()
         );
         Function function = parser.parse(new TokenReader(input));
         Assert.assertEquals("int", function.getOutput().getTypename().getName().getText());
@@ -91,10 +90,10 @@ public @Test class FunctionParserTest {
             new WordToken("int", 0),
             new WordToken("const", 4),
             new WordToken("constantin", 10),
-            new RoundBrackets("", 12, new List<>(
+            b.roundBrackets(
                 new WordToken("float", 13),
                 new WordToken("floating", 20)
-            ))
+            )
         );
         Function function = parser.parse(new TokenReader(input));
         Assert.assertEquals("int", function.getOutput().getTypename().getName().getText());
@@ -112,13 +111,13 @@ public @Test class FunctionParserTest {
             new WordToken("int", 0),
             new WordToken("const", 4),
             new WordToken("constantin", 10),
-            new RoundBrackets("", 12, new List<>(
+            b.roundBrackets(
                 new WordToken("float", 13),
                 new WordToken("floating", 20),
-                new SquareBrackets("", 22, new List<>(
+                b.squareBrackets(
                     new NumberToken("10", 23)
-                ))
-            ))
+                )
+            )
         );
         Function function = parser.parse(new TokenReader(input));
         Assert.assertEquals("int", function.getOutput().getTypename().getName().getText());
@@ -135,7 +134,7 @@ public @Test class FunctionParserTest {
         List<Token> input = new List<>(
             new WordToken("void", 0),
             new WordToken("foobar", 10),
-            new RoundBrackets("", 12, new List<>(
+            b.roundBrackets(
                 new WordToken("float", 13),
                 new WordToken("floating", 20),
                 new SeparatorToken(",", 21),
@@ -146,7 +145,7 @@ public @Test class FunctionParserTest {
                 new OperatorToken("*", 50),
                 new OperatorToken("*", 51),
                 new WordToken("voiding", 53)
-            ))
+            )
         );
         Function function = parser.parse(new TokenReader(input));
         Assert.assertEquals("void", function.getOutput().getTypename().getName().getText());
@@ -165,7 +164,7 @@ public @Test class FunctionParserTest {
     private void testInterfaceAnonymousInput() {
         List<Token> input = new List<>(
             new WordToken("void", 0),
-            new RoundBrackets("", 12, new List<>(
+            b.roundBrackets(
                 new WordToken("float", 13),
                 new SeparatorToken(",", 21),
                 new WordToken("double", 28),
@@ -173,7 +172,7 @@ public @Test class FunctionParserTest {
                 new WordToken("void", 44),
                 new OperatorToken("*", 50),
                 new OperatorToken("*", 51)
-            ))
+            )
         );
         Function function = parser.parse(new TokenReader(input));
         Assert.assertEquals("void", function.getOutput().getTypename().getName().getText());
@@ -194,12 +193,12 @@ public @Test class FunctionParserTest {
             new WordToken("int", 0),
             new WordToken("const", 4),
             new WordToken("constantin", 10),
-            new RoundBrackets("", 12, new List<>(
+            b.roundBrackets(
                 new WordToken("float", 13),
-                new SquareBrackets("", 22, new List<>(
+                b.squareBrackets(
                     new NumberToken("10", 23)
-                ))
-            ))
+                )
+            )
         );
         Function function = parser.parse(new TokenReader(input));
         Assert.assertEquals("int", function.getOutput().getTypename().getName().getText());
@@ -217,12 +216,12 @@ public @Test class FunctionParserTest {
             List<Token> input = new List<>(
                 new WordToken("void", 0),
                 new WordToken("foobar", 10),
-                new RoundBrackets("", 12, new List<>(
+                b.roundBrackets(
                     new WordToken("float", 13),
                     new WordToken("floating", 20),
                     new WordToken("double", 28),
                     new WordToken("doubling", 35)
-                ))
+                )
             );
             parser.parse(new TokenReader(input));
         }).throwsException(ParseException.class);
@@ -232,8 +231,8 @@ public @Test class FunctionParserTest {
         List<Token> input = new List<>(
             new WordToken("void", 0),
             new WordToken("space", 6),
-            new RoundBrackets("", 11, new List<>()),
-            new CurlyBrackets("", 13, new List<>())
+            b.roundBrackets(),
+            b.curlyBrackets()
         );
         Function function = parser.parse(new TokenReader(input));
         Assert.assertEquals("void", function.getOutput().getTypename().getName().getText());
@@ -248,7 +247,7 @@ public @Test class FunctionParserTest {
             new WordToken("void", 0),
             new OperatorToken("*", 5),
             new WordToken("foobar", 10),
-            new RoundBrackets("", 12, new List<>(
+            b.roundBrackets(
                 new WordToken("float", 13),
                 new OperatorToken("*", 19),
                 new WordToken("floating", 20),
@@ -256,12 +255,12 @@ public @Test class FunctionParserTest {
                 new WordToken("double", 28),
                 new OperatorToken("*", 34),
                 new WordToken("doubling", 35)
-            )),
-            new CurlyBrackets("", 37, new List<>(
+            ),
+            b.curlyBrackets(
                 new WordToken("return", 40),
                 new WordToken("null", 47),
                 new SeparatorToken(";", 52)
-            ))
+            )
         );
         Function function = parser.parse(new TokenReader(input));
         Assert.assertEquals("void", function.getOutput().getTypename().getName().getText());

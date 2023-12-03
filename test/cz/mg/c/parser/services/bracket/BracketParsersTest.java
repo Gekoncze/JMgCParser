@@ -2,8 +2,7 @@ package cz.mg.c.parser.services.bracket;
 
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
-import cz.mg.c.parser.entities.brackets.CurlyBrackets;
-import cz.mg.c.parser.entities.brackets.RoundBrackets;
+import cz.mg.c.parser.test.BracketFactory;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
 import cz.mg.tokenizer.entities.Token;
@@ -24,6 +23,7 @@ public @Test class BracketParsersTest {
 
     private final @Service BracketParsers parsers = BracketParsers.getInstance();
     private final @Service TokenFactory f = TokenFactory.getInstance();
+    private final @Service BracketFactory b = BracketFactory.getInstance();
     private final @Service TokenValidator validator = TokenValidator.getInstance();
 
     private void testParseEmpty() {
@@ -39,7 +39,7 @@ public @Test class BracketParsersTest {
 
         List<Token> output = parsers.parse(input);
         validator.assertEquals(
-            new List<>(new CurlyBrackets("", 0, new List<>())),
+            new List<>(b.curlyBrackets()),
             output
         );
     }
@@ -69,19 +69,19 @@ public @Test class BracketParsersTest {
             new List<>(
                 f.word("void"),
                 f.word("fooBar"),
-                new RoundBrackets("", 0, new List<>(
+                b.roundBrackets(
                     f.word("struct"),
-                    new CurlyBrackets("", 0, new List<>()),
+                    b.curlyBrackets(),
                     f.word("parameter")
-                )),
-                new CurlyBrackets("", 0, new List<>(
+                ),
+                b.curlyBrackets(
                     f.word("if"),
-                    new RoundBrackets("", 0, new List<>(
+                    b.roundBrackets(
                         f.word("true")
-                    )),
+                    ),
                     f.word("return"),
                     f.special(";")
-                ))
+                )
             ),
             output
         );

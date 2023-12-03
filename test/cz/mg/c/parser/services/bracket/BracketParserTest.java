@@ -5,6 +5,7 @@ import cz.mg.annotations.classes.Test;
 import cz.mg.c.parser.entities.brackets.Brackets;
 import cz.mg.c.parser.entities.brackets.RoundBrackets;
 import cz.mg.c.parser.exceptions.ParseException;
+import cz.mg.c.parser.test.BracketFactory;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
 import cz.mg.tokenizer.entities.Token;
@@ -30,6 +31,7 @@ public @Test class BracketParserTest {
     }
 
     private final @Service BracketParser parser = new BracketParser("test", "(", ")", RoundBrackets::new);
+    private final @Service BracketFactory b = BracketFactory.getInstance();
 
     private void testParseEmpty() {
         Assert.assertEquals(true, parser.parse(new List<>()).isEmpty());
@@ -116,10 +118,10 @@ public @Test class BracketParserTest {
         List<Token> input = new List<>(
             new BracketToken("(", 3),
             new BracketToken(")", 4),
-            new RoundBrackets("", 10, new List<>(
+            b.roundBrackets(
                 new BracketToken("(", 12),
                 new BracketToken(")", 13)
-            ))
+            )
         );
 
         List<Token> output = parser.parse(input);

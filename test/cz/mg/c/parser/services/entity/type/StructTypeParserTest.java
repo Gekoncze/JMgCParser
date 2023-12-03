@@ -6,14 +6,14 @@ import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.parser.entities.Anonymous;
 import cz.mg.c.parser.entities.Struct;
 import cz.mg.c.parser.entities.Type;
-import cz.mg.c.parser.entities.brackets.CurlyBrackets;
 import cz.mg.c.parser.exceptions.ParseException;
+import cz.mg.c.parser.test.BracketFactory;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
 import cz.mg.tokenizer.entities.Token;
-import cz.mg.tokenizer.entities.tokens.WordToken;
 import cz.mg.tokenizer.entities.tokens.OperatorToken;
 import cz.mg.tokenizer.entities.tokens.SeparatorToken;
+import cz.mg.tokenizer.entities.tokens.WordToken;
 
 public @Test class StructTypeParserTest {
     public static void main(String[] args) {
@@ -31,6 +31,7 @@ public @Test class StructTypeParserTest {
     }
 
     private final @Service StructTypeParser parser = StructTypeParser.getInstance();
+    private final @Service BracketFactory b = BracketFactory.getInstance();
 
     private void testParseEmpty() {
         Assert.assertThatCode(() -> {
@@ -42,7 +43,7 @@ public @Test class StructTypeParserTest {
         List<Token> tokens = new List<>(
             new WordToken("struct", 0),
             new WordToken("Foo", 7),
-            new CurlyBrackets("", 11, new List<>())
+            b.curlyBrackets()
         );
         Type type = parser.parse(new TokenReader(tokens));
         Assert.assertEquals(false, type.isConstant());
@@ -57,11 +58,11 @@ public @Test class StructTypeParserTest {
     private void testParseAnonymous() {
         List<Token> tokens = new List<>(
             new WordToken("struct", 0),
-            new CurlyBrackets("", 11, new List<>(
+            b.curlyBrackets(
                 new WordToken("int", 13),
                 new WordToken("bar", 17),
                 new SeparatorToken(";", 20)
-            ))
+            )
         );
         Type type = parser.parse(new TokenReader(tokens));
         Assert.assertEquals(false, type.isConstant());
@@ -79,11 +80,11 @@ public @Test class StructTypeParserTest {
         List<Token> tokens = new List<>(
             new WordToken("struct", 0),
             new WordToken("Foo", 7),
-            new CurlyBrackets("", 11, new List<>(
+            b.curlyBrackets(
                 new WordToken("int", 13),
                 new WordToken("bar", 17),
                 new SeparatorToken(";", 20)
-            ))
+            )
         );
         Type type = parser.parse(new TokenReader(tokens));
         Assert.assertEquals(false, type.isConstant());
@@ -102,7 +103,7 @@ public @Test class StructTypeParserTest {
             new WordToken("const", 0),
             new WordToken("struct", 7),
             new WordToken("FooBar", 14),
-            new CurlyBrackets("", 20, new List<>(
+            b.curlyBrackets(
                 new WordToken("const", 22),
                 new WordToken("int", 25),
                 new WordToken("a", 30),
@@ -110,7 +111,7 @@ public @Test class StructTypeParserTest {
                 new WordToken("int", 40),
                 new WordToken("b", 45),
                 new SeparatorToken(";", 50)
-            )),
+            ),
             new WordToken("const", 55),
             new OperatorToken("*", 60),
             new WordToken("const", 65)
@@ -136,7 +137,7 @@ public @Test class StructTypeParserTest {
         List<Token> tokens = new List<>(
             new WordToken("struct", 0),
             new WordToken("Foo", 7),
-            new CurlyBrackets("", 11, new List<>()),
+            b.curlyBrackets(),
             new WordToken("Foo2", 16)
         );
         TokenReader reader = new TokenReader(tokens);

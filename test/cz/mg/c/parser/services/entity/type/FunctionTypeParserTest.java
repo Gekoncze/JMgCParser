@@ -5,15 +5,14 @@ import cz.mg.annotations.classes.Test;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.parser.entities.Function;
 import cz.mg.c.parser.entities.Type;
-import cz.mg.c.parser.entities.brackets.RoundBrackets;
-import cz.mg.c.parser.entities.brackets.SquareBrackets;
 import cz.mg.c.parser.exceptions.ParseException;
+import cz.mg.c.parser.test.BracketFactory;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
-import cz.mg.tokenizer.entities.tokens.WordToken;
 import cz.mg.tokenizer.entities.tokens.NumberToken;
 import cz.mg.tokenizer.entities.tokens.OperatorToken;
 import cz.mg.tokenizer.entities.tokens.SeparatorToken;
+import cz.mg.tokenizer.entities.tokens.WordToken;
 
 public @Test class FunctionTypeParserTest {
     public static void main(String[] args) {
@@ -29,6 +28,7 @@ public @Test class FunctionTypeParserTest {
     }
 
     private final @Service FunctionTypeParser parser = FunctionTypeParser.getInstance();
+    private final @Service BracketFactory b = BracketFactory.getInstance();
 
     private void testParseEmpty() {
         Assert.assertThatCode(() -> {
@@ -39,11 +39,11 @@ public @Test class FunctionTypeParserTest {
     private void testParseNoInputNoOutput() {
         Type output = new Type();
         Type type = parser.parse(new TokenReader(new List<>(
-            new RoundBrackets("", 0, new List<>(
+            b.roundBrackets(
                 new OperatorToken("*", 1),
                 new WordToken("fooptr", 2)
-            )),
-            new RoundBrackets("", 100, new List<>())
+            ),
+            b.roundBrackets()
         )), output);
         Assert.assertEquals(1, type.getPointers().count());
         Assert.assertEquals(false, type.getPointers().getFirst().isConstant());
@@ -58,15 +58,15 @@ public @Test class FunctionTypeParserTest {
     private void testParseMultiInputMultiPointer() {
         Type output = new Type();
         Type type = parser.parse(new TokenReader(new List<>(
-            new RoundBrackets("", 0, new List<>(
+            b.roundBrackets(
                 new OperatorToken("**", 1),
                 new WordToken("fooptrptr", 3)
-            )),
-            new RoundBrackets("", 12, new List<>(
+            ),
+            b.roundBrackets(
                 new WordToken("int", 15),
                 new SeparatorToken(",", 19),
                 new WordToken("int", 21)
-            ))
+            )
         )), output);
         Assert.assertEquals(2, type.getPointers().count());
         Assert.assertEquals(0, type.getArrays().count());
@@ -80,22 +80,22 @@ public @Test class FunctionTypeParserTest {
     private void testParseConstAndArray() {
         Type output = new Type();
         Type type = parser.parse(new TokenReader(new List<>(
-            new RoundBrackets("", 0, new List<>(
+            b.roundBrackets(
                 new OperatorToken("*", 1),
                 new WordToken("const", 3),
                 new OperatorToken("*", 10),
                 new WordToken("fooptrptrarr", 12),
-                new SquareBrackets("", 20, new List<>(
+                b.squareBrackets(
                     new NumberToken("3", 21)
-                ))
-            )),
-            new RoundBrackets("", 25, new List<>(
+                )
+            ),
+            b.roundBrackets(
                 new WordToken("int", 28),
                 new WordToken("foo", 32),
                 new SeparatorToken(",", 36),
                 new WordToken("int", 38),
                 new WordToken("bar", 42)
-            ))
+            )
         )), output);
         Assert.assertEquals(2, type.getPointers().count());
         Assert.assertEquals(true, type.getPointers().getFirst().isConstant());

@@ -9,6 +9,7 @@ import cz.mg.c.parser.entities.Variable;
 import cz.mg.c.parser.entities.brackets.CurlyBrackets;
 import cz.mg.c.parser.entities.brackets.SquareBrackets;
 import cz.mg.c.parser.exceptions.ParseException;
+import cz.mg.c.parser.test.BracketFactory;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
 import cz.mg.tokenizer.entities.tokens.WordToken;
@@ -36,6 +37,7 @@ public @Test class VariableParserTest {
 
     private final @Service VariableParser parser = VariableParser.getInstance();
     private final @Service TokenValidator tokenValidator = TokenValidator.getInstance();
+    private final @Service BracketFactory b = BracketFactory.getInstance();
 
     private void testParseEmpty() {
         Assert.assertThatCode(() -> {
@@ -75,9 +77,9 @@ public @Test class VariableParserTest {
         TokenReader reader = new TokenReader(new List<>(
             new WordToken("float", 1),
             new WordToken("bar", 5),
-            new SquareBrackets("", 6, new List<>(
+            b.squareBrackets(
                 new NumberToken("12", 7)
-            ))
+            )
         ));
 
         Variable variable = parser.parse(reader);
@@ -98,15 +100,15 @@ public @Test class VariableParserTest {
         TokenReader reader = new TokenReader(new List<>(
             new WordToken("double", 1),
             new WordToken("foobar", 5),
-            new SquareBrackets("", 6, new List<>(
+            b.squareBrackets(
                 new NumberToken("9", 7)
-            )),
-            new SquareBrackets("", 6, new List<>(
+            ),
+            b.squareBrackets(
                 new NumberToken("3", 7)
-            )),
-            new SquareBrackets("", 6, new List<>(
+            ),
+            b.squareBrackets(
                 new NumberToken("1", 7)
-            ))
+            )
         ));
 
         Variable variable = parser.parse(reader);
@@ -135,11 +137,11 @@ public @Test class VariableParserTest {
         TokenReader reader = new TokenReader(new List<>(
             new WordToken("float", 1),
             new WordToken("bar", 5),
-            new SquareBrackets("", 6, new List<>(
+            b.squareBrackets(
                 new NumberToken("12", 7),
                 new OperatorToken("+", 8),
                 new NumberToken("1.5", 9)
-            ))
+            )
         ));
 
         Variable variable = parser.parse(reader);
@@ -167,11 +169,11 @@ public @Test class VariableParserTest {
             new OperatorToken("*", 11),
             new WordToken("const", 12),
             new WordToken("bar", 20),
-            new SquareBrackets("", 21, new List<>(
+            b.squareBrackets(
                 new NumberToken("12", 22),
                 new OperatorToken("+", 24),
                 new NumberToken("1.5", 25)
-            ))
+            )
         ));
 
         Variable variable = parser.parse(reader);
@@ -197,16 +199,16 @@ public @Test class VariableParserTest {
         TokenReader reader = new TokenReader(new List<>(
             new WordToken("const", 0),
             new WordToken("struct", 7),
-            new CurlyBrackets("", 10, new List<>(
+            b.curlyBrackets(
                 new WordToken("int", 15),
                 new WordToken("a", 17),
                 new SeparatorToken(";", 18)
-            )),
+            ),
             new OperatorToken("*", 20),
             new WordToken("foobar", 22),
-            new SquareBrackets("", 24, new List<>(
+            b.squareBrackets(
                 new NumberToken("2", 26)
-            ))
+            )
         ));
 
         Variable variable = parser.parse(reader);

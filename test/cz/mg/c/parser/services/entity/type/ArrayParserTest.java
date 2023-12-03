@@ -4,13 +4,13 @@ import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.parser.entities.Array;
-import cz.mg.c.parser.entities.brackets.SquareBrackets;
+import cz.mg.c.parser.test.BracketFactory;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
 import cz.mg.tokenizer.entities.Token;
-import cz.mg.tokenizer.entities.tokens.WordToken;
 import cz.mg.tokenizer.entities.tokens.NumberToken;
 import cz.mg.tokenizer.entities.tokens.OperatorToken;
+import cz.mg.tokenizer.entities.tokens.WordToken;
 
 public @Test class ArrayParserTest {
     public static void main(String[] args) {
@@ -26,6 +26,7 @@ public @Test class ArrayParserTest {
     }
 
     private final @Service ArrayParser parser = ArrayParser.getInstance();
+    private final @Service BracketFactory b = BracketFactory.getInstance();
 
     private void testParseEmpty() {
         Assert.assertEquals(true, parser.parse(new TokenReader(new List<>())).isEmpty());
@@ -33,7 +34,7 @@ public @Test class ArrayParserTest {
     }
 
     private void testParseSingle() {
-        List<Token> tokens = new List<>(new SquareBrackets("", 0, new List<>(new NumberToken("5", 2))));
+        List<Token> tokens = new List<>(b.squareBrackets(new NumberToken("5", 2)));
         List<Array> arrays = parser.parse(new TokenReader(tokens));
         Assert.assertEquals(1, arrays.count());
         Assert.assertEquals(1, arrays.getFirst().getExpression().count());
@@ -42,13 +43,13 @@ public @Test class ArrayParserTest {
 
     private void testParseMultiple() {
         List<Token> tokens = new List<>(
-            new SquareBrackets("", 0, new List<>()),
-            new SquareBrackets("", 10, new List<>(new NumberToken("7", 12))),
-            new SquareBrackets("", 20, new List<>(
+            b.squareBrackets(),
+            b.squareBrackets(new NumberToken("7", 12)),
+            b.squareBrackets(
                 new NumberToken("1", 22),
                 new OperatorToken("+", 24),
                 new NumberToken("3", 26)
-            ))
+            )
         );
         List<Array> arrays = parser.parse(new TokenReader(tokens));
         Assert.assertEquals(3, arrays.count());
@@ -58,7 +59,7 @@ public @Test class ArrayParserTest {
     }
 
     private void testParseRemainingTokens() {
-        List<Token> tokens = new List<>(new SquareBrackets("", 0, new List<>()), new WordToken("foo", 2));
+        List<Token> tokens = new List<>(b.squareBrackets(), new WordToken("foo", 2));
         TokenReader reader = new TokenReader(tokens);
         parser.parse(reader);
         Assert.assertEquals(true, reader.has());

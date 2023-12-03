@@ -5,15 +5,15 @@ import cz.mg.annotations.classes.Test;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.parser.entities.Anonymous;
 import cz.mg.c.parser.entities.Enum;
-import cz.mg.c.parser.entities.brackets.CurlyBrackets;
 import cz.mg.c.parser.exceptions.ParseException;
+import cz.mg.c.parser.test.BracketFactory;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
 import cz.mg.tokenizer.entities.Token;
-import cz.mg.tokenizer.entities.tokens.WordToken;
 import cz.mg.tokenizer.entities.tokens.NumberToken;
 import cz.mg.tokenizer.entities.tokens.OperatorToken;
 import cz.mg.tokenizer.entities.tokens.SeparatorToken;
+import cz.mg.tokenizer.entities.tokens.WordToken;
 
 public @Test class EnumParserTest {
     public static void main(String[] args) {
@@ -32,6 +32,7 @@ public @Test class EnumParserTest {
     }
 
     private final @Service EnumParser parser = EnumParser.getInstance();
+    private final @Service BracketFactory b = BracketFactory.getInstance();
 
     private void testEmpty() {
         Assert.assertThatCode(() -> {
@@ -53,7 +54,7 @@ public @Test class EnumParserTest {
         List<Token> input = new List<>(
             new WordToken("enum", 0),
             new WordToken("NomNom", 6),
-            new CurlyBrackets("", 15, new List<>())
+            b.curlyBrackets()
         );
         Enum enom = parser.parse(new TokenReader(input));
         Assert.assertEquals("NomNom", enom.getName().getText());
@@ -64,7 +65,7 @@ public @Test class EnumParserTest {
     private void testAnonymous() {
         List<Token> input = new List<>(
             new WordToken("enum", 0),
-            new CurlyBrackets("", 15, new List<>())
+            b.curlyBrackets()
         );
         Enum enom = parser.parse(new TokenReader(input));
         Assert.assertSame(Anonymous.NAME, enom.getName());
@@ -76,9 +77,9 @@ public @Test class EnumParserTest {
         List<Token> input = new List<>(
             new WordToken("enum", 0),
             new WordToken("NomNom", 6),
-            new CurlyBrackets("", 15, new List<>(
+            b.curlyBrackets(
                 new WordToken("NOM", 20)
-            ))
+            )
         );
         Enum enom = parser.parse(new TokenReader(input));
         Assert.assertEquals("NomNom", enom.getName().getText());
@@ -92,13 +93,13 @@ public @Test class EnumParserTest {
         List<Token> input = new List<>(
             new WordToken("enum", 0),
             new WordToken("NomNomNom", 6),
-            new CurlyBrackets("", 15, new List<>(
+            b.curlyBrackets(
                 new WordToken("NOM", 20),
                 new OperatorToken("=", 24),
                 new NumberToken("22", 26),
                 new SeparatorToken(",", 28),
                 new WordToken("NOM2", 30)
-            ))
+            )
         );
         Enum enom = parser.parse(new TokenReader(input));
         Assert.assertEquals("NomNomNom", enom.getName().getText());
@@ -116,11 +117,11 @@ public @Test class EnumParserTest {
             parser.parse(new TokenReader(new List<>(
                 new WordToken("enum", 0),
                 new WordToken("NomNom", 6),
-                new CurlyBrackets("", 15, new List<>(
+                b.curlyBrackets(
                     new WordToken("NOM", 20),
                     new WordToken("NOM", 25),
                     new WordToken("NOM", 30)
-                ))
+                )
             )));
         }).throwsException(ParseException.class);
     }

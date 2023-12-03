@@ -6,14 +6,14 @@ import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.parser.entities.Anonymous;
 import cz.mg.c.parser.entities.Union;
 import cz.mg.c.parser.entities.Variable;
-import cz.mg.c.parser.entities.brackets.CurlyBrackets;
 import cz.mg.c.parser.exceptions.ParseException;
+import cz.mg.c.parser.test.BracketFactory;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
 import cz.mg.tokenizer.entities.Token;
-import cz.mg.tokenizer.entities.tokens.WordToken;
 import cz.mg.tokenizer.entities.tokens.OperatorToken;
 import cz.mg.tokenizer.entities.tokens.SeparatorToken;
+import cz.mg.tokenizer.entities.tokens.WordToken;
 
 public @Test class UnionParserTest {
     public static void main(String[] args) {
@@ -32,6 +32,7 @@ public @Test class UnionParserTest {
     }
 
     private final @Service UnionParser parser = UnionParser.getInstance();
+    private final @Service BracketFactory b = BracketFactory.getInstance();
 
     private void testEmpty() {
         Assert.assertThatCode(() -> {
@@ -53,7 +54,7 @@ public @Test class UnionParserTest {
         List<Token> input = new List<>(
             new WordToken("union", 0),
             new WordToken("Foo", 10),
-            new CurlyBrackets("", 15, new List<>())
+            b.curlyBrackets()
         );
         Union union = parser.parse(new TokenReader(input));
         Assert.assertEquals("Foo", union.getName().getText());
@@ -64,7 +65,7 @@ public @Test class UnionParserTest {
     private void testAnonymous() {
         List<Token> input = new List<>(
             new WordToken("union", 0),
-            new CurlyBrackets("", 15, new List<>())
+            b.curlyBrackets()
         );
         Union union = parser.parse(new TokenReader(input));
         Assert.assertSame(Anonymous.NAME, union.getName());
@@ -76,13 +77,13 @@ public @Test class UnionParserTest {
         List<Token> input = new List<>(
             new WordToken("union", 0),
             new WordToken("Foo", 10),
-            new CurlyBrackets("", 15, new List<>(
+            b.curlyBrackets(
                 new WordToken("const", 17),
                 new WordToken("int", 23),
                 new OperatorToken("*", 26),
                 new WordToken("bar", 28),
                 new SeparatorToken(";", 32)
-            ))
+            )
         );
         Union union = parser.parse(new TokenReader(input));
         Assert.assertEquals("Foo", union.getName().getText());
@@ -99,7 +100,7 @@ public @Test class UnionParserTest {
         List<Token> input = new List<>(
             new WordToken("union", 0),
             new WordToken("Bar", 10),
-            new CurlyBrackets("", 15, new List<>(
+            b.curlyBrackets(
                 new WordToken("int", 20),
                 new WordToken("i", 25),
                 new SeparatorToken(";", 26),
@@ -109,7 +110,7 @@ public @Test class UnionParserTest {
                 new WordToken("short", 45),
                 new WordToken("s", 48),
                 new SeparatorToken(";", 49)
-            ))
+            )
         );
         Union union = parser.parse(new TokenReader(input));
         Assert.assertEquals("Bar", union.getName().getText());
@@ -125,12 +126,12 @@ public @Test class UnionParserTest {
             parser.parse(new TokenReader(new List<>(
                 new WordToken("union", 0),
                 new WordToken("FooBar", 10),
-                new CurlyBrackets("", 20, new List<>(
+                b.curlyBrackets(
                     new WordToken("int", 25),
                     new WordToken("i", 30),
                     new WordToken("iii", 30),
                     new SeparatorToken(";", 35)
-                ))
+                )
             )));
         }).throwsException(ParseException.class);
     }

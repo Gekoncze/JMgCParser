@@ -8,14 +8,14 @@ import cz.mg.c.parser.entities.Anonymous;
 import cz.mg.c.parser.entities.Pointer;
 import cz.mg.c.parser.entities.Struct;
 import cz.mg.c.parser.entities.Type;
-import cz.mg.c.parser.entities.brackets.CurlyBrackets;
 import cz.mg.c.parser.exceptions.ParseException;
+import cz.mg.c.parser.test.BracketFactory;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
 import cz.mg.tokenizer.entities.Token;
-import cz.mg.tokenizer.entities.tokens.WordToken;
 import cz.mg.tokenizer.entities.tokens.OperatorToken;
 import cz.mg.tokenizer.entities.tokens.SeparatorToken;
+import cz.mg.tokenizer.entities.tokens.WordToken;
 
 public @Test class TypeParserTest {
     public static void main(String[] args) {
@@ -37,6 +37,7 @@ public @Test class TypeParserTest {
     }
 
     private final @Service TypeParser parser = TypeParser.getInstance();
+    private final @Service BracketFactory b = BracketFactory.getInstance();
 
     private void testParseEmpty() {
         Assert.assertThatCode(() -> {
@@ -237,11 +238,11 @@ public @Test class TypeParserTest {
         TokenReader reader = new TokenReader(new List<>(
             new WordToken("const", 0),
             new WordToken("struct", 7),
-            new CurlyBrackets("", 10, new List<>(
+            b.curlyBrackets(
                 new WordToken("int", 15),
                 new WordToken("a", 17),
                 new SeparatorToken(";", 18)
-            )),
+            ),
             new OperatorToken("*", 20)
         ));
 
