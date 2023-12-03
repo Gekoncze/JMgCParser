@@ -1,4 +1,4 @@
-package cz.mg.c.parser.components;
+package cz.mg.c.parser.services.bracket;
 
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;

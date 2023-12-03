@@ -1,8 +1,11 @@
-package cz.mg.c.parser.components;
+package cz.mg.c.parser.services.bracket;
 
+import cz.mg.annotations.classes.Base;
 import cz.mg.annotations.classes.Component;
+import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.annotations.requirement.Optional;
+import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.parser.entities.brackets.Brackets;
 import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.collections.list.List;
@@ -11,7 +14,7 @@ import cz.mg.collections.list.WriteableList;
 import cz.mg.tokenizer.entities.Token;
 import cz.mg.tokenizer.entities.tokens.BracketToken;
 
-public @Component class BracketParser {
+public @Base @Service class BracketParser {
     private final @Mandatory String name;
     private final @Mandatory String openingBracket;
     private final @Mandatory String closingBracket;

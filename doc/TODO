@@ -21,6 +21,3 @@
 ### LATER ###
     add parser test
     vararg support for functions and function pointers
-    BracketParser state is immutable, can it be a @Service?
-        on contrary, it cannot be a singleton
-        so I wonder if it could be a @ServiceBase or @BaseService or @Base @Service
