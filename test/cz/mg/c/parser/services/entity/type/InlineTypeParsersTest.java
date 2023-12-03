@@ -1,5 +1,6 @@
 package cz.mg.c.parser.services.entity.type;
 
+import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.parser.entities.Enum;
@@ -17,6 +18,7 @@ public @Test class InlineTypeParsersTest {
         System.out.print("Running " + InlineTypeParsersTest.class.getSimpleName() + " ... ");
 
         InlineTypeParsersTest test = new InlineTypeParsersTest();
+        test.testParseEmpty();
         test.testParseStruct();
         test.testParseConstStruct();
         test.testParseAnonymousStruct();
@@ -31,7 +33,12 @@ public @Test class InlineTypeParsersTest {
         System.out.println("OK");
     }
 
-    private final InlineTypeParsers parsers = InlineTypeParsers.getInstance();
+    private final @Service InlineTypeParsers parsers = InlineTypeParsers.getInstance();
+
+    private void testParseEmpty() {
+        Type type = parsers.parse(new TokenReader(new List<>()), false);
+        Assert.assertNull(type);
+    }
 
     private void testParseStruct() {
         List<Token> input = new List<>(
