@@ -2,7 +2,7 @@
     ...
 
 ### SOON ###
-    add root entity parsers test
+    implement root entity parsers and add test
     add parser test
 
 ### LATER ###
