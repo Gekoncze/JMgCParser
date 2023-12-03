@@ -1,5 +1,8 @@
 ### NOW ###
-    add statement parser test
+    refactoring of statement parser
+        statements should be detected on the go
+        as a result, StatementParser and Statement classes could be removed
+        extract bracket parsing into BracketParsers class
 
 ### SOON ###
     add typedef parser
