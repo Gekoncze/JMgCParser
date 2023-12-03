@@ -1,7 +1,4 @@
 ### NOW ###
-    ...
-
-### SOON ###
     add typedef parser
         cases for testing
             typedef struct Bar {}; // unnamed typedef
@@ -9,15 +6,10 @@
             typedef int FooBar[2]; // type array
             typedef void (*FooBar[2])(); // function array
 
-    add patterns for main entity parsers
-        maybe extract parser matching to separate service
-        or include patterns inside parsers
-        or both
-        either of these could allow easier unit testing
-
-    add c main entity parsers test
-
+### SOON ###
+    add root entity parsers test
+    add parser test
 
 ### LATER ###
-    add parser test
     vararg support for functions and function pointers
+    rewrite existing tests to use token factory where possible
