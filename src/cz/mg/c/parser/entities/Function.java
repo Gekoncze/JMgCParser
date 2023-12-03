@@ -35,7 +35,7 @@ public @Entity class Function extends Typename implements CMainEntity {
         this.input = input;
     }
 
-    @Optional @Value
+    @Optional @Shared
     public List<Token> getImplementation() {
         return implementation;
     }

@@ -2,7 +2,7 @@ package cz.mg.c.parser.entities;
 
 import cz.mg.annotations.classes.Entity;
 import cz.mg.annotations.requirement.Required;
-import cz.mg.annotations.storage.Value;
+import cz.mg.annotations.storage.Shared;
 import cz.mg.tokenizer.entities.tokens.WordToken;
 
 public @Entity class Typename implements CEntity {
@@ -15,7 +15,7 @@ public @Entity class Typename implements CEntity {
         this.name = name;
     }
 
-    @Required @Value
+    @Required @Shared
     public WordToken getName() {
         return name;
     }

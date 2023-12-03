@@ -1,10 +1,5 @@
 ### NOW ###
-    add typedef parser
-        cases for testing
-            typedef struct Bar {}; // unnamed typedef
-            typedef void (*Foo); // named typedef
-            typedef int FooBar[2]; // type array
-            typedef void (*FooBar[2])(); // function array
+    ...
 
 ### SOON ###
     add root entity parsers test

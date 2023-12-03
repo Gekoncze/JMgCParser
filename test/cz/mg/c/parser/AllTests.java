@@ -36,6 +36,7 @@ public @Test class AllTests {
         FunctionParserTest.main(args);
         NameParserTest.main(args);
         StructParserTest.main(args);
+        TypedefParserTest.main(args);
         TypeParserTest.main(args);
         UnionParserTest.main(args);
         VariableListParserTest.main(args);
