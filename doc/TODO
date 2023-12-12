@@ -3,7 +3,6 @@
 
 ### SOON ###
     add parser test
-    add test for function pointer returning function pointer
 
 ### LATER ###
     vararg support for functions and function pointers
