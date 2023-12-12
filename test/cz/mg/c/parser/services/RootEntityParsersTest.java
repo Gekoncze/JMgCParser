@@ -167,9 +167,46 @@ public @Test class RootEntityParsersTest {
     }
 
     private void testParseUnion() {
-        List<Token> input = new List<>();
+        List<Token> input = new List<>(
+            f.word("union"),
+            f.word("Color"),
+            b.curlyBrackets(
+                f.word("int"),
+                f.word("i"),
+                f.separator(";"),
+                f.word("char"),
+                f.word("c"),
+                b.squareBrackets(
+                    f.number("4")
+                ),
+                f.separator(";"),
+                f.word("float"),
+                f.word("f"),
+                f.separator(";")
+            ),
+            f.separator(";")
+        );
+
         List<CMainEntity> entities = parsers.parse(input);
-        // TODO
+        Assert.assertEquals(1, entities.count());
+        Assert.assertEquals(true, entities.getFirst() instanceof Union);
+
+        Union union = (Union) entities.getFirst();
+        Assert.assertEquals("Color", union.getName().getText());
+        Assert.assertNotNull(union.getVariables());
+        Assert.assertEquals(3, union.getVariables().count());
+        Assert.assertEquals("i", union.getVariables().get(0).getName().getText());
+        Assert.assertEquals("c", union.getVariables().get(1).getName().getText());
+        Assert.assertEquals("f", union.getVariables().get(2).getName().getText());
+        Assert.assertEquals("int", union.getVariables().get(0).getType().getTypename().getName().getText());
+        Assert.assertEquals("char", union.getVariables().get(1).getType().getTypename().getName().getText());
+        Assert.assertEquals("float", union.getVariables().get(2).getType().getTypename().getName().getText());
+        Assert.assertEquals(1, union.getVariables().get(1).getType().getArrays().count());
+        Assert.assertEquals(1, union.getVariables().get(1).getType().getArrays().getFirst().getExpression().count());
+        Assert.assertEquals(
+            "4",
+            union.getVariables().get(1).getType().getArrays().getFirst().getExpression().getFirst().getText()
+        );
     }
 
     private void testParseEnum() {
