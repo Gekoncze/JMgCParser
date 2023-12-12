@@ -2,10 +2,7 @@ package cz.mg.c.parser.services;
 
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
-import cz.mg.c.parser.entities.CMainEntity;
-import cz.mg.c.parser.entities.Function;
-import cz.mg.c.parser.entities.Typedef;
-import cz.mg.c.parser.entities.Variable;
+import cz.mg.c.parser.entities.*;
 import cz.mg.c.parser.test.BracketFactory;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
@@ -139,9 +136,34 @@ public @Test class RootEntityParsersTest {
     }
 
     private void testParseStruct() {
-        List<Token> input = new List<>();
+        List<Token> input = new List<>(
+            f.word("struct"),
+            f.word("FooBar"),
+            b.curlyBrackets(
+                f.word("int"),
+                f.word("a"),
+                f.separator(";"),
+                f.word("int"),
+                f.operator("*"),
+                f.word("b"),
+                f.separator(";")
+            ),
+            f.separator(";")
+        );
+
         List<CMainEntity> entities = parsers.parse(input);
-        // TODO
+        Assert.assertEquals(1, entities.count());
+        Assert.assertEquals(true, entities.getFirst() instanceof Struct);
+
+        Struct struct = (Struct) entities.getFirst();
+        Assert.assertEquals("FooBar", struct.getName().getText());
+        Assert.assertNotNull(struct.getVariables());
+        Assert.assertEquals(2, struct.getVariables().count());
+        Assert.assertEquals("a", struct.getVariables().getFirst().getName().getText());
+        Assert.assertEquals("b", struct.getVariables().getLast().getName().getText());
+        Assert.assertEquals("int", struct.getVariables().getFirst().getType().getTypename().getName().getText());
+        Assert.assertEquals("int", struct.getVariables().getLast().getType().getTypename().getName().getText());
+        Assert.assertEquals(1, struct.getVariables().getLast().getType().getPointers().count());
     }
 
     private void testParseUnion() {
