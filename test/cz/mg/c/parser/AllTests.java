@@ -1,15 +1,12 @@
 package cz.mg.c.parser;
 
 import cz.mg.annotations.classes.Test;
-import cz.mg.c.parser.services.bracket.BracketParserTest;
-import cz.mg.c.parser.services.list.ListParserTest;
+import cz.mg.c.parser.services.RootEntityParsersTest;
+import cz.mg.c.parser.services.bracket.*;
 import cz.mg.c.parser.services.entity.*;
-import cz.mg.c.parser.services.bracket.CurlyBracketParserTest;
-import cz.mg.c.parser.services.bracket.RoundBracketParserTest;
-import cz.mg.c.parser.services.bracket.SquareBracketParserTest;
 import cz.mg.c.parser.services.entity.type.*;
+import cz.mg.c.parser.services.list.ListParserTest;
 import cz.mg.c.parser.services.list.SemicolonParserTest;
-import cz.mg.c.parser.services.bracket.BracketParsersTest;
 
 public @Test class AllTests {
     public static void main(String[] args) {
@@ -47,7 +44,7 @@ public @Test class AllTests {
         SemicolonParserTest.main(args);
 
         // cz.mg.c.parser.services
-        // TODO - RootEntityParsersTest
+        RootEntityParsersTest.main(args);
 
         // cz.mg.c.parser
         // TODO - ParserTest
