@@ -3,6 +3,7 @@ package cz.mg.c.parser.services;
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
 import cz.mg.c.parser.entities.CMainEntity;
+import cz.mg.c.parser.entities.Function;
 import cz.mg.c.parser.entities.Typedef;
 import cz.mg.c.parser.entities.Variable;
 import cz.mg.c.parser.test.BracketFactory;
@@ -98,9 +99,43 @@ public @Test class RootEntityParsersTest {
     }
 
     private void testParseFunction() {
-        List<Token> input = new List<>();
+        List<Token> input = new List<>(
+            f.word("void"),
+            f.operator("*"),
+            f.word("getAddress"),
+            b.roundBrackets(
+                f.word("foo"),
+                f.word("bar"),
+                f.separator(","),
+                f.word("const"),
+                f.word("int"),
+                f.word("constant")
+            ),
+            b.curlyBrackets(
+                f.word("return"),
+                f.number("0"),
+                f.separator(";")
+            )
+        );
+
         List<CMainEntity> entities = parsers.parse(input);
-        // TODO
+        Assert.assertEquals(1, entities.count());
+        Assert.assertEquals(true, entities.getFirst() instanceof Function);
+
+        Function function = (Function) entities.getFirst();
+        Assert.assertEquals("getAddress", function.getName().getText());
+        Assert.assertEquals("void", function.getOutput().getTypename().getName().getText());
+        Assert.assertEquals(1, function.getOutput().getPointers().count());
+        Assert.assertEquals(true, function.getOutput().getArrays().isEmpty());
+        Assert.assertEquals(false, function.getOutput().isConstant());
+        Assert.assertEquals(2, function.getInput().count());
+        Assert.assertEquals("bar", function.getInput().getFirst().getName().getText());
+        Assert.assertEquals("foo", function.getInput().getFirst().getType().getTypename().getName().getText());
+        Assert.assertEquals("constant", function.getInput().getLast().getName().getText());
+        Assert.assertEquals("int", function.getInput().getLast().getType().getTypename().getName().getText());
+        Assert.assertEquals(true, function.getInput().getLast().getType().isConstant());
+        Assert.assertNotNull(function.getImplementation());
+        Assert.assertEquals(3, function.getImplementation().count());
     }
 
     private void testParseStruct() {
