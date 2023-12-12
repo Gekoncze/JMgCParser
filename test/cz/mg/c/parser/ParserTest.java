@@ -77,6 +77,23 @@ public @Test class ParserTest {
             "4",
             union.getVariables().getLast().getType().getArrays().getFirst().getExpression().getFirst().getText()
         );
+
+        Struct struct = (Struct) entities.get(3);
+        Assert.assertEquals("FooBar", struct.getName().getText());
+        Assert.assertNotNull(struct.getVariables());
+        Assert.assertEquals(3, struct.getVariables().count());
+        Assert.assertEquals("f", struct.getVariables().get(0).getName().getText());
+        Assert.assertEquals("d", struct.getVariables().get(1).getName().getText());
+        Assert.assertEquals("c", struct.getVariables().get(2).getName().getText());
+        Assert.assertEquals("Function", struct.getVariables().get(0).getType().getTypename().getName().getText());
+        Assert.assertEquals("Day", struct.getVariables().get(1).getType().getTypename().getName().getText());
+        Assert.assertEquals("Color", struct.getVariables().get(2).getType().getTypename().getName().getText());
+        Assert.assertEquals(Typename.class, struct.getVariables().get(0).getType().getTypename().getClass());
+        Assert.assertEquals(Enum.class, struct.getVariables().get(1).getType().getTypename().getClass());
+        Assert.assertEquals(Union.class, struct.getVariables().get(2).getType().getTypename().getClass());
+
+        // TODO - check array variable
+        // TODO - check main function
     }
 
     private @Mandatory String readTestFile() {

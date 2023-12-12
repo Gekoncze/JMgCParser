@@ -1,8 +1,11 @@
 ### NOW ###
     add parser test
+        check array variable
+        check main function
 
 ### SOON ###
     extend parser test
+        forward declarations
         comments
         exceptions thrown
         macros
