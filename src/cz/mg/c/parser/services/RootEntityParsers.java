@@ -45,7 +45,9 @@ public @Service class RootEntityParsers {
     public List<CMainEntity> parse(@Mandatory List<Token> tokens) {
         TokenReader reader = new TokenReader(tokens);
         List<CMainEntity> entities = new List<>();
-        if (isTypedef(reader)) {
+        if (isSemicolon(reader)) {
+            reader.read();
+        } else if (isTypedef(reader)) {
             entities.addLast(typedefParser.parse(reader));
             reader.read(";", SeparatorToken.class);
         } else if (reader.has()) {
@@ -56,6 +58,7 @@ public @Service class RootEntityParsers {
                 entities.addLast(functionParser.parse(reader, type));
             } else if (isPlainType(reader, type)) {
                 entities.addLast(type.getTypename());
+                reader.read(";", SeparatorToken.class);
             } else {
                 WordToken name = type.getTypename().getName();
                 throw new ParseException(
@@ -64,6 +67,10 @@ public @Service class RootEntityParsers {
             }
         }
         return entities;
+    }
+
+    private boolean isSemicolon(@Mandatory TokenReader reader) {
+        return reader.has(";", SeparatorToken.class);
     }
 
     private boolean isTypedef(@Mandatory TokenReader reader) {
