@@ -63,6 +63,20 @@ public @Test class ParserTest {
         Assert.assertEquals("FRIDAY", enom.getEntries().get(4).getName().getText());
         Assert.assertEquals("SATURDAY", enom.getEntries().get(5).getName().getText());
         Assert.assertEquals("SUNDAY", enom.getEntries().get(6).getName().getText());
+
+        Union union = (Union) entities.get(2);
+        Assert.assertEquals("Color", union.getName().getText());
+        Assert.assertNotNull(union.getVariables());
+        Assert.assertEquals(2, union.getVariables().count());
+        Assert.assertEquals("i", union.getVariables().getFirst().getName().getText());
+        Assert.assertEquals("int", union.getVariables().getFirst().getType().getTypename().getName().getText());
+        Assert.assertEquals("c", union.getVariables().getLast().getName().getText());
+        Assert.assertEquals("char", union.getVariables().getLast().getType().getTypename().getName().getText());
+        Assert.assertEquals(1, union.getVariables().getLast().getType().getArrays().count());
+        Assert.assertEquals(
+            "4",
+            union.getVariables().getLast().getType().getArrays().getFirst().getExpression().getFirst().getText()
+        );
     }
 
     private @Mandatory String readTestFile() {
