@@ -44,32 +44,34 @@ public @Service class RootEntityParsers {
     public List<CMainEntity> parse(@Mandatory List<Token> tokens) {
         TokenReader reader = new TokenReader(tokens);
         List<CMainEntity> entities = new List<>();
-        if (isSemicolon(reader)) {
-            reader.read();
-        } else if (isTypedef(reader)) {
-            entities.addLast(typedefParser.parse(reader));
-            reader.read(";", SeparatorToken.class);
-        } else if (reader.has()) {
-            Type type = typeParser.parse(reader);
-            if (isFunction(reader)) {
-                entities.addLast(functionParser.parse(reader, type));
-            } else if (isVariable(reader)) {
-                entities.addLast(variableParser.parse(reader, type));
+        while (reader.has()) {
+            if (isSemicolon(reader)) {
+                reader.read();
+            } else if (isTypedef(reader)) {
+                entities.addLast(typedefParser.parse(reader));
                 reader.read(";", SeparatorToken.class);
-            } else if (isPlainType(type)) {
-                entities.addLast(type.getTypename());
-                reader.read(";", SeparatorToken.class);
-            } else if (isFunctionPointer(type)) {
-                Variable variable = new Variable();
-                variable.setName(type.getTypename().getName());
-                variable.setType(type);
-                entities.addLast(variable);
-                reader.read(";", SeparatorToken.class);
-            } else {
-                WordToken name = type.getTypename().getName();
-                throw new ParseException(
-                    name.getPosition(), "Unsupported type '" + name.getText() + "'."
-                );
+            } else if (reader.has()) {
+                Type type = typeParser.parse(reader);
+                if (isFunction(reader)) {
+                    entities.addLast(functionParser.parse(reader, type));
+                } else if (isVariable(reader)) {
+                    entities.addLast(variableParser.parse(reader, type));
+                    reader.read(";", SeparatorToken.class);
+                } else if (isPlainType(type)) {
+                    entities.addLast(type.getTypename());
+                    reader.read(";", SeparatorToken.class);
+                } else if (isFunctionPointer(type)) {
+                    Variable variable = new Variable();
+                    variable.setName(type.getTypename().getName());
+                    variable.setType(type);
+                    entities.addLast(variable);
+                    reader.read(";", SeparatorToken.class);
+                } else {
+                    WordToken name = type.getTypename().getName();
+                    throw new ParseException(
+                        name.getPosition(), "Unsupported type '" + name.getText() + "'."
+                    );
+                }
             }
         }
         return entities;

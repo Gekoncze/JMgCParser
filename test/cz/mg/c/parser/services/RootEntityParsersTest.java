@@ -276,8 +276,58 @@ public @Test class RootEntityParsersTest {
     }
 
     private void testParseMultiple() {
-        List<Token> input = new List<>();
+        List<Token> input = new List<>(
+            f.word("typedef"),
+            f.word("const"),
+            f.word("int"),
+            f.operator("*"),
+            f.word("IntPtr"),
+            f.separator(";"),
+
+            f.word("void"),
+            f.operator("*"),
+            f.word("getAddress"),
+            b.roundBrackets(
+                f.word("foo"),
+                f.word("bar"),
+                f.separator(","),
+                f.word("const"),
+                f.word("int"),
+                f.word("constant")
+            ),
+            b.curlyBrackets(
+                f.word("return"),
+                f.number("0"),
+                f.separator(";")
+            ),
+
+            f.word("struct"),
+            f.word("FooBar"),
+            b.curlyBrackets(
+                f.word("int"),
+                f.word("a"),
+                f.separator(";"),
+                f.word("int"),
+                f.operator("*"),
+                f.word("b"),
+                f.separator(";")
+            ),
+            f.separator(";"),
+
+            f.word("void"),
+            b.roundBrackets(
+                f.operator("*"),
+                f.word("fptr")
+            ),
+            b.roundBrackets(),
+            f.separator(";")
+        );
+
         List<CMainEntity> entities = parsers.parse(input);
-        // TODO
+        Assert.assertEquals(4, entities.count());
+        Assert.assertEquals(true, entities.get(0) instanceof Typedef);
+        Assert.assertEquals(true, entities.get(1) instanceof Function);
+        Assert.assertEquals(true, entities.get(2) instanceof Struct);
+        Assert.assertEquals(true, entities.get(3) instanceof Variable);
     }
 }
