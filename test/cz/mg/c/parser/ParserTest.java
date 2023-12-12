@@ -3,10 +3,12 @@ package cz.mg.c.parser;
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
 import cz.mg.annotations.requirement.Mandatory;
-import cz.mg.c.parser.entities.CMainEntity;
+import cz.mg.c.parser.entities.*;
+import cz.mg.c.parser.entities.Enum;
 import cz.mg.c.preprocessor.processors.macro.entities.Macros;
 import cz.mg.collections.list.List;
 import cz.mg.file.File;
+import cz.mg.test.Assert;
 
 import java.io.*;
 import java.nio.file.Path;
@@ -29,8 +31,15 @@ public @Test class ParserTest {
         String content = readTestFile();
         File file = new File(Path.of("test", "path"), content);
         Macros macros = new Macros();
+
         List<CMainEntity> entities = parser.parse(file, macros);
-        // TODO
+        Assert.assertEquals(6, entities.count());
+        Assert.assertEquals(true, entities.get(0) instanceof Typedef);
+        Assert.assertEquals(true, entities.get(1) instanceof Enum);
+        Assert.assertEquals(true, entities.get(2) instanceof Union);
+        Assert.assertEquals(true, entities.get(3) instanceof Struct);
+        Assert.assertEquals(true, entities.get(4) instanceof Variable);
+        Assert.assertEquals(true, entities.get(5) instanceof Function);
     }
 
     private @Mandatory String readTestFile() {
@@ -41,6 +50,7 @@ public @Test class ParserTest {
                 String line;
                 while ((line = reader.readLine()) != null) {
                     content.append(line);
+                    content.append("\n");
                 }
                 return content.toString();
             } catch (IOException e) {

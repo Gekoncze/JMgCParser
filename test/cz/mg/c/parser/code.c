@@ -19,10 +19,11 @@ union Color {
 
 struct FooBar {
     Function f;
-    Day d;
+    enum Day d;
+    union Color c;
 };
 
-const FooBar* variable[2];
+const struct FooBar* variable[2];
 
 int main(int argc, char* argv) {
     printf("OK\n");
