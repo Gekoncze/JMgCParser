@@ -2,7 +2,11 @@
     add parser test
 
 ### SOON ###
-    ...
+    extend parser test
+        comments
+        exceptions thrown
+        macros
+        line concatenation
 
 ### LATER ###
     vararg support for functions and function pointers
