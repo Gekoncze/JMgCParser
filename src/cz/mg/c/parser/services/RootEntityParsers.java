@@ -87,6 +87,6 @@ public @Service class RootEntityParsers {
     }
 
     private boolean isPlainType(@Mandatory Type type) {
-        return type.getArrays().isEmpty() && type.getPointers().isEmpty();
+        return type.getArrays().isEmpty() && type.getPointers().isEmpty() && !type.isConstant();
     }
 }
