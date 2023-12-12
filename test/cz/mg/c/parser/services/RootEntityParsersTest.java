@@ -2,6 +2,7 @@ package cz.mg.c.parser.services;
 
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
+import cz.mg.c.parser.entities.Enum;
 import cz.mg.c.parser.entities.*;
 import cz.mg.c.parser.test.BracketFactory;
 import cz.mg.collections.list.List;
@@ -210,9 +211,43 @@ public @Test class RootEntityParsersTest {
     }
 
     private void testParseEnum() {
-        List<Token> input = new List<>();
+        List<Token> input = new List<>(
+            f.word("enum"),
+            f.word("Color"),
+            b.curlyBrackets(
+                f.word("RED"),
+                f.operator("="),
+                f.number("0"),
+                f.separator(","),
+                f.word("GREEN"),
+                f.separator(","),
+                f.word("BLUE"),
+                f.separator(","),
+                f.word("ALPHA")
+            ),
+            f.separator(";")
+        );
+
         List<CMainEntity> entities = parsers.parse(input);
-        // TODO
+        Assert.assertEquals(1, entities.count());
+        Assert.assertEquals(true, entities.getFirst() instanceof Enum);
+
+        Enum enom = (Enum) entities.getFirst();
+        Assert.assertEquals("Color", enom.getName().getText());
+        Assert.assertNotNull(enom.getEntries());
+        Assert.assertEquals(4, enom.getEntries().count());
+        Assert.assertEquals("RED", enom.getEntries().get(0).getName().getText());
+        Assert.assertEquals("GREEN", enom.getEntries().get(1).getName().getText());
+        Assert.assertEquals("BLUE", enom.getEntries().get(2).getName().getText());
+        Assert.assertEquals("ALPHA", enom.getEntries().get(3).getName().getText());
+
+        List<Token> expression = enom.getEntries().get(0).getExpression();
+        Assert.assertNotNull(expression);
+        Assert.assertNull(enom.getEntries().get(1).getExpression());
+        Assert.assertNull(enom.getEntries().get(2).getExpression());
+        Assert.assertNull(enom.getEntries().get(3).getExpression());
+        Assert.assertEquals(1, expression.count());
+        Assert.assertEquals("0", expression.getFirst().getText());
     }
 
     private void testParseFunctionPointer() {
