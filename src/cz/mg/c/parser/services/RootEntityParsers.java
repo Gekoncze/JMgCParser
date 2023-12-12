@@ -52,11 +52,12 @@ public @Service class RootEntityParsers {
             reader.read(";", SeparatorToken.class);
         } else if (reader.has()) {
             Type type = typeParser.parse(reader);
-            if (isVariable(reader)) {
-                entities.addLast(variableParser.parse(reader, type));
-            } else if (isFunction(reader)) {
+            if (isFunction(reader)) {
                 entities.addLast(functionParser.parse(reader, type));
-            } else if (isPlainType(reader, type)) {
+            } else if (isVariable(reader)) {
+                entities.addLast(variableParser.parse(reader, type));
+                reader.read(";", SeparatorToken.class);
+            } else if (isPlainType(type)) {
                 entities.addLast(type.getTypename());
                 reader.read(";", SeparatorToken.class);
             } else {
@@ -77,15 +78,15 @@ public @Service class RootEntityParsers {
         return reader.has("typedef", WordToken.class);
     }
 
-    private boolean isVariable(@Mandatory TokenReader reader) {
-        return reader.has(WordToken.class) && reader.hasNext(";", SeparatorToken.class);
-    }
-
     private boolean isFunction(@Mandatory TokenReader reader) {
         return reader.has(WordToken.class) && reader.hasNext(RoundBrackets.class);
     }
 
-    private boolean isPlainType(@Mandatory TokenReader reader, @Mandatory Type type) {
-        return reader.has(";", SeparatorToken.class) && type.getArrays().isEmpty() && type.getPointers().isEmpty();
+    private boolean isVariable(@Mandatory TokenReader reader) {
+        return reader.has(WordToken.class);
+    }
+
+    private boolean isPlainType(@Mandatory Type type) {
+        return type.getArrays().isEmpty() && type.getPointers().isEmpty();
     }
 }

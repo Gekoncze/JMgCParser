@@ -4,6 +4,8 @@ import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
 import cz.mg.c.parser.entities.CMainEntity;
 import cz.mg.c.parser.entities.Typedef;
+import cz.mg.c.parser.entities.Variable;
+import cz.mg.c.parser.test.BracketFactory;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
 import cz.mg.tokenizer.entities.Token;
@@ -30,6 +32,7 @@ public @Test class RootEntityParsersTest {
 
     private final @Service RootEntityParsers parsers = RootEntityParsers.getInstance();
     private final @Service TokenFactory f = TokenFactory.getInstance();
+    private final @Service BracketFactory b = BracketFactory.getInstance();
 
     private void testParseEmpty() {
         List<CMainEntity> entities = parsers.parse(new List<>());
@@ -69,9 +72,29 @@ public @Test class RootEntityParsersTest {
     }
 
     private void testParseVariable() {
-        List<Token> input = new List<>();
+        List<Token> input = new List<>(
+            f.word("int"),
+            f.operator("*"),
+            f.operator("*"),
+            f.word("foo"),
+            b.squareBrackets(
+                f.number("1"),
+                f.operator("+"),
+                f.number("1")
+            ),
+            f.separator(";")
+        );
+
         List<CMainEntity> entities = parsers.parse(input);
-        // TODO
+        Assert.assertEquals(1, entities.count());
+        Assert.assertEquals(true, entities.getFirst() instanceof Variable);
+
+        Variable variable = (Variable) entities.getFirst();
+        Assert.assertEquals("foo", variable.getName().getText());
+        Assert.assertEquals("int", variable.getType().getTypename().getName().getText());
+        Assert.assertEquals(1, variable.getType().getArrays().count());
+        Assert.assertEquals(2, variable.getType().getPointers().count());
+        Assert.assertEquals(3, variable.getType().getArrays().getFirst().getExpression().count());
     }
 
     private void testParseFunction() {
