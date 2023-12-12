@@ -40,6 +40,17 @@ public @Test class ParserTest {
         Assert.assertEquals(true, entities.get(3) instanceof Struct);
         Assert.assertEquals(true, entities.get(4) instanceof Variable);
         Assert.assertEquals(true, entities.get(5) instanceof Function);
+
+        Typedef typedef = (Typedef) entities.get(0);
+        Assert.assertEquals(true, typedef.getType().getTypename() instanceof Function);
+        Assert.assertEquals(0, typedef.getType().getArrays().count());
+        Assert.assertEquals(1, typedef.getType().getPointers().count());
+        Assert.assertEquals(false, typedef.getType().isConstant());
+        Assert.assertEquals(false, typedef.getType().getPointers().getFirst().isConstant());
+
+        Function functionPointer = (Function) typedef.getType().getTypename();
+        Assert.assertEquals("void", functionPointer.getOutput().getTypename().getName().getText());
+        Assert.assertEquals(0, functionPointer.getInput().count());
     }
 
     private @Mandatory String readTestFile() {
