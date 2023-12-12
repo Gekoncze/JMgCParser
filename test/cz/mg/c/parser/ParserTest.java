@@ -51,6 +51,18 @@ public @Test class ParserTest {
         Function functionPointer = (Function) typedef.getType().getTypename();
         Assert.assertEquals("void", functionPointer.getOutput().getTypename().getName().getText());
         Assert.assertEquals(0, functionPointer.getInput().count());
+
+        Enum enom = (Enum) entities.get(1);
+        Assert.assertEquals("Day", enom.getName().getText());
+        Assert.assertNotNull(enom.getEntries());
+        Assert.assertEquals(7, enom.getEntries().count());
+        Assert.assertEquals("MONDAY", enom.getEntries().get(0).getName().getText());
+        Assert.assertEquals("TUESDAY", enom.getEntries().get(1).getName().getText());
+        Assert.assertEquals("WEDNESDAY", enom.getEntries().get(2).getName().getText());
+        Assert.assertEquals("THURSDAY", enom.getEntries().get(3).getName().getText());
+        Assert.assertEquals("FRIDAY", enom.getEntries().get(4).getName().getText());
+        Assert.assertEquals("SATURDAY", enom.getEntries().get(5).getName().getText());
+        Assert.assertEquals("SUNDAY", enom.getEntries().get(6).getName().getText());
     }
 
     private @Mandatory String readTestFile() {
