@@ -3,8 +3,7 @@ package cz.mg.c.parser.services;
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.c.parser.components.TokenReader;
-import cz.mg.c.parser.entities.CMainEntity;
-import cz.mg.c.parser.entities.Type;
+import cz.mg.c.parser.entities.*;
 import cz.mg.c.parser.entities.brackets.RoundBrackets;
 import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.c.parser.services.entity.FunctionParser;
@@ -60,6 +59,12 @@ public @Service class RootEntityParsers {
             } else if (isPlainType(type)) {
                 entities.addLast(type.getTypename());
                 reader.read(";", SeparatorToken.class);
+            } else if (isFunctionPointer(type)) {
+                Variable variable = new Variable();
+                variable.setName(type.getTypename().getName());
+                variable.setType(type);
+                entities.addLast(variable);
+                reader.read(";", SeparatorToken.class);
             } else {
                 WordToken name = type.getTypename().getName();
                 throw new ParseException(
@@ -88,5 +93,11 @@ public @Service class RootEntityParsers {
 
     private boolean isPlainType(@Mandatory Type type) {
         return type.getArrays().isEmpty() && type.getPointers().isEmpty() && !type.isConstant();
+    }
+
+    private boolean isFunctionPointer(@Mandatory Type type) {
+        return type.getTypename() instanceof Function
+            && type.getPointers().count() > 0
+            && type.getTypename().getName() != Anonymous.NAME;
     }
 }

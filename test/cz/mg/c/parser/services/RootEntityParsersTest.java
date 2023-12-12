@@ -251,9 +251,28 @@ public @Test class RootEntityParsersTest {
     }
 
     private void testParseFunctionPointer() {
-        List<Token> input = new List<>();
+        List<Token> input = new List<>(
+            f.word("void"),
+            b.roundBrackets(
+                f.operator("*"),
+                f.word("fptr")
+            ),
+            b.roundBrackets(),
+            f.separator(";")
+        );
+
         List<CMainEntity> entities = parsers.parse(input);
-        // TODO
+        Assert.assertEquals(1, entities.count());
+        Assert.assertEquals(true, entities.getFirst() instanceof Variable);
+
+        Variable variable = (Variable) entities.getFirst();
+        Assert.assertEquals("fptr", variable.getName().getText());
+        Assert.assertEquals(1, variable.getType().getPointers().count());
+        Assert.assertEquals(true, variable.getType().getTypename() instanceof Function);
+
+        Function function = (Function) variable.getType().getTypename();
+        Assert.assertEquals(true, function.getInput().isEmpty());
+        Assert.assertEquals("void", function.getOutput().getTypename().getName().getText());
     }
 
     private void testParseMultiple() {
