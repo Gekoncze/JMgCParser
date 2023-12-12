@@ -1,8 +1,8 @@
 ### NOW ###
-    ...
+    add parser test
 
 ### SOON ###
-    add parser test
+    ...
 
 ### LATER ###
     vararg support for functions and function pointers
