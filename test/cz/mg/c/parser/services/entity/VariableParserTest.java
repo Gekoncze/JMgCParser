@@ -5,6 +5,7 @@ import cz.mg.annotations.classes.Test;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.parser.entities.Anonymous;
 import cz.mg.c.parser.entities.Struct;
+import cz.mg.c.parser.entities.Type;
 import cz.mg.c.parser.entities.Variable;
 import cz.mg.c.parser.entities.brackets.CurlyBrackets;
 import cz.mg.c.parser.entities.brackets.SquareBrackets;
@@ -31,6 +32,7 @@ public @Test class VariableParserTest {
         test.testParseArrayExpression();
         test.testParseComplex();
         test.testParseInlineType();
+        test.testParseWithType();
 
         System.out.println("OK");
     }
@@ -219,5 +221,16 @@ public @Test class VariableParserTest {
         Assert.assertEquals(true, variable.getType().isConstant());
         Assert.assertEquals(true, variable.getType().getTypename() instanceof Struct);
         Assert.assertSame(Anonymous.NAME, variable.getType().getTypename().getName());
+    }
+
+    private void testParseWithType() {
+        TokenReader reader = new TokenReader(new List<>(new WordToken("foo", 5)));
+        Type type = new Type();
+
+        Variable variable = parser.parse(reader, type);
+
+        Assert.assertEquals("foo", variable.getName().getText());
+        Assert.assertSame(type, variable.getType());
+        reader.readEnd();
     }
 }

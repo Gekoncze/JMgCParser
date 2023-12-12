@@ -5,11 +5,10 @@ import cz.mg.annotations.requirement.Optional;
 import cz.mg.annotations.requirement.Required;
 import cz.mg.annotations.storage.Part;
 import cz.mg.annotations.storage.Shared;
-import cz.mg.annotations.storage.Value;
 import cz.mg.collections.list.List;
 import cz.mg.tokenizer.entities.Token;
 
-public @Entity class Function extends Typename implements CMainEntity {
+public @Entity class Function extends Typename {
     private Type output;
     private List<Variable> input;
     private List<Token> implementation;

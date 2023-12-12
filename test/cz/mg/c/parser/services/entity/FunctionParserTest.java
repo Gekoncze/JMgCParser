@@ -5,6 +5,7 @@ import cz.mg.annotations.classes.Test;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.parser.entities.Anonymous;
 import cz.mg.c.parser.entities.Function;
+import cz.mg.c.parser.entities.Type;
 import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.c.parser.test.BracketFactory;
 import cz.mg.collections.list.List;
@@ -32,6 +33,7 @@ public @Test class FunctionParserTest {
         test.testInterfaceInvalidInput();
         test.testFunctionEmpty();
         test.testFunction();
+        test.testParseWithType();
 
         System.out.println("OK");
     }
@@ -276,5 +278,20 @@ public @Test class FunctionParserTest {
         Assert.assertEquals("return", function.getImplementation().get(0).getText());
         Assert.assertEquals("null", function.getImplementation().get(1).getText());
         Assert.assertEquals(";", function.getImplementation().get(2).getText());
+    }
+
+    private void testParseWithType() {
+        List<Token> input = new List<>(
+            new WordToken("space", 6),
+            b.roundBrackets(),
+            b.curlyBrackets()
+        );
+        Type type = new Type();
+        Function function = parser.parse(new TokenReader(input), type);
+        Assert.assertSame(type, function.getOutput());
+        Assert.assertEquals("space", function.getName().getText());
+        Assert.assertEquals(true, function.getInput().isEmpty());
+        Assert.assertNotNull(function.getImplementation());
+        Assert.assertEquals(true, function.getImplementation().isEmpty());
     }
 }

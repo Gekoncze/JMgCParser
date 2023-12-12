@@ -5,7 +5,7 @@ import cz.mg.annotations.requirement.Optional;
 import cz.mg.annotations.storage.Part;
 import cz.mg.collections.list.List;
 
-public @Entity class Union extends Typename implements CMainEntity {
+public @Entity class Union extends Typename {
     private List<Variable> variables;
 
     public Union() {

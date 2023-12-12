@@ -4,6 +4,7 @@ import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.parser.entities.Function;
+import cz.mg.c.parser.entities.Type;
 import cz.mg.c.parser.entities.brackets.CurlyBrackets;
 import cz.mg.c.parser.entities.brackets.RoundBrackets;
 import cz.mg.c.parser.services.CMainEntityParser;
@@ -38,6 +39,17 @@ public @Service class FunctionParser implements CMainEntityParser {
     public @Mandatory Function parse(@Mandatory TokenReader reader) {
         Function function = new Function();
         function.setOutput(typeParser.parse(reader));
+        function.setName(nameParser.parse(reader));
+        function.setInput(variableListParser.parse(reader.read(RoundBrackets.class)));
+        if (reader.has(CurlyBrackets.class)) {
+            function.setImplementation(readImplementation(reader.read(CurlyBrackets.class)));
+        }
+        return function;
+    }
+
+    public @Mandatory Function parse(@Mandatory TokenReader reader, Type type) {
+        Function function = new Function();
+        function.setOutput(type);
         function.setName(nameParser.parse(reader));
         function.setInput(variableListParser.parse(reader.read(RoundBrackets.class)));
         if (reader.has(CurlyBrackets.class)) {
