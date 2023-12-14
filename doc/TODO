@@ -1,8 +1,5 @@
 ### NOW ###
-    extend parser test
-        comments
-        macros
-        line concatenation
+    ...
 
 ### SOON ###
     test exceptions thrown for parser

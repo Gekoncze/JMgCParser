@@ -20,6 +20,10 @@
     int externalFalse;
 #endif
 
+#if 0
+    int none;
+#endif
+
 /*
     int voidWalker;
 */

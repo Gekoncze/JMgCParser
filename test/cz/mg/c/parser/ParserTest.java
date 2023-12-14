@@ -3,14 +3,23 @@ package cz.mg.c.parser;
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
 import cz.mg.annotations.requirement.Mandatory;
-import cz.mg.c.parser.entities.*;
 import cz.mg.c.parser.entities.Enum;
+import cz.mg.c.parser.entities.*;
+import cz.mg.c.parser.entities.brackets.CurlyBrackets;
+import cz.mg.c.parser.entities.brackets.RoundBrackets;
+import cz.mg.c.parser.entities.brackets.SquareBrackets;
+import cz.mg.c.preprocessor.processors.macro.entities.Macro;
 import cz.mg.c.preprocessor.processors.macro.entities.Macros;
 import cz.mg.collections.list.List;
 import cz.mg.file.File;
 import cz.mg.test.Assert;
+import cz.mg.tokenizer.entities.Token;
+import cz.mg.tokenizer.entities.tokens.WordToken;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.file.Path;
 
 public @Test class ParserTest {
@@ -172,10 +181,103 @@ public @Test class ParserTest {
         String content = readTestFile(TEST_FILE_PREPROCESSING);
         File file = new File(Path.of(TEST_FILE_PREPROCESSING), content);
         Macros macros = new Macros();
+        Macro externalCondition = new Macro(new WordToken("EXTERNAL_CONDITION", -1), null, new List<>());
+        macros.getDefinitions().addLast(externalCondition);
 
         List<CMainEntity> entities = parser.parse(file, macros);
 
-        // TODO
+        List<String> entityNames = new List<>();
+        for (CMainEntity entity : entities) {
+            entityNames.addLast(entity.getName().getText());
+        }
+
+        Assert.assertThatCollections(
+            new List<>(
+                "missing",
+                "internalTrue",
+                "externalTrue",
+                "allDefined",
+                "correct",
+                "main"
+            ),
+            entityNames
+        ).verbose(", ").areEqual();
+
+        List<String> macroNames = new List<>();
+        for (Macro macro : macros.getDefinitions()) {
+            macroNames.addLast(macro.getName().getText());
+        }
+
+        Assert.assertThatCollections(
+            new List<>(
+                "EXTERNAL_CONDITION",
+                "INTERNAL_CONDITION",
+                "AVERAGE",
+                "FALSE",
+                "TRUE"
+            ),
+            macroNames
+        ).verbose(", ").areEqual();
+
+
+        Assert.assertSame(externalCondition, macros.getDefinitions().get(0));
+
+        Macro internalCondition = macros.getDefinitions().get(1);
+        Assert.assertEquals("INTERNAL_CONDITION", internalCondition.getName().getText());
+        Assert.assertNull(internalCondition.getParameters());
+        Assert.assertEquals(true, internalCondition.getTokens().isEmpty());
+
+        Macro average = macros.getDefinitions().get(2);
+        Assert.assertEquals("AVERAGE", average.getName().getText());
+        Assert.assertNotNull(average.getParameters());
+        Assert.assertEquals("x", average.getParameters().getFirst().getText());
+        Assert.assertEquals("y", average.getParameters().getLast().getText());
+        Assert.assertEquals("((x+y)/2)", concat(average.getTokens()));
+
+        Macro falseMacro = macros.getDefinitions().get(3);
+        Assert.assertEquals("FALSE", falseMacro.getName().getText());
+        Assert.assertNull(falseMacro.getParameters());
+        Assert.assertEquals(1, falseMacro.getTokens().count());
+        Assert.assertEquals("0", falseMacro.getTokens().getFirst().getText());
+
+        Macro trueMacro = macros.getDefinitions().get(4);
+        Assert.assertEquals("TRUE", trueMacro.getName().getText());
+        Assert.assertNull(trueMacro.getParameters());
+        Assert.assertEquals(1, trueMacro.getTokens().count());
+        Assert.assertEquals("1", trueMacro.getTokens().getFirst().getText());
+
+        Enum enom = (Enum) entities.get(4);
+        Assert.assertEquals("correct", enom.getName().getText());
+        Assert.assertNotNull(enom.getEntries());
+        Assert.assertEquals(1, enom.getEntries().count());
+        Assert.assertEquals("ANSWER", enom.getEntries().getFirst().getName().getText());
+        Assert.assertNotNull(enom.getEntries().getFirst().getExpression());
+        Assert.assertEquals("((8+4)/2)", concat(enom.getEntries().getFirst().getExpression()));
+    }
+
+    private @Mandatory String concat(@Mandatory List<Token> tokens) {
+        StringBuilder concatenated = new StringBuilder();
+        for (Token token : tokens) {
+            if (token instanceof RoundBrackets) {
+                concatenated
+                    .append("(")
+                    .append(concat(((RoundBrackets) token).getTokens()))
+                    .append(")");
+            } else if (token instanceof SquareBrackets) {
+                concatenated
+                    .append("[")
+                    .append(concat(((SquareBrackets) token).getTokens()))
+                    .append("]");
+            } else if (token instanceof CurlyBrackets) {
+                concatenated
+                    .append("{")
+                    .append(concat(((CurlyBrackets) token).getTokens()))
+                    .append("}");
+            } else {
+                concatenated.append(token.getText());
+            }
+        }
+        return concatenated.toString();
     }
 
     private @Mandatory String readTestFile(@Mandatory String name) {
