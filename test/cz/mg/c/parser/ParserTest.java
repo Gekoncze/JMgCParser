@@ -14,13 +14,15 @@ import java.io.*;
 import java.nio.file.Path;
 
 public @Test class ParserTest {
-    private static final @Mandatory String TEST_FILE = "code.c";
+    private static final @Mandatory String TEST_FILE_DEFINITIONS = "definitions.c";
+    private static final @Mandatory String TEST_FILE_DECLARATIONS = "declarations.c";
 
     public static void main(String[] args) {
         System.out.print("Running " + ParserTest.class.getSimpleName() + " ... ");
 
         ParserTest test = new ParserTest();
         test.testParseDefinitions();
+        test.testParseDeclarations();
 
         System.out.println("OK");
     }
@@ -28,7 +30,7 @@ public @Test class ParserTest {
     private final @Service Parser parser = Parser.getInstance();
 
     private void testParseDefinitions() {
-        String content = readTestFile();
+        String content = readTestFile(TEST_FILE_DEFINITIONS);
         File file = new File(Path.of("test", "path"), content);
         Macros macros = new Macros();
 
@@ -129,8 +131,12 @@ public @Test class ParserTest {
         Assert.assertEquals("printf", function.getImplementation().getFirst().getText());
     }
 
-    private @Mandatory String readTestFile() {
-        InputStream stream = ParserTest.class.getResourceAsStream(TEST_FILE);
+    private void testParseDeclarations() {
+        // TODO
+    }
+
+    private @Mandatory String readTestFile(@Mandatory String name) {
+        InputStream stream = ParserTest.class.getResourceAsStream(name);
         if (stream != null) {
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(stream))) {
                 StringBuilder content = new StringBuilder();
@@ -144,7 +150,7 @@ public @Test class ParserTest {
                 throw new RuntimeException(e);
             }
         } else {
-            throw new RuntimeException("Could not find test file '" + TEST_FILE + "'.");
+            throw new RuntimeException("Could not find test file '" + name + "'.");
         }
     }
 }
