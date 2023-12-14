@@ -35,9 +35,9 @@ public @Test class ParserTest {
         System.out.print("Running " + ParserTest.class.getSimpleName() + " ... ");
 
         ParserTest test = new ParserTest();
-        //test.testParseDefinitions();
-        //test.testParseDeclarations();
-        //test.testParsePreprocessing();
+        test.testParseDefinitions();
+        test.testParseDeclarations();
+        test.testParsePreprocessing();
         test.testParseError();
 
         System.out.println("OK");
