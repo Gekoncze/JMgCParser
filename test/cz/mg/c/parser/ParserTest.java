@@ -20,14 +20,14 @@ public @Test class ParserTest {
         System.out.print("Running " + ParserTest.class.getSimpleName() + " ... ");
 
         ParserTest test = new ParserTest();
-        test.testParse();
+        test.testParseDefinitions();
 
         System.out.println("OK");
     }
 
     private final @Service Parser parser = Parser.getInstance();
 
-    private void testParse() {
+    private void testParseDefinitions() {
         String content = readTestFile();
         File file = new File(Path.of("test", "path"), content);
         Macros macros = new Macros();
@@ -107,7 +107,24 @@ public @Test class ParserTest {
         Assert.assertEquals("+", variable.getType().getArrays().getLast().getExpression().get(1).getText());
         Assert.assertEquals("1", variable.getType().getArrays().getLast().getExpression().get(2).getText());
 
-        // TODO - check main function
+        Function function = (Function) entities.get(5);
+        Assert.assertEquals("main", function.getName().getText());
+        Assert.assertEquals("int", function.getOutput().getTypename().getName().getText());
+        Assert.assertEquals(true, function.getOutput().getArrays().isEmpty());
+        Assert.assertEquals(true, function.getOutput().getPointers().isEmpty());
+        Assert.assertEquals(false, function.getOutput().isConstant());
+        Assert.assertEquals(2, function.getInput().count());
+        Assert.assertEquals("argc", function.getInput().getFirst().getName().getText());
+        Assert.assertEquals("argv", function.getInput().getLast().getName().getText());
+        Assert.assertEquals("int", function.getInput().getFirst().getType().getTypename().getName().getText());
+        Assert.assertEquals("char", function.getInput().getLast().getType().getTypename().getName().getText());
+        Assert.assertEquals(0, function.getInput().getFirst().getType().getPointers().count());
+        Assert.assertEquals(1, function.getInput().getLast().getType().getPointers().count());
+        Assert.assertEquals(0, function.getInput().getFirst().getType().getArrays().count());
+        Assert.assertEquals(0, function.getInput().getLast().getType().getArrays().count());
+        Assert.assertEquals(false, function.getInput().getFirst().getType().isConstant());
+        Assert.assertEquals(false, function.getInput().getLast().getType().isConstant());
+        Assert.assertEquals(false, function.getInput().getLast().getType().getPointers().getFirst().isConstant());
     }
 
     private @Mandatory String readTestFile() {

@@ -1,10 +1,9 @@
 ### NOW ###
-    add parser test
-        check main function
+    extend parser test
+        forward declarations
 
 ### SOON ###
     extend parser test
-        forward declarations
         comments
         exceptions thrown
         macros
