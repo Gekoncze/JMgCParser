@@ -1,12 +1,11 @@
 ### NOW ###
-    ...
-
-### SOON ###
     extend parser test
         comments
-        exceptions thrown
         macros
         line concatenation
+
+### SOON ###
+    test exceptions thrown for parser
 
 ### LATER ###
     vararg support for functions and function pointers

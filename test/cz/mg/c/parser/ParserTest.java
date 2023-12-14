@@ -16,6 +16,7 @@ import java.nio.file.Path;
 public @Test class ParserTest {
     private static final @Mandatory String TEST_FILE_DEFINITIONS = "definitions.c";
     private static final @Mandatory String TEST_FILE_DECLARATIONS = "declarations.c";
+    private static final @Mandatory String TEST_FILE_PREPROCESSING = "preprocessing.c";
 
     public static void main(String[] args) {
         System.out.print("Running " + ParserTest.class.getSimpleName() + " ... ");
@@ -23,6 +24,7 @@ public @Test class ParserTest {
         ParserTest test = new ParserTest();
         test.testParseDefinitions();
         test.testParseDeclarations();
+        test.testParsePreprocessing();
 
         System.out.println("OK");
     }
@@ -164,6 +166,16 @@ public @Test class ParserTest {
         Assert.assertEquals("double", function.getInput().getLast().getType().getTypename().getName().getText());
         Assert.assertSame(Anonymous.NAME, function.getInput().getFirst().getName());
         Assert.assertSame(Anonymous.NAME, function.getInput().getLast().getName());
+    }
+
+    private void testParsePreprocessing() {
+        String content = readTestFile(TEST_FILE_PREPROCESSING);
+        File file = new File(Path.of(TEST_FILE_PREPROCESSING), content);
+        Macros macros = new Macros();
+
+        List<CMainEntity> entities = parser.parse(file, macros);
+
+        // TODO
     }
 
     private @Mandatory String readTestFile(@Mandatory String name) {
