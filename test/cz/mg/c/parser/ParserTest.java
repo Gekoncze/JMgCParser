@@ -125,6 +125,8 @@ public @Test class ParserTest {
         Assert.assertEquals(false, function.getInput().getFirst().getType().isConstant());
         Assert.assertEquals(false, function.getInput().getLast().getType().isConstant());
         Assert.assertEquals(false, function.getInput().getLast().getType().getPointers().getFirst().isConstant());
+        Assert.assertNotNull(function.getImplementation());
+        Assert.assertEquals("printf", function.getImplementation().getFirst().getText());
     }
 
     private @Mandatory String readTestFile() {
