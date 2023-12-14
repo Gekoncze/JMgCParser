@@ -92,7 +92,21 @@ public @Test class ParserTest {
         Assert.assertEquals(Enum.class, struct.getVariables().get(1).getType().getTypename().getClass());
         Assert.assertEquals(Union.class, struct.getVariables().get(2).getType().getTypename().getClass());
 
-        // TODO - check array variable
+        Variable variable = (Variable) entities.get(4);
+        Assert.assertEquals("variable", variable.getName().getText());
+        Assert.assertEquals("FooBar", variable.getType().getTypename().getName().getText());
+        Assert.assertEquals(Struct.class, variable.getType().getTypename().getClass());
+        Assert.assertEquals(1, variable.getType().getPointers().count());
+        Assert.assertEquals(2, variable.getType().getArrays().count());
+        Assert.assertEquals(true, variable.getType().isConstant());
+        Assert.assertEquals(true, variable.getType().getPointers().getFirst().isConstant());
+        Assert.assertEquals(1, variable.getType().getArrays().getFirst().getExpression().count());
+        Assert.assertEquals(3, variable.getType().getArrays().getLast().getExpression().count());
+        Assert.assertEquals("2", variable.getType().getArrays().getFirst().getExpression().getFirst().getText());
+        Assert.assertEquals("5", variable.getType().getArrays().getLast().getExpression().get(0).getText());
+        Assert.assertEquals("+", variable.getType().getArrays().getLast().getExpression().get(1).getText());
+        Assert.assertEquals("1", variable.getType().getArrays().getLast().getExpression().get(2).getText());
+
         // TODO - check main function
     }
 

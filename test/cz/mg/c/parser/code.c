@@ -23,7 +23,7 @@ struct FooBar {
     union Color c;
 };
 
-const struct FooBar* variable[2];
+const struct FooBar * const variable[2][5+1];
 
 int main(int argc, char* argv) {
     printf("OK\n");
