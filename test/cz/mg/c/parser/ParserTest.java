@@ -8,13 +8,16 @@ import cz.mg.c.parser.entities.*;
 import cz.mg.c.parser.entities.brackets.CurlyBrackets;
 import cz.mg.c.parser.entities.brackets.RoundBrackets;
 import cz.mg.c.parser.entities.brackets.SquareBrackets;
+import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.c.preprocessor.processors.macro.entities.Macro;
 import cz.mg.c.preprocessor.processors.macro.entities.Macros;
 import cz.mg.collections.list.List;
 import cz.mg.file.File;
 import cz.mg.test.Assert;
+import cz.mg.tokenizer.entities.Position;
 import cz.mg.tokenizer.entities.Token;
 import cz.mg.tokenizer.entities.tokens.WordToken;
+import cz.mg.tokenizer.services.PositionService;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -26,19 +29,22 @@ public @Test class ParserTest {
     private static final @Mandatory String TEST_FILE_DEFINITIONS = "definitions.c";
     private static final @Mandatory String TEST_FILE_DECLARATIONS = "declarations.c";
     private static final @Mandatory String TEST_FILE_PREPROCESSING = "preprocessing.c";
+    private static final @Mandatory String TEST_FILE_BROKEN = "broken.c";
 
     public static void main(String[] args) {
         System.out.print("Running " + ParserTest.class.getSimpleName() + " ... ");
 
         ParserTest test = new ParserTest();
-        test.testParseDefinitions();
-        test.testParseDeclarations();
-        test.testParsePreprocessing();
+        //test.testParseDefinitions();
+        //test.testParseDeclarations();
+        //test.testParsePreprocessing();
+        test.testParseError();
 
         System.out.println("OK");
     }
 
     private final @Service Parser parser = Parser.getInstance();
+    private final @Service PositionService positionService = PositionService.getInstance();
 
     private void testParseDefinitions() {
         String content = readTestFile(TEST_FILE_DEFINITIONS);
@@ -46,6 +52,7 @@ public @Test class ParserTest {
         Macros macros = new Macros();
 
         List<CMainEntity> entities = parser.parse(file, macros);
+
         Assert.assertEquals(6, entities.count());
         Assert.assertEquals(true, entities.get(0) instanceof Typedef);
         Assert.assertEquals(true, entities.get(1) instanceof Enum);
@@ -148,6 +155,7 @@ public @Test class ParserTest {
         Macros macros = new Macros();
 
         List<CMainEntity> entities = parser.parse(file, macros);
+
         Assert.assertEquals(5, entities.count());
         Assert.assertEquals(true, entities.get(0) instanceof Enum);
         Assert.assertEquals(true, entities.get(1) instanceof Union);
@@ -253,6 +261,20 @@ public @Test class ParserTest {
         Assert.assertEquals("ANSWER", enom.getEntries().getFirst().getName().getText());
         Assert.assertNotNull(enom.getEntries().getFirst().getExpression());
         Assert.assertEquals("((8+4)/2)", concat(enom.getEntries().getFirst().getExpression()));
+    }
+
+    private void testParseError() {
+        String content = readTestFile(TEST_FILE_BROKEN);
+        File file = new File(Path.of(TEST_FILE_BROKEN), content);
+        Macros macros = new Macros();
+
+        ParseException exception = Assert.assertThatCode(() -> {
+            parser.parse(file, macros);
+        }).throwsException(ParseException.class);
+
+        Position position = positionService.find(file.getContent(), exception.getPosition());
+        Assert.assertEquals(18, position.getRow());
+        Assert.assertEquals(8, position.getColumn());
     }
 
     private @Mandatory String concat(@Mandatory List<Token> tokens) {
