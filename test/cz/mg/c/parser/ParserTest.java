@@ -31,7 +31,7 @@ public @Test class ParserTest {
 
     private void testParseDefinitions() {
         String content = readTestFile(TEST_FILE_DEFINITIONS);
-        File file = new File(Path.of("test", "path"), content);
+        File file = new File(Path.of(TEST_FILE_DEFINITIONS), content);
         Macros macros = new Macros();
 
         List<CMainEntity> entities = parser.parse(file, macros);
@@ -132,7 +132,38 @@ public @Test class ParserTest {
     }
 
     private void testParseDeclarations() {
-        // TODO
+        String content = readTestFile(TEST_FILE_DECLARATIONS);
+        File file = new File(Path.of(TEST_FILE_DECLARATIONS), content);
+        Macros macros = new Macros();
+
+        List<CMainEntity> entities = parser.parse(file, macros);
+        Assert.assertEquals(5, entities.count());
+        Assert.assertEquals(true, entities.get(0) instanceof Enum);
+        Assert.assertEquals(true, entities.get(1) instanceof Union);
+        Assert.assertEquals(true, entities.get(2) instanceof Struct);
+        Assert.assertEquals(true, entities.get(3) instanceof Function);
+        Assert.assertEquals(true, entities.get(4) instanceof Function);
+
+        Enum enom = (Enum) entities.get(0);
+        Assert.assertEquals("MyEnum", enom.getName().getText());
+        Assert.assertNull(enom.getEntries());
+
+        Union union = (Union) entities.get(1);
+        Assert.assertEquals("MyUnion", union.getName().getText());
+        Assert.assertNull(union.getVariables());
+
+        Struct struct = (Struct) entities.get(2);
+        Assert.assertEquals("MyStruct", struct.getName().getText());
+        Assert.assertNull(struct.getVariables());
+
+        Function function = (Function) entities.get(3);
+        Assert.assertEquals("myFunction", function.getName().getText());
+        Assert.assertNull(function.getImplementation());
+        Assert.assertEquals("void", function.getOutput().getTypename().getName().getText());
+        Assert.assertEquals("float", function.getInput().getFirst().getType().getTypename().getName().getText());
+        Assert.assertEquals("double", function.getInput().getLast().getType().getTypename().getName().getText());
+        Assert.assertSame(Anonymous.NAME, function.getInput().getFirst().getName());
+        Assert.assertSame(Anonymous.NAME, function.getInput().getLast().getName());
     }
 
     private @Mandatory String readTestFile(@Mandatory String name) {
