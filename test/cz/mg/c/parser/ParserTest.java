@@ -51,7 +51,10 @@ public @Test class ParserTest {
         File file = new File(Path.of(TEST_FILE_DEFINITIONS), content);
         Macros macros = new Macros();
 
-        List<CMainEntity> entities = parser.parse(file, macros);
+        CFile cFile = parser.parse(file, macros);
+        Assert.assertEquals(file.getPath(), cFile.getPath());
+
+        List<CMainEntity> entities = cFile.getEntities();
 
         Assert.assertEquals(6, entities.count());
         Assert.assertEquals(true, entities.get(0) instanceof Typedef);
@@ -154,7 +157,10 @@ public @Test class ParserTest {
         File file = new File(Path.of(TEST_FILE_DECLARATIONS), content);
         Macros macros = new Macros();
 
-        List<CMainEntity> entities = parser.parse(file, macros);
+        CFile cFile = parser.parse(file, macros);
+        Assert.assertEquals(file.getPath(), cFile.getPath());
+
+        List<CMainEntity> entities = cFile.getEntities();
 
         Assert.assertEquals(5, entities.count());
         Assert.assertEquals(true, entities.get(0) instanceof Enum);
@@ -192,7 +198,10 @@ public @Test class ParserTest {
         Macro externalCondition = new Macro(new WordToken("EXTERNAL_CONDITION", -1), null, new List<>());
         macros.getDefinitions().addLast(externalCondition);
 
-        List<CMainEntity> entities = parser.parse(file, macros);
+        CFile cFile = parser.parse(file, macros);
+        Assert.assertEquals(file.getPath(), cFile.getPath());
+
+        List<CMainEntity> entities = cFile.getEntities();
 
         List<String> entityNames = new List<>();
         for (CMainEntity entity : entities) {

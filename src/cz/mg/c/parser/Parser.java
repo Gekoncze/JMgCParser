@@ -2,12 +2,11 @@ package cz.mg.c.parser;
 
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
-import cz.mg.c.parser.entities.CMainEntity;
+import cz.mg.c.parser.entities.CFile;
 import cz.mg.c.parser.services.RootEntityParsers;
 import cz.mg.c.parser.services.bracket.BracketParsers;
 import cz.mg.c.preprocessor.Preprocessor;
 import cz.mg.c.preprocessor.processors.macro.entities.Macros;
-import cz.mg.collections.list.List;
 import cz.mg.file.File;
 
 public @Service class Parser {
@@ -34,10 +33,13 @@ public @Service class Parser {
     private Parser() {
     }
 
-    public @Mandatory List<CMainEntity> parse(@Mandatory File file, @Mandatory Macros macros) {
-        return rootEntityParsers.parse(
-            bracketParsers.parse(
-                preprocessor.preprocess(file, macros)
+    public @Mandatory CFile parse(@Mandatory File file, @Mandatory Macros macros) {
+        return new CFile(
+            file.getPath(),
+            rootEntityParsers.parse(
+                bracketParsers.parse(
+                    preprocessor.preprocess(file, macros)
+                )
             )
         );
     }
