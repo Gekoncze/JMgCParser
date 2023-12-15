@@ -8,11 +8,11 @@ import cz.mg.collections.list.List;
 import cz.mg.tokenizer.entities.Token;
 import cz.mg.tokenizer.entities.tokens.WordToken;
 
-public @Entity class EnumEntry implements CEntity {
+public @Entity class CEnumEntry implements CEntity {
     private WordToken name;
     private List<Token> expression;
 
-    public EnumEntry() {
+    public CEnumEntry() {
     }
 
     @Required @Shared

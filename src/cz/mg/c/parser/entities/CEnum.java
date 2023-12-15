@@ -5,18 +5,18 @@ import cz.mg.annotations.requirement.Optional;
 import cz.mg.annotations.storage.Part;
 import cz.mg.collections.list.List;
 
-public @Entity class Enum extends Typename {
-    private List<EnumEntry> entries;
+public @Entity class CEnum extends CTypename {
+    private List<CEnumEntry> entries;
 
-    public Enum() {
+    public CEnum() {
     }
 
     @Optional @Part
-    public List<EnumEntry> getEntries() {
+    public List<CEnumEntry> getEntries() {
         return entries;
     }
 
-    public void setEntries(List<EnumEntry> entries) {
+    public void setEntries(List<CEnumEntry> entries) {
         this.entries = entries;
     }
 }

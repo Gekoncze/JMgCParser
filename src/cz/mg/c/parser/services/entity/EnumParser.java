@@ -3,8 +3,8 @@ package cz.mg.c.parser.services.entity;
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.c.parser.components.TokenReader;
-import cz.mg.c.parser.entities.Enum;
-import cz.mg.c.parser.entities.EnumEntry;
+import cz.mg.c.parser.entities.CEnum;
+import cz.mg.c.parser.entities.CEnumEntry;
 import cz.mg.c.parser.entities.brackets.CurlyBrackets;
 import cz.mg.c.parser.services.list.ListParser;
 import cz.mg.collections.list.List;
@@ -35,9 +35,9 @@ public @Service class EnumParser {
     private EnumParser() {
     }
 
-    public @Mandatory Enum parse(@Mandatory TokenReader reader) {
+    public @Mandatory CEnum parse(@Mandatory TokenReader reader) {
         reader.read("enum", WordToken.class);
-        Enum enom = new Enum();
+        CEnum enom = new CEnum();
         enom.setName(nameParser.parse(reader));
         if (reader.has(CurlyBrackets.class)) {
             enom.setEntries(readEntries(reader.read(CurlyBrackets.class)));
@@ -45,9 +45,9 @@ public @Service class EnumParser {
         return enom;
     }
 
-    private @Mandatory List<EnumEntry> readEntries(@Mandatory CurlyBrackets brackets) {
+    private @Mandatory List<CEnumEntry> readEntries(@Mandatory CurlyBrackets brackets) {
         List<List<Token>> values = listParser.parse(new TokenReader(brackets.getTokens()));
-        List<EnumEntry> entries = new List<>();
+        List<CEnumEntry> entries = new List<>();
         if (hasValues(values)) {
             for (List<Token> value : values) {
                 TokenReader reader = new TokenReader(value);

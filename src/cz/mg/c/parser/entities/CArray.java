@@ -6,13 +6,13 @@ import cz.mg.annotations.storage.Shared;
 import cz.mg.collections.list.List;
 import cz.mg.tokenizer.entities.Token;
 
-public @Entity class Array implements CEntity {
+public @Entity class CArray implements CEntity {
     private List<Token> expression = new List<>();
 
-    public Array() {
+    public CArray() {
     }
 
-    public Array(List<Token> expression) {
+    public CArray(List<Token> expression) {
         this.expression = expression;
     }
 

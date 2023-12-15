@@ -4,9 +4,9 @@ import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.parser.constants.Anonymous;
-import cz.mg.c.parser.entities.Struct;
-import cz.mg.c.parser.entities.Type;
-import cz.mg.c.parser.entities.Variable;
+import cz.mg.c.parser.entities.CStruct;
+import cz.mg.c.parser.entities.CType;
+import cz.mg.c.parser.entities.CVariable;
 import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.c.parser.test.BracketFactory;
 import cz.mg.collections.list.List;
@@ -50,7 +50,7 @@ public @Test class VariableParserTest {
             new WordToken("int", 2), new WordToken("foo", 5)
         ));
 
-        Variable variable = parser.parse(reader);
+        CVariable variable = parser.parse(reader);
 
         Assert.assertEquals("foo", variable.getName().getText());
         Assert.assertEquals(true, variable.getType().getArrays().isEmpty());
@@ -63,7 +63,7 @@ public @Test class VariableParserTest {
     private void testParseAnonymous() {
         TokenReader reader = new TokenReader(new List<>(new WordToken("int", 2)));
 
-        Variable variable = parser.parse(reader);
+        CVariable variable = parser.parse(reader);
 
         Assert.assertSame(Anonymous.NAME, variable.getName());
         Assert.assertEquals(true, variable.getType().getArrays().isEmpty());
@@ -82,7 +82,7 @@ public @Test class VariableParserTest {
             )
         ));
 
-        Variable variable = parser.parse(reader);
+        CVariable variable = parser.parse(reader);
 
         Assert.assertEquals("bar", variable.getName().getText());
         Assert.assertEquals(1, variable.getType().getArrays().count());
@@ -111,7 +111,7 @@ public @Test class VariableParserTest {
             )
         ));
 
-        Variable variable = parser.parse(reader);
+        CVariable variable = parser.parse(reader);
 
         Assert.assertEquals("foobar", variable.getName().getText());
         Assert.assertEquals(3, variable.getType().getArrays().count());
@@ -144,7 +144,7 @@ public @Test class VariableParserTest {
             )
         ));
 
-        Variable variable = parser.parse(reader);
+        CVariable variable = parser.parse(reader);
 
         Assert.assertEquals("bar", variable.getName().getText());
         Assert.assertEquals(1, variable.getType().getArrays().count());
@@ -176,7 +176,7 @@ public @Test class VariableParserTest {
             )
         ));
 
-        Variable variable = parser.parse(reader);
+        CVariable variable = parser.parse(reader);
 
         Assert.assertEquals("bar", variable.getName().getText());
         Assert.assertEquals(1, variable.getType().getArrays().count());
@@ -211,21 +211,21 @@ public @Test class VariableParserTest {
             )
         ));
 
-        Variable variable = parser.parse(reader);
+        CVariable variable = parser.parse(reader);
 
         Assert.assertEquals("foobar", variable.getName().getText());
         Assert.assertEquals(1, variable.getType().getArrays().count());
         Assert.assertEquals(1, variable.getType().getPointers().count());
         Assert.assertEquals(true, variable.getType().isConstant());
-        Assert.assertEquals(true, variable.getType().getTypename() instanceof Struct);
+        Assert.assertEquals(true, variable.getType().getTypename() instanceof CStruct);
         Assert.assertSame(Anonymous.NAME, variable.getType().getTypename().getName());
     }
 
     private void testParseWithType() {
         TokenReader reader = new TokenReader(new List<>(new WordToken("foo", 5)));
-        Type type = new Type();
+        CType type = new CType();
 
-        Variable variable = parser.parse(reader, type);
+        CVariable variable = parser.parse(reader, type);
 
         Assert.assertEquals("foo", variable.getName().getText());
         Assert.assertSame(type, variable.getType());

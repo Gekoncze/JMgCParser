@@ -4,8 +4,8 @@ import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.parser.constants.Anonymous;
-import cz.mg.c.parser.entities.Union;
-import cz.mg.c.parser.entities.Variable;
+import cz.mg.c.parser.entities.CUnion;
+import cz.mg.c.parser.entities.CVariable;
 import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.c.parser.test.BracketFactory;
 import cz.mg.collections.list.List;
@@ -45,7 +45,7 @@ public @Test class UnionParserTest {
             new WordToken("union", 0),
             new WordToken("Foo", 10)
         );
-        Union union = parser.parse(new TokenReader(input));
+        CUnion union = parser.parse(new TokenReader(input));
         Assert.assertEquals("Foo", union.getName().getText());
         Assert.assertNull(union.getVariables());
     }
@@ -56,7 +56,7 @@ public @Test class UnionParserTest {
             new WordToken("Foo", 10),
             b.curlyBrackets()
         );
-        Union union = parser.parse(new TokenReader(input));
+        CUnion union = parser.parse(new TokenReader(input));
         Assert.assertEquals("Foo", union.getName().getText());
         Assert.assertNotNull(union.getVariables());
         Assert.assertEquals(true, union.getVariables().isEmpty());
@@ -67,7 +67,7 @@ public @Test class UnionParserTest {
             new WordToken("union", 0),
             b.curlyBrackets()
         );
-        Union union = parser.parse(new TokenReader(input));
+        CUnion union = parser.parse(new TokenReader(input));
         Assert.assertSame(Anonymous.NAME, union.getName());
         Assert.assertNotNull(union.getVariables());
         Assert.assertEquals(true, union.getVariables().isEmpty());
@@ -85,12 +85,12 @@ public @Test class UnionParserTest {
                 new SeparatorToken(";", 32)
             )
         );
-        Union union = parser.parse(new TokenReader(input));
+        CUnion union = parser.parse(new TokenReader(input));
         Assert.assertEquals("Foo", union.getName().getText());
         Assert.assertNotNull(union.getVariables());
         Assert.assertEquals(1, union.getVariables().count());
         Assert.assertEquals("bar", union.getVariables().getFirst().getName().getText());
-        Variable variable = union.getVariables().getFirst();
+        CVariable variable = union.getVariables().getFirst();
         Assert.assertEquals("int", variable.getType().getTypename().getName().getText());
         Assert.assertEquals(true, variable.getType().isConstant());
         Assert.assertEquals(1, union.getVariables().getFirst().getType().getPointers().count());
@@ -112,7 +112,7 @@ public @Test class UnionParserTest {
                 new SeparatorToken(";", 49)
             )
         );
-        Union union = parser.parse(new TokenReader(input));
+        CUnion union = parser.parse(new TokenReader(input));
         Assert.assertEquals("Bar", union.getName().getText());
         Assert.assertNotNull(union.getVariables());
         Assert.assertEquals(3, union.getVariables().count());

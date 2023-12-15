@@ -3,8 +3,8 @@ package cz.mg.c.parser.services.entity;
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.c.parser.components.TokenReader;
-import cz.mg.c.parser.entities.Type;
-import cz.mg.c.parser.entities.Variable;
+import cz.mg.c.parser.entities.CType;
+import cz.mg.c.parser.entities.CVariable;
 import cz.mg.c.parser.services.CMainEntityParser;
 import cz.mg.c.parser.services.entity.type.ArrayParser;
 
@@ -28,16 +28,16 @@ public @Service class VariableParser implements CMainEntityParser {
     private @Service NameParser nameParser;
 
     @Override
-    public @Mandatory Variable parse(@Mandatory TokenReader reader) {
-        Variable variable = new Variable();
+    public @Mandatory CVariable parse(@Mandatory TokenReader reader) {
+        CVariable variable = new CVariable();
         variable.setType(typeParser.parse(reader));
         variable.setName(nameParser.parse(reader));
         variable.getType().setArrays(arrayParser.parse(reader));
         return variable;
     }
 
-    public @Mandatory Variable parse(@Mandatory TokenReader reader, @Mandatory Type type) {
-        Variable variable = new Variable();
+    public @Mandatory CVariable parse(@Mandatory TokenReader reader, @Mandatory CType type) {
+        CVariable variable = new CVariable();
         variable.setType(type);
         variable.setName(nameParser.parse(reader));
         variable.getType().setArrays(arrayParser.parse(reader));

@@ -3,8 +3,8 @@ package cz.mg.c.parser.services.entity.type;
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.c.parser.components.TokenReader;
-import cz.mg.c.parser.entities.Function;
-import cz.mg.c.parser.entities.Type;
+import cz.mg.c.parser.entities.CFunction;
+import cz.mg.c.parser.entities.CType;
 import cz.mg.c.parser.entities.brackets.RoundBrackets;
 import cz.mg.c.parser.services.entity.VariableListParser;
 import cz.mg.tokenizer.entities.Token;
@@ -47,11 +47,11 @@ public @Service class FunctionTypeParser {
         return false;
     }
 
-    public @Mandatory Type parse(@Mandatory TokenReader reader, @Mandatory Type output) {
+    public @Mandatory CType parse(@Mandatory TokenReader reader, @Mandatory CType output) {
         TokenReader bracketReader = new TokenReader(reader.read(RoundBrackets.class).getTokens());
-        Function function = new Function();
+        CFunction function = new CFunction();
         function.setOutput(output);
-        Type type = new Type();
+        CType type = new CType();
         type.setTypename(function);
         type.setPointers(pointerParser.parse(bracketReader));
         function.setName(bracketReader.read(WordToken.class));

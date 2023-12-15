@@ -7,21 +7,21 @@ import cz.mg.annotations.storage.Shared;
 import cz.mg.annotations.storage.Value;
 import cz.mg.collections.list.List;
 
-public @Entity class Type implements CEntity {
-    private Typename typename;
+public @Entity class CType implements CEntity {
+    private CTypename typename;
     private boolean constant;
-    private List<Pointer> pointers = new List<>();
-    private List<Array> arrays = new List<>();
+    private List<CPointer> pointers = new List<>();
+    private List<CArray> arrays = new List<>();
 
-    public Type() {
+    public CType() {
     }
 
     @Required @Shared
-    public Typename getTypename() {
+    public CTypename getTypename() {
         return typename;
     }
 
-    public void setTypename(Typename typename) {
+    public void setTypename(CTypename typename) {
         this.typename = typename;
     }
 
@@ -35,20 +35,20 @@ public @Entity class Type implements CEntity {
     }
 
     @Required @Part
-    public List<Pointer> getPointers() {
+    public List<CPointer> getPointers() {
         return pointers;
     }
 
-    public void setPointers(List<Pointer> pointers) {
+    public void setPointers(List<CPointer> pointers) {
         this.pointers = pointers;
     }
 
     @Required @Part
-    public List<Array> getArrays() {
+    public List<CArray> getArrays() {
         return arrays;
     }
 
-    public void setArrays(List<Array> arrays) {
+    public void setArrays(List<CArray> arrays) {
         this.arrays = arrays;
     }
 }

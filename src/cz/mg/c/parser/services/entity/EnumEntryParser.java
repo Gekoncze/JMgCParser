@@ -3,7 +3,7 @@ package cz.mg.c.parser.services.entity;
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.c.parser.components.TokenReader;
-import cz.mg.c.parser.entities.EnumEntry;
+import cz.mg.c.parser.entities.CEnumEntry;
 import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.c.parser.services.CEntityParser;
 import cz.mg.collections.list.List;
@@ -29,8 +29,8 @@ public @Service class EnumEntryParser implements CEntityParser {
     }
 
     @Override
-    public @Mandatory EnumEntry parse(@Mandatory TokenReader reader) {
-        EnumEntry entry = new EnumEntry();
+    public @Mandatory CEnumEntry parse(@Mandatory TokenReader reader) {
+        CEnumEntry entry = new CEnumEntry();
         entry.setName(reader.read(WordToken.class));
         if (reader.has("=", OperatorToken.class)) {
             entry.setExpression(readExpression(reader));

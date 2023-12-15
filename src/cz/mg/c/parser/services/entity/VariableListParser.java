@@ -3,7 +3,7 @@ package cz.mg.c.parser.services.entity;
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.c.parser.components.TokenReader;
-import cz.mg.c.parser.entities.Variable;
+import cz.mg.c.parser.entities.CVariable;
 import cz.mg.c.parser.entities.brackets.Brackets;
 import cz.mg.c.parser.services.list.ListParser;
 import cz.mg.collections.list.List;
@@ -26,9 +26,9 @@ public @Service class VariableListParser {
     private @Service ListParser listParser;
     private @Service VariableParser variableParser;
 
-    public @Mandatory List<Variable> parse(@Mandatory Brackets brackets) {
+    public @Mandatory List<CVariable> parse(@Mandatory Brackets brackets) {
         List<List<Token>> entries = listParser.parse(new TokenReader(brackets.getTokens()));
-        List<Variable> variables = new List<>();
+        List<CVariable> variables = new List<>();
         if (!empty(entries)) {
             for (List<Token> entry : entries) {
                 TokenReader reader = new TokenReader(entry);

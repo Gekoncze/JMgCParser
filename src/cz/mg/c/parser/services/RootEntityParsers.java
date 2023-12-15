@@ -52,7 +52,7 @@ public @Service class RootEntityParsers {
                 entities.addLast(typedefParser.parse(reader));
                 reader.read(";", SeparatorToken.class);
             } else if (reader.has()) {
-                Type type = typeParser.parse(reader);
+                CType type = typeParser.parse(reader);
                 if (isFunction(reader)) {
                     entities.addLast(functionParser.parse(reader, type));
                 } else if (isVariable(reader)) {
@@ -62,7 +62,7 @@ public @Service class RootEntityParsers {
                     entities.addLast(type.getTypename());
                     reader.read(";", SeparatorToken.class);
                 } else if (isFunctionPointer(type)) {
-                    Variable variable = new Variable();
+                    CVariable variable = new CVariable();
                     variable.setName(type.getTypename().getName());
                     variable.setType(type);
                     entities.addLast(variable);
@@ -94,12 +94,12 @@ public @Service class RootEntityParsers {
         return reader.has(WordToken.class);
     }
 
-    private boolean isPlainType(@Mandatory Type type) {
+    private boolean isPlainType(@Mandatory CType type) {
         return type.getArrays().isEmpty() && type.getPointers().isEmpty() && !type.isConstant();
     }
 
-    private boolean isFunctionPointer(@Mandatory Type type) {
-        return type.getTypename() instanceof Function
+    private boolean isFunctionPointer(@Mandatory CType type) {
+        return type.getTypename() instanceof CFunction
             && type.getPointers().count() > 0
             && type.getTypename().getName() != Anonymous.NAME;
     }

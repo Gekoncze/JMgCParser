@@ -3,8 +3,8 @@ package cz.mg.c.parser.services.entity.type;
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
 import cz.mg.c.parser.components.TokenReader;
-import cz.mg.c.parser.entities.Function;
-import cz.mg.c.parser.entities.Type;
+import cz.mg.c.parser.entities.CFunction;
+import cz.mg.c.parser.entities.CType;
 import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.c.parser.test.BracketFactory;
 import cz.mg.collections.list.List;
@@ -32,13 +32,13 @@ public @Test class FunctionTypeParserTest {
 
     private void testParseEmpty() {
         Assert.assertThatCode(() -> {
-            parser.parse(new TokenReader(new List<>()), new Type());
+            parser.parse(new TokenReader(new List<>()), new CType());
         }).throwsException(ParseException.class);
     }
 
     private void testParseNoInputNoOutput() {
-        Type output = new Type();
-        Type type = parser.parse(new TokenReader(new List<>(
+        CType output = new CType();
+        CType type = parser.parse(new TokenReader(new List<>(
             b.roundBrackets(
                 new OperatorToken("*", 1),
                 new WordToken("fooptr", 2)
@@ -48,16 +48,16 @@ public @Test class FunctionTypeParserTest {
         Assert.assertEquals(1, type.getPointers().count());
         Assert.assertEquals(false, type.getPointers().getFirst().isConstant());
         Assert.assertEquals(0, type.getArrays().count());
-        Assert.assertEquals(Function.class, type.getTypename().getClass());
-        Function function = (Function) type.getTypename();
+        Assert.assertEquals(CFunction.class, type.getTypename().getClass());
+        CFunction function = (CFunction) type.getTypename();
         Assert.assertSame(output, function.getOutput());
         Assert.assertEquals("fooptr", function.getName().getText());
         Assert.assertEquals(true, function.getInput().isEmpty());
     }
 
     private void testParseMultiInputMultiPointer() {
-        Type output = new Type();
-        Type type = parser.parse(new TokenReader(new List<>(
+        CType output = new CType();
+        CType type = parser.parse(new TokenReader(new List<>(
             b.roundBrackets(
                 new OperatorToken("**", 1),
                 new WordToken("fooptrptr", 3)
@@ -70,16 +70,16 @@ public @Test class FunctionTypeParserTest {
         )), output);
         Assert.assertEquals(2, type.getPointers().count());
         Assert.assertEquals(0, type.getArrays().count());
-        Assert.assertEquals(Function.class, type.getTypename().getClass());
-        Function function = (Function) type.getTypename();
+        Assert.assertEquals(CFunction.class, type.getTypename().getClass());
+        CFunction function = (CFunction) type.getTypename();
         Assert.assertSame(output, function.getOutput());
         Assert.assertEquals("fooptrptr", function.getName().getText());
         Assert.assertEquals(2, function.getInput().count());
     }
 
     private void testParseConstAndArray() {
-        Type output = new Type();
-        Type type = parser.parse(new TokenReader(new List<>(
+        CType output = new CType();
+        CType type = parser.parse(new TokenReader(new List<>(
             b.roundBrackets(
                 new OperatorToken("*", 1),
                 new WordToken("const", 3),
@@ -103,8 +103,8 @@ public @Test class FunctionTypeParserTest {
         Assert.assertEquals(1, type.getArrays().count());
         Assert.assertEquals(1, type.getArrays().getFirst().getExpression().count());
         Assert.assertEquals("3", type.getArrays().getFirst().getExpression().getFirst().getText());
-        Assert.assertEquals(Function.class, type.getTypename().getClass());
-        Function function = (Function) type.getTypename();
+        Assert.assertEquals(CFunction.class, type.getTypename().getClass());
+        CFunction function = (CFunction) type.getTypename();
         Assert.assertSame(output, function.getOutput());
         Assert.assertEquals("fooptrptrarr", function.getName().getText());
         Assert.assertEquals(2, function.getInput().count());

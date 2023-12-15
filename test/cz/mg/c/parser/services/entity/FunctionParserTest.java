@@ -4,8 +4,8 @@ import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.parser.constants.Anonymous;
-import cz.mg.c.parser.entities.Function;
-import cz.mg.c.parser.entities.Type;
+import cz.mg.c.parser.entities.CFunction;
+import cz.mg.c.parser.entities.CType;
 import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.c.parser.test.BracketFactory;
 import cz.mg.collections.list.List;
@@ -53,7 +53,7 @@ public @Test class FunctionParserTest {
             new WordToken("foo", 7),
             b.roundBrackets()
         );
-        Function function = parser.parse(new TokenReader(input));
+        CFunction function = parser.parse(new TokenReader(input));
         Assert.assertEquals("void", function.getOutput().getTypename().getName().getText());
         Assert.assertEquals("foo", function.getName().getText());
         Assert.assertEquals(true, function.getInput().isEmpty());
@@ -65,7 +65,7 @@ public @Test class FunctionParserTest {
             new WordToken("void", 0),
             b.roundBrackets()
         );
-        Function function = parser.parse(new TokenReader(input));
+        CFunction function = parser.parse(new TokenReader(input));
         Assert.assertEquals("void", function.getOutput().getTypename().getName().getText());
         Assert.assertSame(Anonymous.NAME, function.getName());
         Assert.assertEquals(true, function.getInput().isEmpty());
@@ -79,7 +79,7 @@ public @Test class FunctionParserTest {
             new WordToken("foobar", 7),
             b.roundBrackets()
         );
-        Function function = parser.parse(new TokenReader(input));
+        CFunction function = parser.parse(new TokenReader(input));
         Assert.assertEquals("int", function.getOutput().getTypename().getName().getText());
         Assert.assertEquals(1, function.getOutput().getPointers().count());
         Assert.assertEquals("foobar", function.getName().getText());
@@ -97,7 +97,7 @@ public @Test class FunctionParserTest {
                 new WordToken("floating", 20)
             )
         );
-        Function function = parser.parse(new TokenReader(input));
+        CFunction function = parser.parse(new TokenReader(input));
         Assert.assertEquals("int", function.getOutput().getTypename().getName().getText());
         Assert.assertEquals(true, function.getOutput().isConstant());
         Assert.assertEquals("constantin", function.getName().getText());
@@ -121,7 +121,7 @@ public @Test class FunctionParserTest {
                 )
             )
         );
-        Function function = parser.parse(new TokenReader(input));
+        CFunction function = parser.parse(new TokenReader(input));
         Assert.assertEquals("int", function.getOutput().getTypename().getName().getText());
         Assert.assertEquals(true, function.getOutput().isConstant());
         Assert.assertEquals("constantin", function.getName().getText());
@@ -149,7 +149,7 @@ public @Test class FunctionParserTest {
                 new WordToken("voiding", 53)
             )
         );
-        Function function = parser.parse(new TokenReader(input));
+        CFunction function = parser.parse(new TokenReader(input));
         Assert.assertEquals("void", function.getOutput().getTypename().getName().getText());
         Assert.assertEquals("foobar", function.getName().getText());
         Assert.assertEquals(3, function.getInput().count());
@@ -176,7 +176,7 @@ public @Test class FunctionParserTest {
                 new OperatorToken("*", 51)
             )
         );
-        Function function = parser.parse(new TokenReader(input));
+        CFunction function = parser.parse(new TokenReader(input));
         Assert.assertEquals("void", function.getOutput().getTypename().getName().getText());
         Assert.assertSame(Anonymous.NAME, function.getName());
         Assert.assertEquals(3, function.getInput().count());
@@ -202,7 +202,7 @@ public @Test class FunctionParserTest {
                 )
             )
         );
-        Function function = parser.parse(new TokenReader(input));
+        CFunction function = parser.parse(new TokenReader(input));
         Assert.assertEquals("int", function.getOutput().getTypename().getName().getText());
         Assert.assertEquals(true, function.getOutput().isConstant());
         Assert.assertEquals("constantin", function.getName().getText());
@@ -236,7 +236,7 @@ public @Test class FunctionParserTest {
             b.roundBrackets(),
             b.curlyBrackets()
         );
-        Function function = parser.parse(new TokenReader(input));
+        CFunction function = parser.parse(new TokenReader(input));
         Assert.assertEquals("void", function.getOutput().getTypename().getName().getText());
         Assert.assertEquals("space", function.getName().getText());
         Assert.assertEquals(true, function.getInput().isEmpty());
@@ -264,7 +264,7 @@ public @Test class FunctionParserTest {
                 new SeparatorToken(";", 52)
             )
         );
-        Function function = parser.parse(new TokenReader(input));
+        CFunction function = parser.parse(new TokenReader(input));
         Assert.assertEquals("void", function.getOutput().getTypename().getName().getText());
         Assert.assertEquals(1, function.getOutput().getPointers().count());
         Assert.assertEquals("foobar", function.getName().getText());
@@ -286,8 +286,8 @@ public @Test class FunctionParserTest {
             b.roundBrackets(),
             b.curlyBrackets()
         );
-        Type type = new Type();
-        Function function = parser.parse(new TokenReader(input), type);
+        CType type = new CType();
+        CFunction function = parser.parse(new TokenReader(input), type);
         Assert.assertSame(type, function.getOutput());
         Assert.assertEquals("space", function.getName().getText());
         Assert.assertEquals(true, function.getInput().isEmpty());

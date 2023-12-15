@@ -3,7 +3,7 @@ package cz.mg.c.parser.services.entity.type;
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
 import cz.mg.c.parser.components.TokenReader;
-import cz.mg.c.parser.entities.Pointer;
+import cz.mg.c.parser.entities.CPointer;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
 import cz.mg.tokenizer.entities.Token;
@@ -40,21 +40,21 @@ public @Test class PointerParserTest {
 
     private void testParseSingle() {
         List<Token> tokens = new List<>(new OperatorToken("*", 0));
-        List<Pointer> pointers = parser.parse(new TokenReader(tokens));
+        List<CPointer> pointers = parser.parse(new TokenReader(tokens));
         Assert.assertEquals(1, pointers.count());
         Assert.assertEquals(false, pointers.getFirst().isConstant());
     }
 
     private void testParseSingleConst() {
         List<Token> tokens = new List<>(new OperatorToken("*", 0), new WordToken("const", 2));
-        List<Pointer> pointers = parser.parse(new TokenReader(tokens));
+        List<CPointer> pointers = parser.parse(new TokenReader(tokens));
         Assert.assertEquals(1, pointers.count());
         Assert.assertEquals(true, pointers.getFirst().isConstant());
     }
 
     private void testParseSingleGroup() {
         List<Token> tokens = new List<>(new OperatorToken("***", 0));
-        List<Pointer> pointers = parser.parse(new TokenReader(tokens));
+        List<CPointer> pointers = parser.parse(new TokenReader(tokens));
         Assert.assertEquals(3, pointers.count());
         Assert.assertEquals(false, pointers.get(0).isConstant());
         Assert.assertEquals(false, pointers.get(1).isConstant());
@@ -63,7 +63,7 @@ public @Test class PointerParserTest {
 
     private void testParseSingleGroupConst() {
         List<Token> tokens = new List<>(new OperatorToken("***", 0), new WordToken("const", 5));
-        List<Pointer> pointers = parser.parse(new TokenReader(tokens));
+        List<CPointer> pointers = parser.parse(new TokenReader(tokens));
         Assert.assertEquals(3, pointers.count());
         Assert.assertEquals(false, pointers.get(0).isConstant());
         Assert.assertEquals(false, pointers.get(1).isConstant());
@@ -77,7 +77,7 @@ public @Test class PointerParserTest {
             new WordToken("const", 4),
             new OperatorToken("*", 12)
         );
-        List<Pointer> pointers = parser.parse(new TokenReader(tokens));
+        List<CPointer> pointers = parser.parse(new TokenReader(tokens));
         Assert.assertEquals(3, pointers.count());
         Assert.assertEquals(false, pointers.get(0).isConstant());
         Assert.assertEquals(true, pointers.get(1).isConstant());
@@ -90,7 +90,7 @@ public @Test class PointerParserTest {
             new WordToken("const", 5),
             new OperatorToken("**", 0)
         );
-        List<Pointer> pointers = parser.parse(new TokenReader(tokens));
+        List<CPointer> pointers = parser.parse(new TokenReader(tokens));
         Assert.assertEquals(5, pointers.count());
         Assert.assertEquals(false, pointers.get(0).isConstant());
         Assert.assertEquals(false, pointers.get(1).isConstant());
@@ -107,7 +107,7 @@ public @Test class PointerParserTest {
             new OperatorToken("***", 15),
             new OperatorToken("*", 17)
         );
-        List<Pointer> pointers = parser.parse(new TokenReader(tokens));
+        List<CPointer> pointers = parser.parse(new TokenReader(tokens));
         Assert.assertEquals(5, pointers.count());
         Assert.assertEquals(true, pointers.get(0).isConstant());
         Assert.assertEquals(false, pointers.get(1).isConstant());

@@ -5,9 +5,9 @@ import cz.mg.annotations.classes.Test;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.parser.constants.Anonymous;
-import cz.mg.c.parser.entities.Pointer;
-import cz.mg.c.parser.entities.Struct;
-import cz.mg.c.parser.entities.Type;
+import cz.mg.c.parser.entities.CPointer;
+import cz.mg.c.parser.entities.CStruct;
+import cz.mg.c.parser.entities.CType;
 import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.c.parser.test.BracketFactory;
 import cz.mg.collections.list.List;
@@ -50,7 +50,7 @@ public @Test class TypeParserTest {
             new WordToken("foo", 1)
         ));
 
-        Type type = parser.parse(reader);
+        CType type = parser.parse(reader);
 
         Assert.assertEquals(false, type.isConstant());
         Assert.assertEquals("foo", type.getTypename().getName().getText());
@@ -64,7 +64,7 @@ public @Test class TypeParserTest {
             new WordToken("foo", 12)
         ));
 
-        Type type = parser.parse(reader);
+        CType type = parser.parse(reader);
 
         Assert.assertEquals(true, type.isConstant());
         Assert.assertEquals("foo", type.getTypename().getName().getText());
@@ -78,7 +78,7 @@ public @Test class TypeParserTest {
             new WordToken("const", 12)
         ));
 
-        Type type = parser.parse(reader);
+        CType type = parser.parse(reader);
 
         Assert.assertEquals(true, type.isConstant());
         Assert.assertEquals("foo", type.getTypename().getName().getText());
@@ -92,7 +92,7 @@ public @Test class TypeParserTest {
             new WordToken("bar", 5)
         ));
 
-        Type type = parser.parse(reader);
+        CType type = parser.parse(reader);
 
         Assert.assertEquals(false, type.isConstant());
         Assert.assertEquals("foo", type.getTypename().getName().getText());
@@ -109,13 +109,13 @@ public @Test class TypeParserTest {
             new OperatorToken("*", 6)
         ));
 
-        Type type = parser.parse(reader);
+        CType type = parser.parse(reader);
 
         Assert.assertEquals(false, type.isConstant());
         Assert.assertEquals("foo", type.getTypename().getName().getText());
         Assert.assertEquals(3, type.getPointers().count());
 
-        for (Pointer pointer : type.getPointers()) {
+        for (CPointer pointer : type.getPointers()) {
             Assert.assertEquals(false, pointer.isConstant());
         }
 
@@ -128,13 +128,13 @@ public @Test class TypeParserTest {
             new OperatorToken("***", 4)
         ));
 
-        Type type = parser.parse(reader);
+        CType type = parser.parse(reader);
 
         Assert.assertEquals(false, type.isConstant());
         Assert.assertEquals("dst", type.getTypename().getName().getText());
         Assert.assertEquals(3, type.getPointers().count());
 
-        for (Pointer pointer : type.getPointers()) {
+        for (CPointer pointer : type.getPointers()) {
             Assert.assertEquals(false, pointer.isConstant());
         }
 
@@ -210,14 +210,14 @@ public @Test class TypeParserTest {
     ) {
         TokenReader reader = new TokenReader(input);
 
-        Type type = parser.parse(reader);
+        CType type = parser.parse(reader);
 
         Assert.assertEquals(typenameConst, type.isConstant());
         Assert.assertEquals("foo", type.getTypename().getName().getText());
         Assert.assertEquals(pointersConst.length, type.getPointers().count());
 
         int i = 0;
-        for (Pointer pointer : type.getPointers()) {
+        for (CPointer pointer : type.getPointers()) {
             Assert.assertEquals(pointersConst[i], pointer.isConstant());
             i++;
         }
@@ -246,11 +246,11 @@ public @Test class TypeParserTest {
             new OperatorToken("*", 20)
         ));
 
-        Type type = parser.parse(reader);
+        CType type = parser.parse(reader);
 
         Assert.assertEquals(1, type.getPointers().count());
         Assert.assertEquals(true, type.isConstant());
-        Assert.assertEquals(true, type.getTypename() instanceof Struct);
+        Assert.assertEquals(true, type.getTypename() instanceof CStruct);
         Assert.assertSame(Anonymous.NAME, type.getTypename().getName());
     }
 }

@@ -4,10 +4,10 @@ import cz.mg.annotations.classes.Entity;
 import cz.mg.annotations.requirement.Required;
 import cz.mg.annotations.storage.Value;
 
-public @Entity class Pointer implements CEntity {
+public @Entity class CPointer implements CEntity {
     boolean constant;
 
-    public Pointer() {
+    public CPointer() {
     }
 
     @Required @Value

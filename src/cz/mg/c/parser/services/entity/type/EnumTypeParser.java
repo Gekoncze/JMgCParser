@@ -3,7 +3,7 @@ package cz.mg.c.parser.services.entity.type;
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.c.parser.components.TokenReader;
-import cz.mg.c.parser.entities.Type;
+import cz.mg.c.parser.entities.CType;
 import cz.mg.c.parser.services.entity.EnumParser;
 
 public @Service class EnumTypeParser implements InlineTypeParser {
@@ -31,8 +31,8 @@ public @Service class EnumTypeParser implements InlineTypeParser {
     }
 
     @Override
-    public @Mandatory Type parse(@Mandatory TokenReader reader) {
-        Type type = new Type();
+    public @Mandatory CType parse(@Mandatory TokenReader reader) {
+        CType type = new CType();
         type.setConstant(type.isConstant() | constParser.parse(reader));
         type.setTypename(enumParser.parse(reader));
         type.setConstant(type.isConstant() | constParser.parse(reader));

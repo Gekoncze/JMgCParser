@@ -4,18 +4,18 @@ import cz.mg.annotations.classes.Entity;
 import cz.mg.annotations.requirement.Required;
 import cz.mg.annotations.storage.Shared;
 
-public @Entity class Typedef extends Typename {
-    private Type type;
+public @Entity class CTypedef extends CTypename {
+    private CType type;
 
-    public Typedef() {
+    public CTypedef() {
     }
 
     @Required @Shared
-    public Type getType() {
+    public CType getType() {
         return type;
     }
 
-    public void setType(Type type) {
+    public void setType(CType type) {
         this.type = type;
     }
 }

@@ -4,8 +4,8 @@ import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.parser.constants.Anonymous;
-import cz.mg.c.parser.entities.Struct;
-import cz.mg.c.parser.entities.Type;
+import cz.mg.c.parser.entities.CStruct;
+import cz.mg.c.parser.entities.CType;
 import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.c.parser.test.BracketFactory;
 import cz.mg.collections.list.List;
@@ -45,11 +45,11 @@ public @Test class StructTypeParserTest {
             new WordToken("Foo", 7),
             b.curlyBrackets()
         );
-        Type type = parser.parse(new TokenReader(tokens));
+        CType type = parser.parse(new TokenReader(tokens));
         Assert.assertEquals(false, type.isConstant());
         Assert.assertEquals(true, type.getPointers().isEmpty());
-        Assert.assertEquals(true, type.getTypename() instanceof Struct);
-        Struct struct = (Struct) type.getTypename();
+        Assert.assertEquals(true, type.getTypename() instanceof CStruct);
+        CStruct struct = (CStruct) type.getTypename();
         Assert.assertEquals("Foo", struct.getName().getText());
         Assert.assertNotNull(struct.getVariables());
         Assert.assertEquals(true, struct.getVariables().isEmpty());
@@ -64,11 +64,11 @@ public @Test class StructTypeParserTest {
                 new SeparatorToken(";", 20)
             )
         );
-        Type type = parser.parse(new TokenReader(tokens));
+        CType type = parser.parse(new TokenReader(tokens));
         Assert.assertEquals(false, type.isConstant());
         Assert.assertEquals(true, type.getPointers().isEmpty());
-        Assert.assertEquals(true, type.getTypename() instanceof Struct);
-        Struct struct = (Struct) type.getTypename();
+        Assert.assertEquals(true, type.getTypename() instanceof CStruct);
+        CStruct struct = (CStruct) type.getTypename();
         Assert.assertSame(Anonymous.NAME, struct.getName());
         Assert.assertNotNull(struct.getVariables());
         Assert.assertEquals(1, struct.getVariables().count());
@@ -86,11 +86,11 @@ public @Test class StructTypeParserTest {
                 new SeparatorToken(";", 20)
             )
         );
-        Type type = parser.parse(new TokenReader(tokens));
+        CType type = parser.parse(new TokenReader(tokens));
         Assert.assertEquals(false, type.isConstant());
         Assert.assertEquals(true, type.getPointers().isEmpty());
-        Assert.assertEquals(true, type.getTypename() instanceof Struct);
-        Struct struct = (Struct) type.getTypename();
+        Assert.assertEquals(true, type.getTypename() instanceof CStruct);
+        CStruct struct = (CStruct) type.getTypename();
         Assert.assertEquals("Foo", struct.getName().getText());
         Assert.assertNotNull(struct.getVariables());
         Assert.assertEquals(1, struct.getVariables().count());
@@ -116,12 +116,12 @@ public @Test class StructTypeParserTest {
             new OperatorToken("*", 60),
             new WordToken("const", 65)
         );
-        Type type = parser.parse(new TokenReader(tokens));
+        CType type = parser.parse(new TokenReader(tokens));
         Assert.assertEquals(true, type.isConstant());
         Assert.assertEquals(1, type.getPointers().count());
         Assert.assertEquals(true, type.getPointers().getFirst().isConstant());
-        Assert.assertEquals(true, type.getTypename() instanceof Struct);
-        Struct struct = (Struct) type.getTypename();
+        Assert.assertEquals(true, type.getTypename() instanceof CStruct);
+        CStruct struct = (CStruct) type.getTypename();
         Assert.assertEquals("FooBar", struct.getName().getText());
         Assert.assertNotNull(struct.getVariables());
         Assert.assertEquals(2, struct.getVariables().count());

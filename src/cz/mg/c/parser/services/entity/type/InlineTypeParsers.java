@@ -4,7 +4,7 @@ import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.annotations.requirement.Optional;
 import cz.mg.c.parser.components.TokenReader;
-import cz.mg.c.parser.entities.Type;
+import cz.mg.c.parser.entities.CType;
 import cz.mg.tokenizer.entities.tokens.WordToken;
 
 public @Service class InlineTypeParsers {
@@ -31,15 +31,15 @@ public @Service class InlineTypeParsers {
     private InlineTypeParsers() {
     }
 
-    public @Optional Type parse(@Mandatory TokenReader reader, boolean constant) {
-        Type type = parse(reader);
+    public @Optional CType parse(@Mandatory TokenReader reader, boolean constant) {
+        CType type = parse(reader);
         if (type != null) {
             type.setConstant(constant);
         }
         return type;
     }
 
-    private @Optional Type parse(@Mandatory TokenReader reader) {
+    private @Optional CType parse(@Mandatory TokenReader reader) {
         if (reader.has("struct", WordToken.class)) {
             return structTypeParser.parse(reader);
         } else if (reader.has("union", WordToken.class)) {

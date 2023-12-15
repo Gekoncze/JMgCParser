@@ -6,19 +6,19 @@ import cz.mg.annotations.storage.Shared;
 import cz.mg.annotations.storage.Value;
 import cz.mg.tokenizer.entities.tokens.WordToken;
 
-public @Entity class Variable implements CMainEntity {
-    private Type type;
+public @Entity class CVariable implements CMainEntity {
+    private CType type;
     private WordToken name;
 
-    public Variable() {
+    public CVariable() {
     }
 
     @Required @Shared
-    public Type getType() {
+    public CType getType() {
         return type;
     }
 
-    public void setType(Type type) {
+    public void setType(CType type) {
         this.type = type;
     }
 

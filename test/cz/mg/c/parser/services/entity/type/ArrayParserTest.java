@@ -3,7 +3,7 @@ package cz.mg.c.parser.services.entity.type;
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
 import cz.mg.c.parser.components.TokenReader;
-import cz.mg.c.parser.entities.Array;
+import cz.mg.c.parser.entities.CArray;
 import cz.mg.c.parser.test.BracketFactory;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
@@ -35,7 +35,7 @@ public @Test class ArrayParserTest {
 
     private void testParseSingle() {
         List<Token> tokens = new List<>(b.squareBrackets(new NumberToken("5", 2)));
-        List<Array> arrays = parser.parse(new TokenReader(tokens));
+        List<CArray> arrays = parser.parse(new TokenReader(tokens));
         Assert.assertEquals(1, arrays.count());
         Assert.assertEquals(1, arrays.getFirst().getExpression().count());
         Assert.assertEquals("5", arrays.getFirst().getExpression().getFirst().getText());
@@ -51,7 +51,7 @@ public @Test class ArrayParserTest {
                 new NumberToken("3", 26)
             )
         );
-        List<Array> arrays = parser.parse(new TokenReader(tokens));
+        List<CArray> arrays = parser.parse(new TokenReader(tokens));
         Assert.assertEquals(3, arrays.count());
         Assert.assertEquals(0, arrays.get(0).getExpression().count());
         Assert.assertEquals(1, arrays.get(1).getExpression().count());

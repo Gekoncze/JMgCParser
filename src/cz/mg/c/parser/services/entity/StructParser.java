@@ -3,8 +3,8 @@ package cz.mg.c.parser.services.entity;
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.c.parser.components.TokenReader;
-import cz.mg.c.parser.entities.Struct;
-import cz.mg.c.parser.entities.Variable;
+import cz.mg.c.parser.entities.CStruct;
+import cz.mg.c.parser.entities.CVariable;
 import cz.mg.c.parser.entities.brackets.CurlyBrackets;
 import cz.mg.c.parser.services.list.SemicolonParser;
 import cz.mg.collections.list.List;
@@ -35,9 +35,9 @@ public @Service class StructParser {
     private StructParser() {
     }
 
-    public @Mandatory Struct parse(@Mandatory TokenReader reader) {
+    public @Mandatory CStruct parse(@Mandatory TokenReader reader) {
         reader.read("struct", WordToken.class);
-        Struct struct = new Struct();
+        CStruct struct = new CStruct();
         struct.setName(nameParser.parse(reader));
         if (reader.has(CurlyBrackets.class)) {
             struct.setVariables(readVariables(reader.read(CurlyBrackets.class)));
@@ -45,9 +45,9 @@ public @Service class StructParser {
         return struct;
     }
 
-    private @Mandatory List<Variable> readVariables(CurlyBrackets brackets) {
+    private @Mandatory List<CVariable> readVariables(CurlyBrackets brackets) {
         List<List<Token>> groups = semicolonParser.parse(brackets.getTokens());
-        List<Variable> variables = new List<>();
+        List<CVariable> variables = new List<>();
         for (List<Token> group : groups) {
             TokenReader reader = new TokenReader(group);
             variables.addLast(variableParser.parse(reader));

@@ -5,18 +5,18 @@ import cz.mg.annotations.requirement.Optional;
 import cz.mg.annotations.storage.Part;
 import cz.mg.collections.list.List;
 
-public @Entity class Union extends Typename {
-    private List<Variable> variables;
+public @Entity class CUnion extends CTypename {
+    private List<CVariable> variables;
 
-    public Union() {
+    public CUnion() {
     }
 
     @Optional @Part
-    public List<Variable> getVariables() {
+    public List<CVariable> getVariables() {
         return variables;
     }
 
-    public void setVariables(List<Variable> variables) {
+    public void setVariables(List<CVariable> variables) {
         this.variables = variables;
     }
 }

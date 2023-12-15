@@ -3,8 +3,8 @@ package cz.mg.c.parser.services.entity;
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.c.parser.components.TokenReader;
-import cz.mg.c.parser.entities.Union;
-import cz.mg.c.parser.entities.Variable;
+import cz.mg.c.parser.entities.CUnion;
+import cz.mg.c.parser.entities.CVariable;
 import cz.mg.c.parser.entities.brackets.CurlyBrackets;
 import cz.mg.c.parser.services.list.SemicolonParser;
 import cz.mg.collections.list.List;
@@ -35,9 +35,9 @@ public @Service class UnionParser {
     private UnionParser() {
     }
 
-    public @Mandatory Union parse(@Mandatory TokenReader reader) {
+    public @Mandatory CUnion parse(@Mandatory TokenReader reader) {
         reader.read("union", WordToken.class);
-        Union union = new Union();
+        CUnion union = new CUnion();
         union.setName(nameParser.parse(reader));
         if (reader.has(CurlyBrackets.class)) {
             union.setVariables(readVariables(reader.read(CurlyBrackets.class)));
@@ -45,9 +45,9 @@ public @Service class UnionParser {
         return union;
     }
 
-    private @Mandatory List<Variable> readVariables(CurlyBrackets brackets) {
+    private @Mandatory List<CVariable> readVariables(CurlyBrackets brackets) {
         List<List<Token>> groups = semicolonParser.parse(brackets.getTokens());
-        List<Variable> variables = new List<>();
+        List<CVariable> variables = new List<>();
         for (List<Token> group : groups) {
             TokenReader reader = new TokenReader(group);
             variables.addLast(variableParser.parse(reader));

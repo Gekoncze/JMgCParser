@@ -3,8 +3,8 @@ package cz.mg.c.parser.services.entity;
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.c.parser.components.TokenReader;
-import cz.mg.c.parser.entities.Function;
-import cz.mg.c.parser.entities.Typedef;
+import cz.mg.c.parser.entities.CFunction;
+import cz.mg.c.parser.entities.CTypedef;
 import cz.mg.c.parser.entities.brackets.SquareBrackets;
 import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.c.parser.services.entity.type.ArrayParser;
@@ -34,13 +34,13 @@ public @Service class TypedefParser {
     private TypedefParser() {
     }
 
-    public @Mandatory Typedef parse(@Mandatory TokenReader reader) {
-        Typedef typedef = new Typedef();
+    public @Mandatory CTypedef parse(@Mandatory TokenReader reader) {
+        CTypedef typedef = new CTypedef();
         reader.read("typedef", WordToken.class);
         typedef.setType(typeParser.parse(reader));
         typedef.setName(nameParser.parse(reader));
 
-        if (typedef.getType().getTypename() instanceof Function) {
+        if (typedef.getType().getTypename() instanceof CFunction) {
             typedef.setName(typedef.getType().getTypename().getName());
         } else if (reader.has(SquareBrackets.class)) {
             if (typedef.getType().getArrays().count() == 0) {

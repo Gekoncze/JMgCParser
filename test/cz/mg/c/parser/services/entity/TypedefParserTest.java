@@ -5,7 +5,7 @@ import cz.mg.annotations.classes.Test;
 import cz.mg.c.parser.constants.Anonymous;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.parser.entities.*;
-import cz.mg.c.parser.entities.Enum;
+import cz.mg.c.parser.entities.CEnum;
 import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.c.parser.test.BracketFactory;
 import cz.mg.collections.list.List;
@@ -48,11 +48,11 @@ public @Test class TypedefParserTest {
             )
         );
 
-        Typedef typedef = parser.parse(reader);
+        CTypedef typedef = parser.parse(reader);
         reader.readEnd();
 
         Assert.assertEquals("FooBar", typedef.getName().getText());
-        Assert.assertEquals(Struct.class, typedef.getType().getTypename().getClass());
+        Assert.assertEquals(CStruct.class, typedef.getType().getTypename().getClass());
     }
 
     private void testParseUnion() {
@@ -65,11 +65,11 @@ public @Test class TypedefParserTest {
             )
         );
 
-        Typedef typedef = parser.parse(reader);
+        CTypedef typedef = parser.parse(reader);
         reader.readEnd();
 
         Assert.assertEquals("FooBar", typedef.getName().getText());
-        Assert.assertEquals(Union.class, typedef.getType().getTypename().getClass());
+        Assert.assertEquals(CUnion.class, typedef.getType().getTypename().getClass());
     }
 
     private void testParseEnum() {
@@ -82,11 +82,11 @@ public @Test class TypedefParserTest {
             )
         );
 
-        Typedef typedef = parser.parse(reader);
+        CTypedef typedef = parser.parse(reader);
         reader.readEnd();
 
         Assert.assertEquals("FooBar", typedef.getName().getText());
-        Assert.assertEquals(Enum.class, typedef.getType().getTypename().getClass());
+        Assert.assertEquals(CEnum.class, typedef.getType().getTypename().getClass());
     }
 
     private void testParseFunction() {
@@ -105,11 +105,11 @@ public @Test class TypedefParserTest {
             )
         );
 
-        Typedef typedef = parser.parse(reader);
+        CTypedef typedef = parser.parse(reader);
         reader.readEnd();
 
         Assert.assertEquals("FooBar", typedef.getName().getText());
-        Assert.assertEquals(Function.class, typedef.getType().getTypename().getClass());
+        Assert.assertEquals(CFunction.class, typedef.getType().getTypename().getClass());
         Assert.assertEquals(1, typedef.getType().getArrays().count());
     }
 
@@ -125,11 +125,11 @@ public @Test class TypedefParserTest {
             )
         );
 
-        Typedef typedef = parser.parse(reader);
+        CTypedef typedef = parser.parse(reader);
         reader.readEnd();
 
         Assert.assertEquals("FooBar", typedef.getName().getText());
-        Assert.assertEquals(Typename.class, typedef.getType().getTypename().getClass());
+        Assert.assertEquals(CTypename.class, typedef.getType().getTypename().getClass());
         Assert.assertEquals(1, typedef.getType().getArrays().count());
     }
 
@@ -142,10 +142,10 @@ public @Test class TypedefParserTest {
             )
         );
 
-        Typedef typedef = parser.parse(reader);
+        CTypedef typedef = parser.parse(reader);
         reader.readEnd();
 
         Assert.assertSame(Anonymous.NAME, typedef.getName());
-        Assert.assertEquals(Struct.class, typedef.getType().getTypename().getClass());
+        Assert.assertEquals(CStruct.class, typedef.getType().getTypename().getClass());
     }
 }

@@ -3,7 +3,7 @@ package cz.mg.c.parser.services.entity;
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
 import cz.mg.c.parser.components.TokenReader;
-import cz.mg.c.parser.entities.EnumEntry;
+import cz.mg.c.parser.entities.CEnumEntry;
 import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
@@ -36,7 +36,7 @@ public @Test class EnumEntryParserTest {
         List<Token> input = new List<>(
             new WordToken("VALUE", 0)
         );
-        EnumEntry entry = parser.parse(new TokenReader(input));
+        CEnumEntry entry = parser.parse(new TokenReader(input));
         Assert.assertEquals("VALUE", entry.getName().getText());
         Assert.assertNull(entry.getExpression());
     }
@@ -49,7 +49,7 @@ public @Test class EnumEntryParserTest {
             new OperatorToken("+", 24),
             new NumberToken("2", 25)
         );
-        EnumEntry entry = parser.parse(new TokenReader(input));
+        CEnumEntry entry = parser.parse(new TokenReader(input));
         Assert.assertEquals("COMPLEX_VALUE", entry.getName().getText());
         Assert.assertNotNull(entry.getExpression());
         Assert.assertEquals(3, entry.getExpression().count());

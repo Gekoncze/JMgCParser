@@ -4,8 +4,8 @@ import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.parser.constants.Anonymous;
-import cz.mg.c.parser.entities.Enum;
-import cz.mg.c.parser.entities.Type;
+import cz.mg.c.parser.entities.CEnum;
+import cz.mg.c.parser.entities.CType;
 import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.c.parser.test.BracketFactory;
 import cz.mg.collections.list.List;
@@ -45,11 +45,11 @@ public @Test class EnumTypeParserTest {
             new WordToken("Foo", 7),
             b.curlyBrackets()
         );
-        Type type = parser.parse(new TokenReader(tokens));
+        CType type = parser.parse(new TokenReader(tokens));
         Assert.assertEquals(false, type.isConstant());
         Assert.assertEquals(true, type.getPointers().isEmpty());
-        Assert.assertEquals(true, type.getTypename() instanceof Enum);
-        Enum enom = (Enum) type.getTypename();
+        Assert.assertEquals(true, type.getTypename() instanceof CEnum);
+        CEnum enom = (CEnum) type.getTypename();
         Assert.assertEquals("Foo", enom.getName().getText());
         Assert.assertNotNull(enom.getEntries());
         Assert.assertEquals(true, enom.getEntries().isEmpty());
@@ -62,11 +62,11 @@ public @Test class EnumTypeParserTest {
                 new WordToken("foo", 17)
             )
         );
-        Type type = parser.parse(new TokenReader(tokens));
+        CType type = parser.parse(new TokenReader(tokens));
         Assert.assertEquals(false, type.isConstant());
         Assert.assertEquals(true, type.getPointers().isEmpty());
-        Assert.assertEquals(true, type.getTypename() instanceof Enum);
-        Enum enom = (Enum) type.getTypename();
+        Assert.assertEquals(true, type.getTypename() instanceof CEnum);
+        CEnum enom = (CEnum) type.getTypename();
         Assert.assertSame(Anonymous.NAME, enom.getName());
         Assert.assertNotNull(enom.getEntries());
         Assert.assertEquals(1, enom.getEntries().count());
@@ -84,11 +84,11 @@ public @Test class EnumTypeParserTest {
                 new WordToken("bar", 17)
             )
         );
-        Type type = parser.parse(new TokenReader(tokens));
+        CType type = parser.parse(new TokenReader(tokens));
         Assert.assertEquals(false, type.isConstant());
         Assert.assertEquals(true, type.getPointers().isEmpty());
-        Assert.assertEquals(true, type.getTypename() instanceof Enum);
-        Enum enom = (Enum) type.getTypename();
+        Assert.assertEquals(true, type.getTypename() instanceof CEnum);
+        CEnum enom = (CEnum) type.getTypename();
         Assert.assertEquals("FooBar", enom.getName().getText());
         Assert.assertNotNull(enom.getEntries());
         Assert.assertEquals(2, enom.getEntries().count());
@@ -112,12 +112,12 @@ public @Test class EnumTypeParserTest {
             new OperatorToken("*", 60),
             new WordToken("const", 65)
         );
-        Type type = parser.parse(new TokenReader(tokens));
+        CType type = parser.parse(new TokenReader(tokens));
         Assert.assertEquals(true, type.isConstant());
         Assert.assertEquals(1, type.getPointers().count());
         Assert.assertEquals(true, type.getPointers().getFirst().isConstant());
-        Assert.assertEquals(true, type.getTypename() instanceof Enum);
-        Enum enom = (Enum) type.getTypename();
+        Assert.assertEquals(true, type.getTypename() instanceof CEnum);
+        CEnum enom = (CEnum) type.getTypename();
         Assert.assertEquals("FooBar", enom.getName().getText());
         Assert.assertNotNull(enom.getEntries());
         Assert.assertEquals(2, enom.getEntries().count());

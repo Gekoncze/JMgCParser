@@ -3,8 +3,8 @@ package cz.mg.c.parser.services.entity;
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.c.parser.components.TokenReader;
-import cz.mg.c.parser.entities.Type;
-import cz.mg.c.parser.entities.Typename;
+import cz.mg.c.parser.entities.CType;
+import cz.mg.c.parser.entities.CTypename;
 import cz.mg.c.parser.services.CEntityParser;
 import cz.mg.c.parser.services.entity.type.ConstParser;
 import cz.mg.c.parser.services.entity.type.FunctionTypeParser;
@@ -34,9 +34,9 @@ public @Service class TypeParser implements CEntityParser {
     private @Service FunctionTypeParser functionTypeParser;
 
     @Override
-    public @Mandatory Type parse(@Mandatory TokenReader reader) {
+    public @Mandatory CType parse(@Mandatory TokenReader reader) {
         boolean constant = constParser.parse(reader);
-        Type type = inlineTypeParsers.parse(reader, constant);
+        CType type = inlineTypeParsers.parse(reader, constant);
         if (type == null) {
             type = parsePlainType(reader, constant);
             if (reader.has(functionTypeParser::matches)) {
@@ -46,10 +46,10 @@ public @Service class TypeParser implements CEntityParser {
         return type;
     }
 
-    private @Mandatory Type parsePlainType(@Mandatory TokenReader reader, boolean constant) {
-        Type type = new Type();
+    private @Mandatory CType parsePlainType(@Mandatory TokenReader reader, boolean constant) {
+        CType type = new CType();
         type.setConstant(type.isConstant() | constant);
-        type.setTypename(new Typename(reader.read(WordToken.class)));
+        type.setTypename(new CTypename(reader.read(WordToken.class)));
         type.setConstant(type.isConstant() | constParser.parse(reader));
         type.setPointers(pointerParser.parse(reader));
         return type;

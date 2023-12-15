@@ -5,13 +5,13 @@ import cz.mg.annotations.requirement.Required;
 import cz.mg.annotations.storage.Shared;
 import cz.mg.tokenizer.entities.tokens.WordToken;
 
-public @Entity class Typename implements CMainEntity {
+public @Entity class CTypename implements CMainEntity {
     private WordToken name;
 
-    public Typename() {
+    public CTypename() {
     }
 
-    public Typename(WordToken name) {
+    public CTypename(WordToken name) {
         this.name = name;
     }
 

@@ -3,7 +3,7 @@ package cz.mg.c.parser.services.entity;
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
 import cz.mg.c.parser.constants.Anonymous;
-import cz.mg.c.parser.entities.Variable;
+import cz.mg.c.parser.entities.CVariable;
 import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.c.parser.test.BracketFactory;
 import cz.mg.collections.list.List;
@@ -30,7 +30,7 @@ public @Test class VariableListParserTest {
     private final @Service BracketFactory b = BracketFactory.getInstance();
 
     private void testParseEmpty() {
-        List<Variable> variables = parser.parse(b.roundBrackets());
+        List<CVariable> variables = parser.parse(b.roundBrackets());
         Assert.assertEquals(true, variables.isEmpty());
     }
 
@@ -41,7 +41,7 @@ public @Test class VariableListParserTest {
     }
 
     private void testParseAnonymous() {
-        List<Variable> variables = parser.parse(b.roundBrackets(
+        List<CVariable> variables = parser.parse(b.roundBrackets(
             new WordToken("int", 0)
         ));
         Assert.assertEquals(1, variables.count());
@@ -50,7 +50,7 @@ public @Test class VariableListParserTest {
     }
 
     private void testParseSingle() {
-        List<Variable> variables = parser.parse(b.roundBrackets(
+        List<CVariable> variables = parser.parse(b.roundBrackets(
             new WordToken("int", 0),
             new WordToken("a", 5)
         ));
@@ -60,7 +60,7 @@ public @Test class VariableListParserTest {
     }
 
     private void testParseMultiple() {
-        List<Variable> variables = parser.parse(b.roundBrackets(
+        List<CVariable> variables = parser.parse(b.roundBrackets(
             new WordToken("int", 0),
             new OperatorToken("*", 4),
             new WordToken("a", 5),

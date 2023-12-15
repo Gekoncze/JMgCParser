@@ -2,7 +2,7 @@ package cz.mg.c.parser.services;
 
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
-import cz.mg.c.parser.entities.Enum;
+import cz.mg.c.parser.entities.CEnum;
 import cz.mg.c.parser.entities.*;
 import cz.mg.c.parser.test.BracketFactory;
 import cz.mg.collections.list.List;
@@ -61,9 +61,9 @@ public @Test class RootEntityParsersTest {
 
         List<CMainEntity> entities = parsers.parse(input);
         Assert.assertEquals(1, entities.count());
-        Assert.assertEquals(true, entities.getFirst() instanceof Typedef);
+        Assert.assertEquals(true, entities.getFirst() instanceof CTypedef);
 
-        Typedef typedef = (Typedef) entities.getFirst();
+        CTypedef typedef = (CTypedef) entities.getFirst();
         Assert.assertEquals("IntPtr", typedef.getName().getText());
         Assert.assertEquals(true, typedef.getType().isConstant());
         Assert.assertEquals(true, typedef.getType().getArrays().isEmpty());
@@ -86,9 +86,9 @@ public @Test class RootEntityParsersTest {
 
         List<CMainEntity> entities = parsers.parse(input);
         Assert.assertEquals(1, entities.count());
-        Assert.assertEquals(true, entities.getFirst() instanceof Variable);
+        Assert.assertEquals(true, entities.getFirst() instanceof CVariable);
 
-        Variable variable = (Variable) entities.getFirst();
+        CVariable variable = (CVariable) entities.getFirst();
         Assert.assertEquals("foo", variable.getName().getText());
         Assert.assertEquals("int", variable.getType().getTypename().getName().getText());
         Assert.assertEquals(1, variable.getType().getArrays().count());
@@ -118,9 +118,9 @@ public @Test class RootEntityParsersTest {
 
         List<CMainEntity> entities = parsers.parse(input);
         Assert.assertEquals(1, entities.count());
-        Assert.assertEquals(true, entities.getFirst() instanceof Function);
+        Assert.assertEquals(true, entities.getFirst() instanceof CFunction);
 
-        Function function = (Function) entities.getFirst();
+        CFunction function = (CFunction) entities.getFirst();
         Assert.assertEquals("getAddress", function.getName().getText());
         Assert.assertEquals("void", function.getOutput().getTypename().getName().getText());
         Assert.assertEquals(1, function.getOutput().getPointers().count());
@@ -154,9 +154,9 @@ public @Test class RootEntityParsersTest {
 
         List<CMainEntity> entities = parsers.parse(input);
         Assert.assertEquals(1, entities.count());
-        Assert.assertEquals(true, entities.getFirst() instanceof Struct);
+        Assert.assertEquals(true, entities.getFirst() instanceof CStruct);
 
-        Struct struct = (Struct) entities.getFirst();
+        CStruct struct = (CStruct) entities.getFirst();
         Assert.assertEquals("FooBar", struct.getName().getText());
         Assert.assertNotNull(struct.getVariables());
         Assert.assertEquals(2, struct.getVariables().count());
@@ -190,9 +190,9 @@ public @Test class RootEntityParsersTest {
 
         List<CMainEntity> entities = parsers.parse(input);
         Assert.assertEquals(1, entities.count());
-        Assert.assertEquals(true, entities.getFirst() instanceof Union);
+        Assert.assertEquals(true, entities.getFirst() instanceof CUnion);
 
-        Union union = (Union) entities.getFirst();
+        CUnion union = (CUnion) entities.getFirst();
         Assert.assertEquals("Color", union.getName().getText());
         Assert.assertNotNull(union.getVariables());
         Assert.assertEquals(3, union.getVariables().count());
@@ -230,9 +230,9 @@ public @Test class RootEntityParsersTest {
 
         List<CMainEntity> entities = parsers.parse(input);
         Assert.assertEquals(1, entities.count());
-        Assert.assertEquals(true, entities.getFirst() instanceof Enum);
+        Assert.assertEquals(true, entities.getFirst() instanceof CEnum);
 
-        Enum enom = (Enum) entities.getFirst();
+        CEnum enom = (CEnum) entities.getFirst();
         Assert.assertEquals("Color", enom.getName().getText());
         Assert.assertNotNull(enom.getEntries());
         Assert.assertEquals(4, enom.getEntries().count());
@@ -263,14 +263,14 @@ public @Test class RootEntityParsersTest {
 
         List<CMainEntity> entities = parsers.parse(input);
         Assert.assertEquals(1, entities.count());
-        Assert.assertEquals(true, entities.getFirst() instanceof Variable);
+        Assert.assertEquals(true, entities.getFirst() instanceof CVariable);
 
-        Variable variable = (Variable) entities.getFirst();
+        CVariable variable = (CVariable) entities.getFirst();
         Assert.assertEquals("fptr", variable.getName().getText());
         Assert.assertEquals(1, variable.getType().getPointers().count());
-        Assert.assertEquals(true, variable.getType().getTypename() instanceof Function);
+        Assert.assertEquals(true, variable.getType().getTypename() instanceof CFunction);
 
-        Function function = (Function) variable.getType().getTypename();
+        CFunction function = (CFunction) variable.getType().getTypename();
         Assert.assertEquals(true, function.getInput().isEmpty());
         Assert.assertEquals("void", function.getOutput().getTypename().getName().getText());
     }
@@ -325,9 +325,9 @@ public @Test class RootEntityParsersTest {
 
         List<CMainEntity> entities = parsers.parse(input);
         Assert.assertEquals(4, entities.count());
-        Assert.assertEquals(true, entities.get(0) instanceof Typedef);
-        Assert.assertEquals(true, entities.get(1) instanceof Function);
-        Assert.assertEquals(true, entities.get(2) instanceof Struct);
-        Assert.assertEquals(true, entities.get(3) instanceof Variable);
+        Assert.assertEquals(true, entities.get(0) instanceof CTypedef);
+        Assert.assertEquals(true, entities.get(1) instanceof CFunction);
+        Assert.assertEquals(true, entities.get(2) instanceof CStruct);
+        Assert.assertEquals(true, entities.get(3) instanceof CVariable);
     }
 }

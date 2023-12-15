@@ -3,10 +3,10 @@ package cz.mg.c.parser.services.entity.type;
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
 import cz.mg.c.parser.components.TokenReader;
-import cz.mg.c.parser.entities.Enum;
-import cz.mg.c.parser.entities.Struct;
-import cz.mg.c.parser.entities.Type;
-import cz.mg.c.parser.entities.Union;
+import cz.mg.c.parser.entities.CEnum;
+import cz.mg.c.parser.entities.CStruct;
+import cz.mg.c.parser.entities.CType;
+import cz.mg.c.parser.entities.CUnion;
 import cz.mg.c.parser.entities.brackets.CurlyBrackets;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
@@ -36,7 +36,7 @@ public @Test class InlineTypeParsersTest {
     private final @Service InlineTypeParsers parsers = InlineTypeParsers.getInstance();
 
     private void testParseEmpty() {
-        Type type = parsers.parse(new TokenReader(new List<>()), false);
+        CType type = parsers.parse(new TokenReader(new List<>()), false);
         Assert.assertNull(type);
     }
 
@@ -47,11 +47,11 @@ public @Test class InlineTypeParsersTest {
             new CurlyBrackets()
         );
 
-        Type type = parsers.parse(new TokenReader(input), false);
+        CType type = parsers.parse(new TokenReader(input), false);
 
         Assert.assertNotNull(type);
         Assert.assertEquals(false, type.isConstant());
-        Assert.assertEquals(true, type.getTypename() instanceof Struct);
+        Assert.assertEquals(true, type.getTypename() instanceof CStruct);
     }
 
     private void testParseConstStruct() {
@@ -61,11 +61,11 @@ public @Test class InlineTypeParsersTest {
             new CurlyBrackets()
         );
 
-        Type type = parsers.parse(new TokenReader(input), true);
+        CType type = parsers.parse(new TokenReader(input), true);
 
         Assert.assertNotNull(type);
         Assert.assertEquals(true, type.isConstant());
-        Assert.assertEquals(true, type.getTypename() instanceof Struct);
+        Assert.assertEquals(true, type.getTypename() instanceof CStruct);
     }
 
     private void testParseAnonymousStruct() {
@@ -74,11 +74,11 @@ public @Test class InlineTypeParsersTest {
             new CurlyBrackets()
         );
 
-        Type type = parsers.parse(new TokenReader(input), false);
+        CType type = parsers.parse(new TokenReader(input), false);
 
         Assert.assertNotNull(type);
         Assert.assertEquals(false, type.isConstant());
-        Assert.assertEquals(true, type.getTypename() instanceof Struct);
+        Assert.assertEquals(true, type.getTypename() instanceof CStruct);
     }
 
     private void testParseUnion() {
@@ -88,11 +88,11 @@ public @Test class InlineTypeParsersTest {
             new CurlyBrackets()
         );
 
-        Type type = parsers.parse(new TokenReader(input), false);
+        CType type = parsers.parse(new TokenReader(input), false);
 
         Assert.assertNotNull(type);
         Assert.assertEquals(false, type.isConstant());
-        Assert.assertEquals(true, type.getTypename() instanceof Union);
+        Assert.assertEquals(true, type.getTypename() instanceof CUnion);
     }
 
     private void testParseConstUnion() {
@@ -102,11 +102,11 @@ public @Test class InlineTypeParsersTest {
             new CurlyBrackets()
         );
 
-        Type type = parsers.parse(new TokenReader(input), true);
+        CType type = parsers.parse(new TokenReader(input), true);
 
         Assert.assertNotNull(type);
         Assert.assertEquals(true, type.isConstant());
-        Assert.assertEquals(true, type.getTypename() instanceof Union);
+        Assert.assertEquals(true, type.getTypename() instanceof CUnion);
     }
 
     private void testParseAnonymousUnion() {
@@ -115,11 +115,11 @@ public @Test class InlineTypeParsersTest {
             new CurlyBrackets()
         );
 
-        Type type = parsers.parse(new TokenReader(input), false);
+        CType type = parsers.parse(new TokenReader(input), false);
 
         Assert.assertNotNull(type);
         Assert.assertEquals(false, type.isConstant());
-        Assert.assertEquals(true, type.getTypename() instanceof Union);
+        Assert.assertEquals(true, type.getTypename() instanceof CUnion);
     }
 
     private void testParseEnum() {
@@ -129,11 +129,11 @@ public @Test class InlineTypeParsersTest {
             new CurlyBrackets()
         );
 
-        Type type = parsers.parse(new TokenReader(input), false);
+        CType type = parsers.parse(new TokenReader(input), false);
 
         Assert.assertNotNull(type);
         Assert.assertEquals(false, type.isConstant());
-        Assert.assertEquals(true, type.getTypename() instanceof Enum);
+        Assert.assertEquals(true, type.getTypename() instanceof CEnum);
     }
 
     private void testParseConstEnum() {
@@ -143,11 +143,11 @@ public @Test class InlineTypeParsersTest {
             new CurlyBrackets()
         );
 
-        Type type = parsers.parse(new TokenReader(input), true);
+        CType type = parsers.parse(new TokenReader(input), true);
 
         Assert.assertNotNull(type);
         Assert.assertEquals(true, type.isConstant());
-        Assert.assertEquals(true, type.getTypename() instanceof Enum);
+        Assert.assertEquals(true, type.getTypename() instanceof CEnum);
     }
 
     private void testParseAnonymousEnum() {
@@ -156,11 +156,11 @@ public @Test class InlineTypeParsersTest {
             new CurlyBrackets()
         );
 
-        Type type = parsers.parse(new TokenReader(input), false);
+        CType type = parsers.parse(new TokenReader(input), false);
 
         Assert.assertNotNull(type);
         Assert.assertEquals(false, type.isConstant());
-        Assert.assertEquals(true, type.getTypename() instanceof Enum);
+        Assert.assertEquals(true, type.getTypename() instanceof CEnum);
     }
 
     private void testParseUnknown() {
@@ -170,7 +170,7 @@ public @Test class InlineTypeParsersTest {
             new CurlyBrackets()
         );
 
-        Type type = parsers.parse(new TokenReader(input), true);
+        CType type = parsers.parse(new TokenReader(input), true);
 
         Assert.assertNull(type);
     }

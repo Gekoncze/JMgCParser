@@ -8,29 +8,29 @@ import cz.mg.annotations.storage.Shared;
 import cz.mg.collections.list.List;
 import cz.mg.tokenizer.entities.Token;
 
-public @Entity class Function extends Typename {
-    private Type output;
-    private List<Variable> input;
+public @Entity class CFunction extends CTypename {
+    private CType output;
+    private List<CVariable> input;
     private List<Token> implementation;
 
-    public Function() {
+    public CFunction() {
     }
 
     @Required @Shared
-    public Type getOutput() {
+    public CType getOutput() {
         return output;
     }
 
-    public void setOutput(Type output) {
+    public void setOutput(CType output) {
         this.output = output;
     }
 
     @Required @Part
-    public List<Variable> getInput() {
+    public List<CVariable> getInput() {
         return input;
     }
 
-    public void setInput(List<Variable> input) {
+    public void setInput(List<CVariable> input) {
         this.input = input;
     }
 
