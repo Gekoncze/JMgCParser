@@ -4,7 +4,7 @@ import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.c.parser.components.TokenReader;
-import cz.mg.c.parser.entities.Anonymous;
+import cz.mg.c.parser.constants.Anonymous;
 import cz.mg.c.parser.entities.Pointer;
 import cz.mg.c.parser.entities.Struct;
 import cz.mg.c.parser.entities.Type;

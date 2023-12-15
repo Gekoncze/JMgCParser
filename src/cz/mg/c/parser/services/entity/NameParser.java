@@ -3,7 +3,7 @@ package cz.mg.c.parser.services.entity;
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.c.parser.components.TokenReader;
-import cz.mg.c.parser.entities.Anonymous;
+import cz.mg.c.parser.constants.Anonymous;
 import cz.mg.tokenizer.entities.tokens.WordToken;
 
 public @Service class NameParser {

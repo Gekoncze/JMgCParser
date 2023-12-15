@@ -1,4 +1,4 @@
-package cz.mg.c.parser.entities;
+package cz.mg.c.parser.constants;
 
 import cz.mg.annotations.classes.Static;
 import cz.mg.annotations.requirement.Mandatory;

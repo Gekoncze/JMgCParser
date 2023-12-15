@@ -2,6 +2,7 @@ package cz.mg.c.parser.services.entity;
 
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
+import cz.mg.c.parser.constants.Anonymous;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.parser.entities.*;
 import cz.mg.c.parser.entities.Enum;
