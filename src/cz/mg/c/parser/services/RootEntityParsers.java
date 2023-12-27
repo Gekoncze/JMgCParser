@@ -2,11 +2,12 @@ package cz.mg.c.parser.services;
 
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
-import cz.mg.c.parser.constants.Anonymous;
 import cz.mg.c.parser.components.TokenReader;
-import cz.mg.c.parser.entities.*;
+import cz.mg.c.parser.entities.CFunction;
+import cz.mg.c.parser.entities.CMainEntity;
+import cz.mg.c.parser.entities.CType;
+import cz.mg.c.parser.entities.CVariable;
 import cz.mg.c.parser.entities.brackets.RoundBrackets;
-import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.c.parser.services.entity.FunctionParser;
 import cz.mg.c.parser.services.entity.TypeParser;
 import cz.mg.c.parser.services.entity.TypedefParser;
@@ -68,9 +69,8 @@ public @Service class RootEntityParsers {
                     entities.addLast(variable);
                     reader.read(";", SeparatorToken.class);
                 } else {
-                    WordToken name = type.getTypename().getName();
-                    throw new ParseException(
-                        name.getPosition(), "Unsupported type '" + name.getText() + "'."
+                    throw new UnsupportedOperationException(
+                        "Unsupported type '" + type.getTypename().getName() + "'."
                     );
                 }
             }
@@ -101,6 +101,6 @@ public @Service class RootEntityParsers {
     private boolean isFunctionPointer(@Mandatory CType type) {
         return type.getTypename() instanceof CFunction
             && type.getPointers().count() > 0
-            && type.getTypename().getName() != Anonymous.NAME;
+            && type.getTypename().getName() != null;
     }
 }

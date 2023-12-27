@@ -31,7 +31,7 @@ public @Service class EnumEntryParser implements CEntityParser {
     @Override
     public @Mandatory CEnumEntry parse(@Mandatory TokenReader reader) {
         CEnumEntry entry = new CEnumEntry();
-        entry.setName(reader.read(WordToken.class));
+        entry.setName(reader.read(WordToken.class).getText());
         if (reader.has("=", OperatorToken.class)) {
             entry.setExpression(readExpression(reader));
         }

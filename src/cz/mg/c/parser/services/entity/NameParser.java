@@ -2,8 +2,8 @@ package cz.mg.c.parser.services.entity;
 
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
+import cz.mg.annotations.requirement.Optional;
 import cz.mg.c.parser.components.TokenReader;
-import cz.mg.c.parser.constants.Anonymous;
 import cz.mg.tokenizer.entities.tokens.WordToken;
 
 public @Service class NameParser {
@@ -23,11 +23,11 @@ public @Service class NameParser {
     private NameParser() {
     }
 
-    public @Mandatory WordToken parse(@Mandatory TokenReader reader) {
+    public @Optional String parse(@Mandatory TokenReader reader) {
         if (reader.has(WordToken.class)) {
-            return reader.read(WordToken.class);
+            return reader.read(WordToken.class).getText();
         } else {
-            return Anonymous.NAME;
+            return null;
         }
     }
 }

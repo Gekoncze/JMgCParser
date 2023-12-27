@@ -49,7 +49,7 @@ public @Service class TypeParser implements CEntityParser {
     private @Mandatory CType parsePlainType(@Mandatory TokenReader reader, boolean constant) {
         CType type = new CType();
         type.setConstant(type.isConstant() | constant);
-        type.setTypename(new CTypename(reader.read(WordToken.class)));
+        type.setTypename(new CTypename(reader.read(WordToken.class).getText()));
         type.setConstant(type.isConstant() | constParser.parse(reader));
         type.setPointers(pointerParser.parse(reader));
         return type;

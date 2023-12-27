@@ -54,7 +54,7 @@ public @Service class FunctionTypeParser {
         CType type = new CType();
         type.setTypename(function);
         type.setPointers(pointerParser.parse(bracketReader));
-        function.setName(bracketReader.read(WordToken.class));
+        function.setName(bracketReader.read(WordToken.class).getText());
         type.setArrays(arrayParser.parse(bracketReader));
         function.setInput(variableListParser.parse(reader.read(RoundBrackets.class)));
         bracketReader.readEnd();

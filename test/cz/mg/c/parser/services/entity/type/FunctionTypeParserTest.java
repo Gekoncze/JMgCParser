@@ -51,7 +51,7 @@ public @Test class FunctionTypeParserTest {
         Assert.assertEquals(CFunction.class, type.getTypename().getClass());
         CFunction function = (CFunction) type.getTypename();
         Assert.assertSame(output, function.getOutput());
-        Assert.assertEquals("fooptr", function.getName().getText());
+        Assert.assertEquals("fooptr", function.getName());
         Assert.assertEquals(true, function.getInput().isEmpty());
     }
 
@@ -73,7 +73,7 @@ public @Test class FunctionTypeParserTest {
         Assert.assertEquals(CFunction.class, type.getTypename().getClass());
         CFunction function = (CFunction) type.getTypename();
         Assert.assertSame(output, function.getOutput());
-        Assert.assertEquals("fooptrptr", function.getName().getText());
+        Assert.assertEquals("fooptrptr", function.getName());
         Assert.assertEquals(2, function.getInput().count());
     }
 
@@ -106,7 +106,7 @@ public @Test class FunctionTypeParserTest {
         Assert.assertEquals(CFunction.class, type.getTypename().getClass());
         CFunction function = (CFunction) type.getTypename();
         Assert.assertSame(output, function.getOutput());
-        Assert.assertEquals("fooptrptrarr", function.getName().getText());
+        Assert.assertEquals("fooptrptrarr", function.getName());
         Assert.assertEquals(2, function.getInput().count());
     }
 }

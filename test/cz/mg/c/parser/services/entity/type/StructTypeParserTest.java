@@ -3,7 +3,6 @@ package cz.mg.c.parser.services.entity.type;
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
 import cz.mg.c.parser.components.TokenReader;
-import cz.mg.c.parser.constants.Anonymous;
 import cz.mg.c.parser.entities.CStruct;
 import cz.mg.c.parser.entities.CType;
 import cz.mg.c.parser.exceptions.ParseException;
@@ -50,7 +49,7 @@ public @Test class StructTypeParserTest {
         Assert.assertEquals(true, type.getPointers().isEmpty());
         Assert.assertEquals(true, type.getTypename() instanceof CStruct);
         CStruct struct = (CStruct) type.getTypename();
-        Assert.assertEquals("Foo", struct.getName().getText());
+        Assert.assertEquals("Foo", struct.getName());
         Assert.assertNotNull(struct.getVariables());
         Assert.assertEquals(true, struct.getVariables().isEmpty());
     }
@@ -69,11 +68,11 @@ public @Test class StructTypeParserTest {
         Assert.assertEquals(true, type.getPointers().isEmpty());
         Assert.assertEquals(true, type.getTypename() instanceof CStruct);
         CStruct struct = (CStruct) type.getTypename();
-        Assert.assertSame(Anonymous.NAME, struct.getName());
+        Assert.assertNull(struct.getName());
         Assert.assertNotNull(struct.getVariables());
         Assert.assertEquals(1, struct.getVariables().count());
-        Assert.assertEquals("int", struct.getVariables().get(0).getType().getTypename().getName().getText());
-        Assert.assertEquals("bar", struct.getVariables().get(0).getName().getText());
+        Assert.assertEquals("int", struct.getVariables().get(0).getType().getTypename().getName());
+        Assert.assertEquals("bar", struct.getVariables().get(0).getName());
     }
 
     private void testParseNamed() {
@@ -91,11 +90,11 @@ public @Test class StructTypeParserTest {
         Assert.assertEquals(true, type.getPointers().isEmpty());
         Assert.assertEquals(true, type.getTypename() instanceof CStruct);
         CStruct struct = (CStruct) type.getTypename();
-        Assert.assertEquals("Foo", struct.getName().getText());
+        Assert.assertEquals("Foo", struct.getName());
         Assert.assertNotNull(struct.getVariables());
         Assert.assertEquals(1, struct.getVariables().count());
-        Assert.assertEquals("int", struct.getVariables().get(0).getType().getTypename().getName().getText());
-        Assert.assertEquals("bar", struct.getVariables().get(0).getName().getText());
+        Assert.assertEquals("int", struct.getVariables().get(0).getType().getTypename().getName());
+        Assert.assertEquals("bar", struct.getVariables().get(0).getName());
     }
 
     private void testParseComplexConst() {
@@ -122,15 +121,15 @@ public @Test class StructTypeParserTest {
         Assert.assertEquals(true, type.getPointers().getFirst().isConstant());
         Assert.assertEquals(true, type.getTypename() instanceof CStruct);
         CStruct struct = (CStruct) type.getTypename();
-        Assert.assertEquals("FooBar", struct.getName().getText());
+        Assert.assertEquals("FooBar", struct.getName());
         Assert.assertNotNull(struct.getVariables());
         Assert.assertEquals(2, struct.getVariables().count());
         Assert.assertEquals(true, struct.getVariables().get(0).getType().isConstant());
-        Assert.assertEquals("int", struct.getVariables().get(0).getType().getTypename().getName().getText());
-        Assert.assertEquals("a", struct.getVariables().get(0).getName().getText());
+        Assert.assertEquals("int", struct.getVariables().get(0).getType().getTypename().getName());
+        Assert.assertEquals("a", struct.getVariables().get(0).getName());
         Assert.assertEquals(false, struct.getVariables().get(1).getType().isConstant());
-        Assert.assertEquals("int", struct.getVariables().get(1).getType().getTypename().getName().getText());
-        Assert.assertEquals("b", struct.getVariables().get(1).getName().getText());
+        Assert.assertEquals("int", struct.getVariables().get(1).getType().getTypename().getName());
+        Assert.assertEquals("b", struct.getVariables().get(1).getName());
     }
 
     private void testParseRemainingTokens() {

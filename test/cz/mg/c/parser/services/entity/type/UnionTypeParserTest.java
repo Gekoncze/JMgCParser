@@ -3,7 +3,6 @@ package cz.mg.c.parser.services.entity.type;
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
 import cz.mg.c.parser.components.TokenReader;
-import cz.mg.c.parser.constants.Anonymous;
 import cz.mg.c.parser.entities.CType;
 import cz.mg.c.parser.entities.CUnion;
 import cz.mg.c.parser.exceptions.ParseException;
@@ -50,7 +49,7 @@ public @Test class UnionTypeParserTest {
         Assert.assertEquals(true, type.getPointers().isEmpty());
         Assert.assertEquals(true, type.getTypename() instanceof CUnion);
         CUnion union = (CUnion) type.getTypename();
-        Assert.assertEquals("Foo", union.getName().getText());
+        Assert.assertEquals("Foo", union.getName());
         Assert.assertNotNull(union.getVariables());
         Assert.assertEquals(true, union.getVariables().isEmpty());
     }
@@ -69,11 +68,11 @@ public @Test class UnionTypeParserTest {
         Assert.assertEquals(true, type.getPointers().isEmpty());
         Assert.assertEquals(true, type.getTypename() instanceof CUnion);
         CUnion union = (CUnion) type.getTypename();
-        Assert.assertSame(Anonymous.NAME, union.getName());
+        Assert.assertNull(union.getName());
         Assert.assertNotNull(union.getVariables());
         Assert.assertEquals(1, union.getVariables().count());
-        Assert.assertEquals("int", union.getVariables().get(0).getType().getTypename().getName().getText());
-        Assert.assertEquals("bar", union.getVariables().get(0).getName().getText());
+        Assert.assertEquals("int", union.getVariables().get(0).getType().getTypename().getName());
+        Assert.assertEquals("bar", union.getVariables().get(0).getName());
     }
 
     private void testParseNamed() {
@@ -91,11 +90,11 @@ public @Test class UnionTypeParserTest {
         Assert.assertEquals(true, type.getPointers().isEmpty());
         Assert.assertEquals(true, type.getTypename() instanceof CUnion);
         CUnion union = (CUnion) type.getTypename();
-        Assert.assertEquals("Foo", union.getName().getText());
+        Assert.assertEquals("Foo", union.getName());
         Assert.assertNotNull(union.getVariables());
         Assert.assertEquals(1, union.getVariables().count());
-        Assert.assertEquals("int", union.getVariables().get(0).getType().getTypename().getName().getText());
-        Assert.assertEquals("bar", union.getVariables().get(0).getName().getText());
+        Assert.assertEquals("int", union.getVariables().get(0).getType().getTypename().getName());
+        Assert.assertEquals("bar", union.getVariables().get(0).getName());
     }
 
     private void testParseComplexConst() {
@@ -122,15 +121,15 @@ public @Test class UnionTypeParserTest {
         Assert.assertEquals(true, type.getPointers().getFirst().isConstant());
         Assert.assertEquals(true, type.getTypename() instanceof CUnion);
         CUnion union = (CUnion) type.getTypename();
-        Assert.assertEquals("FooBar", union.getName().getText());
+        Assert.assertEquals("FooBar", union.getName());
         Assert.assertNotNull(union.getVariables());
         Assert.assertEquals(2, union.getVariables().count());
         Assert.assertEquals(true, union.getVariables().get(0).getType().isConstant());
-        Assert.assertEquals("int", union.getVariables().get(0).getType().getTypename().getName().getText());
-        Assert.assertEquals("a", union.getVariables().get(0).getName().getText());
+        Assert.assertEquals("int", union.getVariables().get(0).getType().getTypename().getName());
+        Assert.assertEquals("a", union.getVariables().get(0).getName());
         Assert.assertEquals(false, union.getVariables().get(1).getType().isConstant());
-        Assert.assertEquals("int", union.getVariables().get(1).getType().getTypename().getName().getText());
-        Assert.assertEquals("b", union.getVariables().get(1).getName().getText());
+        Assert.assertEquals("int", union.getVariables().get(1).getType().getTypename().getName());
+        Assert.assertEquals("b", union.getVariables().get(1).getName());
     }
 
     private void testParseRemainingTokens() {

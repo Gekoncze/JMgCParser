@@ -37,7 +37,7 @@ public @Test class EnumEntryParserTest {
             new WordToken("VALUE", 0)
         );
         CEnumEntry entry = parser.parse(new TokenReader(input));
-        Assert.assertEquals("VALUE", entry.getName().getText());
+        Assert.assertEquals("VALUE", entry.getName());
         Assert.assertNull(entry.getExpression());
     }
 
@@ -50,7 +50,7 @@ public @Test class EnumEntryParserTest {
             new NumberToken("2", 25)
         );
         CEnumEntry entry = parser.parse(new TokenReader(input));
-        Assert.assertEquals("COMPLEX_VALUE", entry.getName().getText());
+        Assert.assertEquals("COMPLEX_VALUE", entry.getName());
         Assert.assertNotNull(entry.getExpression());
         Assert.assertEquals(3, entry.getExpression().count());
         Assert.assertEquals("11", entry.getExpression().get(0).getText());

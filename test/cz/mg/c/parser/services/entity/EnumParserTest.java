@@ -3,7 +3,6 @@ package cz.mg.c.parser.services.entity;
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
 import cz.mg.c.parser.components.TokenReader;
-import cz.mg.c.parser.constants.Anonymous;
 import cz.mg.c.parser.entities.CEnum;
 import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.c.parser.test.BracketFactory;
@@ -46,7 +45,7 @@ public @Test class EnumParserTest {
             new WordToken("Nom", 6)
         );
         CEnum enom = parser.parse(new TokenReader(input));
-        Assert.assertEquals("Nom", enom.getName().getText());
+        Assert.assertEquals("Nom", enom.getName());
         Assert.assertNull(enom.getEntries());
     }
 
@@ -57,7 +56,7 @@ public @Test class EnumParserTest {
             b.curlyBrackets()
         );
         CEnum enom = parser.parse(new TokenReader(input));
-        Assert.assertEquals("NomNom", enom.getName().getText());
+        Assert.assertEquals("NomNom", enom.getName());
         Assert.assertNotNull(enom.getEntries());
         Assert.assertEquals(true, enom.getEntries().isEmpty());
     }
@@ -68,7 +67,7 @@ public @Test class EnumParserTest {
             b.curlyBrackets()
         );
         CEnum enom = parser.parse(new TokenReader(input));
-        Assert.assertSame(Anonymous.NAME, enom.getName());
+        Assert.assertNull(enom.getName());
         Assert.assertNotNull(enom.getEntries());
         Assert.assertEquals(true, enom.getEntries().isEmpty());
     }
@@ -82,10 +81,10 @@ public @Test class EnumParserTest {
             )
         );
         CEnum enom = parser.parse(new TokenReader(input));
-        Assert.assertEquals("NomNom", enom.getName().getText());
+        Assert.assertEquals("NomNom", enom.getName());
         Assert.assertNotNull(enom.getEntries());
         Assert.assertEquals(1, enom.getEntries().count());
-        Assert.assertEquals("NOM", enom.getEntries().getFirst().getName().getText());
+        Assert.assertEquals("NOM", enom.getEntries().getFirst().getName());
         Assert.assertNull(enom.getEntries().getFirst().getExpression());
     }
 
@@ -102,13 +101,13 @@ public @Test class EnumParserTest {
             )
         );
         CEnum enom = parser.parse(new TokenReader(input));
-        Assert.assertEquals("NomNomNom", enom.getName().getText());
+        Assert.assertEquals("NomNomNom", enom.getName());
         Assert.assertNotNull(enom.getEntries());
         Assert.assertEquals(2, enom.getEntries().count());
-        Assert.assertEquals("NOM", enom.getEntries().getFirst().getName().getText());
+        Assert.assertEquals("NOM", enom.getEntries().getFirst().getName());
         Assert.assertNotNull(enom.getEntries().getFirst().getExpression());
         Assert.assertEquals("22", enom.getEntries().getFirst().getExpression().getLast().getText());
-        Assert.assertEquals("NOM2", enom.getEntries().getLast().getName().getText());
+        Assert.assertEquals("NOM2", enom.getEntries().getLast().getName());
         Assert.assertNull(enom.getEntries().getLast().getExpression());
     }
 

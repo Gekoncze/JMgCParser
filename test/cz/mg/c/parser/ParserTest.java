@@ -3,8 +3,6 @@ package cz.mg.c.parser;
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
 import cz.mg.annotations.requirement.Mandatory;
-import cz.mg.c.parser.constants.Anonymous;
-import cz.mg.c.parser.entities.CEnum;
 import cz.mg.c.parser.entities.*;
 import cz.mg.c.parser.entities.brackets.CurlyBrackets;
 import cz.mg.c.parser.entities.brackets.RoundBrackets;
@@ -73,29 +71,29 @@ public @Test class ParserTest {
         Assert.assertEquals(false, typedef.getType().getPointers().getFirst().isConstant());
 
         CFunction functionPointer = (CFunction) typedef.getType().getTypename();
-        Assert.assertEquals("void", functionPointer.getOutput().getTypename().getName().getText());
+        Assert.assertEquals("void", functionPointer.getOutput().getTypename().getName());
         Assert.assertEquals(0, functionPointer.getInput().count());
 
         CEnum enom = (CEnum) entities.get(1);
-        Assert.assertEquals("Day", enom.getName().getText());
+        Assert.assertEquals("Day", enom.getName());
         Assert.assertNotNull(enom.getEntries());
         Assert.assertEquals(7, enom.getEntries().count());
-        Assert.assertEquals("MONDAY", enom.getEntries().get(0).getName().getText());
-        Assert.assertEquals("TUESDAY", enom.getEntries().get(1).getName().getText());
-        Assert.assertEquals("WEDNESDAY", enom.getEntries().get(2).getName().getText());
-        Assert.assertEquals("THURSDAY", enom.getEntries().get(3).getName().getText());
-        Assert.assertEquals("FRIDAY", enom.getEntries().get(4).getName().getText());
-        Assert.assertEquals("SATURDAY", enom.getEntries().get(5).getName().getText());
-        Assert.assertEquals("SUNDAY", enom.getEntries().get(6).getName().getText());
+        Assert.assertEquals("MONDAY", enom.getEntries().get(0).getName());
+        Assert.assertEquals("TUESDAY", enom.getEntries().get(1).getName());
+        Assert.assertEquals("WEDNESDAY", enom.getEntries().get(2).getName());
+        Assert.assertEquals("THURSDAY", enom.getEntries().get(3).getName());
+        Assert.assertEquals("FRIDAY", enom.getEntries().get(4).getName());
+        Assert.assertEquals("SATURDAY", enom.getEntries().get(5).getName());
+        Assert.assertEquals("SUNDAY", enom.getEntries().get(6).getName());
 
         CUnion union = (CUnion) entities.get(2);
-        Assert.assertEquals("Color", union.getName().getText());
+        Assert.assertEquals("Color", union.getName());
         Assert.assertNotNull(union.getVariables());
         Assert.assertEquals(2, union.getVariables().count());
-        Assert.assertEquals("i", union.getVariables().getFirst().getName().getText());
-        Assert.assertEquals("int", union.getVariables().getFirst().getType().getTypename().getName().getText());
-        Assert.assertEquals("c", union.getVariables().getLast().getName().getText());
-        Assert.assertEquals("char", union.getVariables().getLast().getType().getTypename().getName().getText());
+        Assert.assertEquals("i", union.getVariables().getFirst().getName());
+        Assert.assertEquals("int", union.getVariables().getFirst().getType().getTypename().getName());
+        Assert.assertEquals("c", union.getVariables().getLast().getName());
+        Assert.assertEquals("char", union.getVariables().getLast().getType().getTypename().getName());
         Assert.assertEquals(1, union.getVariables().getLast().getType().getArrays().count());
         Assert.assertEquals(
             "4",
@@ -103,22 +101,22 @@ public @Test class ParserTest {
         );
 
         CStruct struct = (CStruct) entities.get(3);
-        Assert.assertEquals("FooBar", struct.getName().getText());
+        Assert.assertEquals("FooBar", struct.getName());
         Assert.assertNotNull(struct.getVariables());
         Assert.assertEquals(3, struct.getVariables().count());
-        Assert.assertEquals("f", struct.getVariables().get(0).getName().getText());
-        Assert.assertEquals("d", struct.getVariables().get(1).getName().getText());
-        Assert.assertEquals("c", struct.getVariables().get(2).getName().getText());
-        Assert.assertEquals("Function", struct.getVariables().get(0).getType().getTypename().getName().getText());
-        Assert.assertEquals("Day", struct.getVariables().get(1).getType().getTypename().getName().getText());
-        Assert.assertEquals("Color", struct.getVariables().get(2).getType().getTypename().getName().getText());
+        Assert.assertEquals("f", struct.getVariables().get(0).getName());
+        Assert.assertEquals("d", struct.getVariables().get(1).getName());
+        Assert.assertEquals("c", struct.getVariables().get(2).getName());
+        Assert.assertEquals("Function", struct.getVariables().get(0).getType().getTypename().getName());
+        Assert.assertEquals("Day", struct.getVariables().get(1).getType().getTypename().getName());
+        Assert.assertEquals("Color", struct.getVariables().get(2).getType().getTypename().getName());
         Assert.assertEquals(CTypename.class, struct.getVariables().get(0).getType().getTypename().getClass());
         Assert.assertEquals(CEnum.class, struct.getVariables().get(1).getType().getTypename().getClass());
         Assert.assertEquals(CUnion.class, struct.getVariables().get(2).getType().getTypename().getClass());
 
         CVariable variable = (CVariable) entities.get(4);
-        Assert.assertEquals("variable", variable.getName().getText());
-        Assert.assertEquals("FooBar", variable.getType().getTypename().getName().getText());
+        Assert.assertEquals("variable", variable.getName());
+        Assert.assertEquals("FooBar", variable.getType().getTypename().getName());
         Assert.assertEquals(CStruct.class, variable.getType().getTypename().getClass());
         Assert.assertEquals(1, variable.getType().getPointers().count());
         Assert.assertEquals(2, variable.getType().getArrays().count());
@@ -132,16 +130,16 @@ public @Test class ParserTest {
         Assert.assertEquals("1", variable.getType().getArrays().getLast().getExpression().get(2).getText());
 
         CFunction function = (CFunction) entities.get(5);
-        Assert.assertEquals("main", function.getName().getText());
-        Assert.assertEquals("int", function.getOutput().getTypename().getName().getText());
+        Assert.assertEquals("main", function.getName());
+        Assert.assertEquals("int", function.getOutput().getTypename().getName());
         Assert.assertEquals(true, function.getOutput().getArrays().isEmpty());
         Assert.assertEquals(true, function.getOutput().getPointers().isEmpty());
         Assert.assertEquals(false, function.getOutput().isConstant());
         Assert.assertEquals(2, function.getInput().count());
-        Assert.assertEquals("argc", function.getInput().getFirst().getName().getText());
-        Assert.assertEquals("argv", function.getInput().getLast().getName().getText());
-        Assert.assertEquals("int", function.getInput().getFirst().getType().getTypename().getName().getText());
-        Assert.assertEquals("char", function.getInput().getLast().getType().getTypename().getName().getText());
+        Assert.assertEquals("argc", function.getInput().getFirst().getName());
+        Assert.assertEquals("argv", function.getInput().getLast().getName());
+        Assert.assertEquals("int", function.getInput().getFirst().getType().getTypename().getName());
+        Assert.assertEquals("char", function.getInput().getLast().getType().getTypename().getName());
         Assert.assertEquals(0, function.getInput().getFirst().getType().getPointers().count());
         Assert.assertEquals(1, function.getInput().getLast().getType().getPointers().count());
         Assert.assertEquals(0, function.getInput().getFirst().getType().getArrays().count());
@@ -171,25 +169,25 @@ public @Test class ParserTest {
         Assert.assertEquals(true, entities.get(4) instanceof CFunction);
 
         CEnum enom = (CEnum) entities.get(0);
-        Assert.assertEquals("MyEnum", enom.getName().getText());
+        Assert.assertEquals("MyEnum", enom.getName());
         Assert.assertNull(enom.getEntries());
 
         CUnion union = (CUnion) entities.get(1);
-        Assert.assertEquals("MyUnion", union.getName().getText());
+        Assert.assertEquals("MyUnion", union.getName());
         Assert.assertNull(union.getVariables());
 
         CStruct struct = (CStruct) entities.get(2);
-        Assert.assertEquals("MyStruct", struct.getName().getText());
+        Assert.assertEquals("MyStruct", struct.getName());
         Assert.assertNull(struct.getVariables());
 
         CFunction function = (CFunction) entities.get(3);
-        Assert.assertEquals("myFunction", function.getName().getText());
+        Assert.assertEquals("myFunction", function.getName());
         Assert.assertNull(function.getImplementation());
-        Assert.assertEquals("void", function.getOutput().getTypename().getName().getText());
-        Assert.assertEquals("float", function.getInput().getFirst().getType().getTypename().getName().getText());
-        Assert.assertEquals("double", function.getInput().getLast().getType().getTypename().getName().getText());
-        Assert.assertSame(Anonymous.NAME, function.getInput().getFirst().getName());
-        Assert.assertSame(Anonymous.NAME, function.getInput().getLast().getName());
+        Assert.assertEquals("void", function.getOutput().getTypename().getName());
+        Assert.assertEquals("float", function.getInput().getFirst().getType().getTypename().getName());
+        Assert.assertEquals("double", function.getInput().getLast().getType().getTypename().getName());
+        Assert.assertNull(function.getInput().getFirst().getName());
+        Assert.assertNull(function.getInput().getLast().getName());
     }
 
     private void testParsePreprocessing() {
@@ -206,7 +204,7 @@ public @Test class ParserTest {
 
         List<String> entityNames = new List<>();
         for (CMainEntity entity : entities) {
-            entityNames.addLast(entity.getName().getText());
+            entityNames.addLast(entity.getName());
         }
 
         Assert.assertThatCollections(
@@ -265,10 +263,10 @@ public @Test class ParserTest {
         Assert.assertEquals("1", trueMacro.getTokens().getFirst().getText());
 
         CEnum enom = (CEnum) entities.get(4);
-        Assert.assertEquals("correct", enom.getName().getText());
+        Assert.assertEquals("correct", enom.getName());
         Assert.assertNotNull(enom.getEntries());
         Assert.assertEquals(1, enom.getEntries().count());
-        Assert.assertEquals("ANSWER", enom.getEntries().getFirst().getName().getText());
+        Assert.assertEquals("ANSWER", enom.getEntries().getFirst().getName());
         Assert.assertNotNull(enom.getEntries().getFirst().getExpression());
         Assert.assertEquals("((8+4)/2)", concat(enom.getEntries().getFirst().getExpression()));
     }

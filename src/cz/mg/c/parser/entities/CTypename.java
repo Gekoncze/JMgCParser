@@ -1,26 +1,25 @@
 package cz.mg.c.parser.entities;
 
 import cz.mg.annotations.classes.Entity;
-import cz.mg.annotations.requirement.Required;
+import cz.mg.annotations.requirement.Optional;
 import cz.mg.annotations.storage.Shared;
-import cz.mg.tokenizer.entities.tokens.WordToken;
 
 public @Entity class CTypename implements CMainEntity {
-    private WordToken name;
+    private String name;
 
     public CTypename() {
     }
 
-    public CTypename(WordToken name) {
+    public CTypename(@Optional String name) {
         this.name = name;
     }
 
-    @Required @Shared
-    public WordToken getName() {
+    @Optional @Shared
+    public String getName() {
         return name;
     }
 
-    public void setName(WordToken name) {
+    public void setName(@Optional String name) {
         this.name = name;
     }
 }

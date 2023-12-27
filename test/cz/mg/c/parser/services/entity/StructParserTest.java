@@ -3,7 +3,6 @@ package cz.mg.c.parser.services.entity;
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
 import cz.mg.c.parser.components.TokenReader;
-import cz.mg.c.parser.constants.Anonymous;
 import cz.mg.c.parser.entities.CStruct;
 import cz.mg.c.parser.entities.CVariable;
 import cz.mg.c.parser.exceptions.ParseException;
@@ -46,7 +45,7 @@ public @Test class StructParserTest {
             new WordToken("Foo", 10)
         );
         CStruct struct = parser.parse(new TokenReader(input));
-        Assert.assertEquals("Foo", struct.getName().getText());
+        Assert.assertEquals("Foo", struct.getName());
         Assert.assertNull(struct.getVariables());
     }
 
@@ -57,7 +56,7 @@ public @Test class StructParserTest {
             b.curlyBrackets()
         );
         CStruct struct = parser.parse(new TokenReader(input));
-        Assert.assertEquals("Foo", struct.getName().getText());
+        Assert.assertEquals("Foo", struct.getName());
         Assert.assertNotNull(struct.getVariables());
         Assert.assertEquals(true, struct.getVariables().isEmpty());
     }
@@ -68,7 +67,7 @@ public @Test class StructParserTest {
             b.curlyBrackets()
         );
         CStruct struct = parser.parse(new TokenReader(input));
-        Assert.assertSame(Anonymous.NAME, struct.getName());
+        Assert.assertNull(struct.getName());
         Assert.assertNotNull(struct.getVariables());
         Assert.assertEquals(true, struct.getVariables().isEmpty());
     }
@@ -86,12 +85,12 @@ public @Test class StructParserTest {
             )
         );
         CStruct struct = parser.parse(new TokenReader(input));
-        Assert.assertEquals("Foo", struct.getName().getText());
+        Assert.assertEquals("Foo", struct.getName());
         Assert.assertNotNull(struct.getVariables());
         Assert.assertEquals(1, struct.getVariables().count());
-        Assert.assertEquals("bar", struct.getVariables().getFirst().getName().getText());
+        Assert.assertEquals("bar", struct.getVariables().getFirst().getName());
         CVariable variable = struct.getVariables().getFirst();
-        Assert.assertEquals("int", variable.getType().getTypename().getName().getText());
+        Assert.assertEquals("int", variable.getType().getTypename().getName());
         Assert.assertEquals(true, variable.getType().isConstant());
         Assert.assertEquals(1, struct.getVariables().getFirst().getType().getPointers().count());
     }
@@ -113,12 +112,12 @@ public @Test class StructParserTest {
             )
         );
         CStruct struct = parser.parse(new TokenReader(input));
-        Assert.assertEquals("Bar", struct.getName().getText());
+        Assert.assertEquals("Bar", struct.getName());
         Assert.assertNotNull(struct.getVariables());
         Assert.assertEquals(3, struct.getVariables().count());
-        Assert.assertEquals("i", struct.getVariables().get(0).getName().getText());
-        Assert.assertEquals("l", struct.getVariables().get(1).getName().getText());
-        Assert.assertEquals("s", struct.getVariables().get(2).getName().getText());
+        Assert.assertEquals("i", struct.getVariables().get(0).getName());
+        Assert.assertEquals("l", struct.getVariables().get(1).getName());
+        Assert.assertEquals("s", struct.getVariables().get(2).getName());
     }
 
     private void testInvalid() {

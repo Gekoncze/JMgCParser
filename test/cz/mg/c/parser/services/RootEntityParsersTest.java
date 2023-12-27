@@ -64,7 +64,7 @@ public @Test class RootEntityParsersTest {
         Assert.assertEquals(true, entities.getFirst() instanceof CTypedef);
 
         CTypedef typedef = (CTypedef) entities.getFirst();
-        Assert.assertEquals("IntPtr", typedef.getName().getText());
+        Assert.assertEquals("IntPtr", typedef.getName());
         Assert.assertEquals(true, typedef.getType().isConstant());
         Assert.assertEquals(true, typedef.getType().getArrays().isEmpty());
         Assert.assertEquals(1, typedef.getType().getPointers().count());
@@ -89,8 +89,8 @@ public @Test class RootEntityParsersTest {
         Assert.assertEquals(true, entities.getFirst() instanceof CVariable);
 
         CVariable variable = (CVariable) entities.getFirst();
-        Assert.assertEquals("foo", variable.getName().getText());
-        Assert.assertEquals("int", variable.getType().getTypename().getName().getText());
+        Assert.assertEquals("foo", variable.getName());
+        Assert.assertEquals("int", variable.getType().getTypename().getName());
         Assert.assertEquals(1, variable.getType().getArrays().count());
         Assert.assertEquals(2, variable.getType().getPointers().count());
         Assert.assertEquals(3, variable.getType().getArrays().getFirst().getExpression().count());
@@ -121,16 +121,16 @@ public @Test class RootEntityParsersTest {
         Assert.assertEquals(true, entities.getFirst() instanceof CFunction);
 
         CFunction function = (CFunction) entities.getFirst();
-        Assert.assertEquals("getAddress", function.getName().getText());
-        Assert.assertEquals("void", function.getOutput().getTypename().getName().getText());
+        Assert.assertEquals("getAddress", function.getName());
+        Assert.assertEquals("void", function.getOutput().getTypename().getName());
         Assert.assertEquals(1, function.getOutput().getPointers().count());
         Assert.assertEquals(true, function.getOutput().getArrays().isEmpty());
         Assert.assertEquals(false, function.getOutput().isConstant());
         Assert.assertEquals(2, function.getInput().count());
-        Assert.assertEquals("bar", function.getInput().getFirst().getName().getText());
-        Assert.assertEquals("foo", function.getInput().getFirst().getType().getTypename().getName().getText());
-        Assert.assertEquals("constant", function.getInput().getLast().getName().getText());
-        Assert.assertEquals("int", function.getInput().getLast().getType().getTypename().getName().getText());
+        Assert.assertEquals("bar", function.getInput().getFirst().getName());
+        Assert.assertEquals("foo", function.getInput().getFirst().getType().getTypename().getName());
+        Assert.assertEquals("constant", function.getInput().getLast().getName());
+        Assert.assertEquals("int", function.getInput().getLast().getType().getTypename().getName());
         Assert.assertEquals(true, function.getInput().getLast().getType().isConstant());
         Assert.assertNotNull(function.getImplementation());
         Assert.assertEquals(3, function.getImplementation().count());
@@ -157,13 +157,13 @@ public @Test class RootEntityParsersTest {
         Assert.assertEquals(true, entities.getFirst() instanceof CStruct);
 
         CStruct struct = (CStruct) entities.getFirst();
-        Assert.assertEquals("FooBar", struct.getName().getText());
+        Assert.assertEquals("FooBar", struct.getName());
         Assert.assertNotNull(struct.getVariables());
         Assert.assertEquals(2, struct.getVariables().count());
-        Assert.assertEquals("a", struct.getVariables().getFirst().getName().getText());
-        Assert.assertEquals("b", struct.getVariables().getLast().getName().getText());
-        Assert.assertEquals("int", struct.getVariables().getFirst().getType().getTypename().getName().getText());
-        Assert.assertEquals("int", struct.getVariables().getLast().getType().getTypename().getName().getText());
+        Assert.assertEquals("a", struct.getVariables().getFirst().getName());
+        Assert.assertEquals("b", struct.getVariables().getLast().getName());
+        Assert.assertEquals("int", struct.getVariables().getFirst().getType().getTypename().getName());
+        Assert.assertEquals("int", struct.getVariables().getLast().getType().getTypename().getName());
         Assert.assertEquals(1, struct.getVariables().getLast().getType().getPointers().count());
     }
 
@@ -193,15 +193,15 @@ public @Test class RootEntityParsersTest {
         Assert.assertEquals(true, entities.getFirst() instanceof CUnion);
 
         CUnion union = (CUnion) entities.getFirst();
-        Assert.assertEquals("Color", union.getName().getText());
+        Assert.assertEquals("Color", union.getName());
         Assert.assertNotNull(union.getVariables());
         Assert.assertEquals(3, union.getVariables().count());
-        Assert.assertEquals("i", union.getVariables().get(0).getName().getText());
-        Assert.assertEquals("c", union.getVariables().get(1).getName().getText());
-        Assert.assertEquals("f", union.getVariables().get(2).getName().getText());
-        Assert.assertEquals("int", union.getVariables().get(0).getType().getTypename().getName().getText());
-        Assert.assertEquals("char", union.getVariables().get(1).getType().getTypename().getName().getText());
-        Assert.assertEquals("float", union.getVariables().get(2).getType().getTypename().getName().getText());
+        Assert.assertEquals("i", union.getVariables().get(0).getName());
+        Assert.assertEquals("c", union.getVariables().get(1).getName());
+        Assert.assertEquals("f", union.getVariables().get(2).getName());
+        Assert.assertEquals("int", union.getVariables().get(0).getType().getTypename().getName());
+        Assert.assertEquals("char", union.getVariables().get(1).getType().getTypename().getName());
+        Assert.assertEquals("float", union.getVariables().get(2).getType().getTypename().getName());
         Assert.assertEquals(1, union.getVariables().get(1).getType().getArrays().count());
         Assert.assertEquals(1, union.getVariables().get(1).getType().getArrays().getFirst().getExpression().count());
         Assert.assertEquals(
@@ -233,13 +233,13 @@ public @Test class RootEntityParsersTest {
         Assert.assertEquals(true, entities.getFirst() instanceof CEnum);
 
         CEnum enom = (CEnum) entities.getFirst();
-        Assert.assertEquals("Color", enom.getName().getText());
+        Assert.assertEquals("Color", enom.getName());
         Assert.assertNotNull(enom.getEntries());
         Assert.assertEquals(4, enom.getEntries().count());
-        Assert.assertEquals("RED", enom.getEntries().get(0).getName().getText());
-        Assert.assertEquals("GREEN", enom.getEntries().get(1).getName().getText());
-        Assert.assertEquals("BLUE", enom.getEntries().get(2).getName().getText());
-        Assert.assertEquals("ALPHA", enom.getEntries().get(3).getName().getText());
+        Assert.assertEquals("RED", enom.getEntries().get(0).getName());
+        Assert.assertEquals("GREEN", enom.getEntries().get(1).getName());
+        Assert.assertEquals("BLUE", enom.getEntries().get(2).getName());
+        Assert.assertEquals("ALPHA", enom.getEntries().get(3).getName());
 
         List<Token> expression = enom.getEntries().get(0).getExpression();
         Assert.assertNotNull(expression);
@@ -266,13 +266,13 @@ public @Test class RootEntityParsersTest {
         Assert.assertEquals(true, entities.getFirst() instanceof CVariable);
 
         CVariable variable = (CVariable) entities.getFirst();
-        Assert.assertEquals("fptr", variable.getName().getText());
+        Assert.assertEquals("fptr", variable.getName());
         Assert.assertEquals(1, variable.getType().getPointers().count());
         Assert.assertEquals(true, variable.getType().getTypename() instanceof CFunction);
 
         CFunction function = (CFunction) variable.getType().getTypename();
         Assert.assertEquals(true, function.getInput().isEmpty());
-        Assert.assertEquals("void", function.getOutput().getTypename().getName().getText());
+        Assert.assertEquals("void", function.getOutput().getTypename().getName());
     }
 
     private void testParseMultiple() {

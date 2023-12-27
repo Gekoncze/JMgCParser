@@ -4,7 +4,6 @@ import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.c.parser.components.TokenReader;
-import cz.mg.c.parser.constants.Anonymous;
 import cz.mg.c.parser.entities.CPointer;
 import cz.mg.c.parser.entities.CStruct;
 import cz.mg.c.parser.entities.CType;
@@ -53,7 +52,7 @@ public @Test class TypeParserTest {
         CType type = parser.parse(reader);
 
         Assert.assertEquals(false, type.isConstant());
-        Assert.assertEquals("foo", type.getTypename().getName().getText());
+        Assert.assertEquals("foo", type.getTypename().getName());
         Assert.assertEquals(true, type.getPointers().isEmpty());
         reader.readEnd();
     }
@@ -67,7 +66,7 @@ public @Test class TypeParserTest {
         CType type = parser.parse(reader);
 
         Assert.assertEquals(true, type.isConstant());
-        Assert.assertEquals("foo", type.getTypename().getName().getText());
+        Assert.assertEquals("foo", type.getTypename().getName());
         Assert.assertEquals(true, type.getPointers().isEmpty());
         reader.readEnd();
     }
@@ -81,7 +80,7 @@ public @Test class TypeParserTest {
         CType type = parser.parse(reader);
 
         Assert.assertEquals(true, type.isConstant());
-        Assert.assertEquals("foo", type.getTypename().getName().getText());
+        Assert.assertEquals("foo", type.getTypename().getName());
         Assert.assertEquals(true, type.getPointers().isEmpty());
         reader.readEnd();
     }
@@ -95,7 +94,7 @@ public @Test class TypeParserTest {
         CType type = parser.parse(reader);
 
         Assert.assertEquals(false, type.isConstant());
-        Assert.assertEquals("foo", type.getTypename().getName().getText());
+        Assert.assertEquals("foo", type.getTypename().getName());
         Assert.assertEquals(true, type.getPointers().isEmpty());
         Assert.assertEquals("bar", reader.read().getText());
         reader.readEnd();
@@ -112,7 +111,7 @@ public @Test class TypeParserTest {
         CType type = parser.parse(reader);
 
         Assert.assertEquals(false, type.isConstant());
-        Assert.assertEquals("foo", type.getTypename().getName().getText());
+        Assert.assertEquals("foo", type.getTypename().getName());
         Assert.assertEquals(3, type.getPointers().count());
 
         for (CPointer pointer : type.getPointers()) {
@@ -131,7 +130,7 @@ public @Test class TypeParserTest {
         CType type = parser.parse(reader);
 
         Assert.assertEquals(false, type.isConstant());
-        Assert.assertEquals("dst", type.getTypename().getName().getText());
+        Assert.assertEquals("dst", type.getTypename().getName());
         Assert.assertEquals(3, type.getPointers().count());
 
         for (CPointer pointer : type.getPointers()) {
@@ -213,7 +212,7 @@ public @Test class TypeParserTest {
         CType type = parser.parse(reader);
 
         Assert.assertEquals(typenameConst, type.isConstant());
-        Assert.assertEquals("foo", type.getTypename().getName().getText());
+        Assert.assertEquals("foo", type.getTypename().getName());
         Assert.assertEquals(pointersConst.length, type.getPointers().count());
 
         int i = 0;
@@ -251,6 +250,6 @@ public @Test class TypeParserTest {
         Assert.assertEquals(1, type.getPointers().count());
         Assert.assertEquals(true, type.isConstant());
         Assert.assertEquals(true, type.getTypename() instanceof CStruct);
-        Assert.assertSame(Anonymous.NAME, type.getTypename().getName());
+        Assert.assertNull(type.getTypename().getName());
     }
 }

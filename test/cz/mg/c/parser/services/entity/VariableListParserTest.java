@@ -2,7 +2,6 @@ package cz.mg.c.parser.services.entity;
 
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
-import cz.mg.c.parser.constants.Anonymous;
 import cz.mg.c.parser.entities.CVariable;
 import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.c.parser.test.BracketFactory;
@@ -45,8 +44,8 @@ public @Test class VariableListParserTest {
             new WordToken("int", 0)
         ));
         Assert.assertEquals(1, variables.count());
-        Assert.assertEquals("int", variables.getFirst().getType().getTypename().getName().getText());
-        Assert.assertSame(Anonymous.NAME, variables.getFirst().getName());
+        Assert.assertEquals("int", variables.getFirst().getType().getTypename().getName());
+        Assert.assertNull(variables.getFirst().getName());
     }
 
     private void testParseSingle() {
@@ -55,8 +54,8 @@ public @Test class VariableListParserTest {
             new WordToken("a", 5)
         ));
         Assert.assertEquals(1, variables.count());
-        Assert.assertEquals("int", variables.getFirst().getType().getTypename().getName().getText());
-        Assert.assertEquals("a", variables.getFirst().getName().getText());
+        Assert.assertEquals("int", variables.getFirst().getType().getTypename().getName());
+        Assert.assertEquals("a", variables.getFirst().getName());
     }
 
     private void testParseMultiple() {
@@ -69,11 +68,11 @@ public @Test class VariableListParserTest {
             new WordToken("b", 15)
         ));
         Assert.assertEquals(2, variables.count());
-        Assert.assertEquals("int", variables.getFirst().getType().getTypename().getName().getText());
-        Assert.assertEquals("a", variables.getFirst().getName().getText());
+        Assert.assertEquals("int", variables.getFirst().getType().getTypename().getName());
+        Assert.assertEquals("a", variables.getFirst().getName());
         Assert.assertEquals(1, variables.getFirst().getType().getPointers().count());
-        Assert.assertEquals("float", variables.getLast().getType().getTypename().getName().getText());
-        Assert.assertEquals("b", variables.getLast().getName().getText());
+        Assert.assertEquals("float", variables.getLast().getType().getTypename().getName());
+        Assert.assertEquals("b", variables.getLast().getName());
         Assert.assertEquals(0, variables.getLast().getType().getPointers().count());
     }
 }

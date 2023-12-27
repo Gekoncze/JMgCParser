@@ -3,11 +3,10 @@ package cz.mg.c.parser.services.entity;
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
 import cz.mg.c.parser.components.TokenReader;
-import cz.mg.c.parser.constants.Anonymous;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
-import cz.mg.tokenizer.entities.tokens.WordToken;
 import cz.mg.tokenizer.entities.tokens.SeparatorToken;
+import cz.mg.tokenizer.entities.tokens.WordToken;
 
 public @Test class NameParserTest {
     public static void main(String[] args) {
@@ -24,21 +23,21 @@ public @Test class NameParserTest {
     private final @Service NameParser parser = NameParser.getInstance();
 
     private void testParseEmpty() {
-        WordToken name = parser.parse(new TokenReader(new List<>()));
-        Assert.assertSame(Anonymous.NAME, name);
+        String name = parser.parse(new TokenReader(new List<>()));
+        Assert.assertNull(name);
     }
 
     private void testParseAnonymous() {
         TokenReader reader = new TokenReader(new List<>(new SeparatorToken(",", 10)));
-        WordToken name = parser.parse(reader);
-        Assert.assertSame(Anonymous.NAME, name);
+        String name = parser.parse(reader);
+        Assert.assertNull(name);
         Assert.assertEquals(true, reader.has(",", SeparatorToken.class));
     }
 
     private void testParseName() {
         TokenReader reader = new TokenReader(new List<>(new WordToken("foo", 0), new SeparatorToken(",", 10)));
-        WordToken name = parser.parse(reader);
-        Assert.assertEquals("foo", name.getText());
+        String name = parser.parse(reader);
+        Assert.assertEquals("foo", name);
         Assert.assertEquals(true, reader.has(",", SeparatorToken.class));
     }
 }

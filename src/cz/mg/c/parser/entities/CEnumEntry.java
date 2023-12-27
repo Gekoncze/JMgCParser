@@ -2,25 +2,23 @@ package cz.mg.c.parser.entities;
 
 import cz.mg.annotations.classes.Entity;
 import cz.mg.annotations.requirement.Optional;
-import cz.mg.annotations.requirement.Required;
 import cz.mg.annotations.storage.Shared;
 import cz.mg.collections.list.List;
 import cz.mg.tokenizer.entities.Token;
-import cz.mg.tokenizer.entities.tokens.WordToken;
 
 public @Entity class CEnumEntry implements CEntity {
-    private WordToken name;
+    private String name;
     private List<Token> expression;
 
     public CEnumEntry() {
     }
 
-    @Required @Shared
-    public WordToken getName() {
+    @Optional @Shared
+    public String getName() {
         return name;
     }
 
-    public void setName(WordToken name) {
+    public void setName(@Optional String name) {
         this.name = name;
     }
 
