@@ -10,6 +10,10 @@ public @Entity class CPointer implements CEntity {
     public CPointer() {
     }
 
+    public CPointer(boolean constant) {
+        this.constant = constant;
+    }
+
     @Required @Value
     public boolean isConstant() {
         return constant;
