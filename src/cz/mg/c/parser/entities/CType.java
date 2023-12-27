@@ -16,6 +16,13 @@ public @Entity class CType implements CEntity {
     public CType() {
     }
 
+    public CType(CTypename typename, boolean constant, List<CPointer> pointers, List<CArray> arrays) {
+        this.typename = typename;
+        this.constant = constant;
+        this.pointers = pointers;
+        this.arrays = arrays;
+    }
+
     @Required @Shared
     public CTypename getTypename() {
         return typename;
