@@ -5,5 +5,6 @@
     ...
 
 ### LATER ###
+    consider moving entities to separate project + move to cz.mg.c.entities
     vararg support for functions and function pointers
     rewrite existing tests to use token factory where possible
