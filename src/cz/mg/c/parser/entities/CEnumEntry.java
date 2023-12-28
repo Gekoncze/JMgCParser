@@ -2,6 +2,7 @@ package cz.mg.c.parser.entities;
 
 import cz.mg.annotations.classes.Entity;
 import cz.mg.annotations.requirement.Optional;
+import cz.mg.annotations.requirement.Required;
 import cz.mg.annotations.storage.Shared;
 import cz.mg.collections.list.List;
 import cz.mg.tokenizer.entities.Token;
@@ -13,17 +14,17 @@ public @Entity class CEnumEntry implements CEntity {
     public CEnumEntry() {
     }
 
-    public CEnumEntry(@Optional String name, List<Token> expression) {
+    public CEnumEntry(String name, List<Token> expression) {
         this.name = name;
         this.expression = expression;
     }
 
-    @Optional @Shared
+    @Required @Shared
     public String getName() {
         return name;
     }
 
-    public void setName(@Optional String name) {
+    public void setName(String name) {
         this.name = name;
     }
 
