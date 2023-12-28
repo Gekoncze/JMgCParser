@@ -16,6 +16,13 @@ public @Entity class CFunction extends CTypename {
     public CFunction() {
     }
 
+    public CFunction(@Optional String name, CType output, List<CVariable> input, List<Token> implementation) {
+        super(name);
+        this.output = output;
+        this.input = input;
+        this.implementation = implementation;
+    }
+
     @Required @Shared
     public CType getOutput() {
         return output;

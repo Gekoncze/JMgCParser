@@ -13,6 +13,11 @@ public @Entity class CEnumEntry implements CEntity {
     public CEnumEntry() {
     }
 
+    public CEnumEntry(@Optional String name, List<Token> expression) {
+        this.name = name;
+        this.expression = expression;
+    }
+
     @Optional @Shared
     public String getName() {
         return name;

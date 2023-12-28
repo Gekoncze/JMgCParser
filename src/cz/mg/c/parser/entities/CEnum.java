@@ -11,6 +11,11 @@ public @Entity class CEnum extends CTypename {
     public CEnum() {
     }
 
+    public CEnum(String name, List<CEnumEntry> entries) {
+        super(name);
+        this.entries = entries;
+    }
+
     @Optional @Part
     public List<CEnumEntry> getEntries() {
         return entries;

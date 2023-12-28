@@ -11,6 +11,11 @@ public @Entity class CStruct extends CTypename {
     public CStruct() {
     }
 
+    public CStruct(@Optional String name, List<CVariable> variables) {
+        super(name);
+        this.variables = variables;
+    }
+
     @Optional @Part
     public List<CVariable> getVariables() {
         return variables;

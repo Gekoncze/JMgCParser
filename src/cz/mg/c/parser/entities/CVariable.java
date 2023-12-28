@@ -13,6 +13,11 @@ public @Entity class CVariable implements CMainEntity {
     public CVariable() {
     }
 
+    public CVariable(CType type, @Optional String name) {
+        this.type = type;
+        this.name = name;
+    }
+
     @Required @Shared
     public CType getType() {
         return type;
