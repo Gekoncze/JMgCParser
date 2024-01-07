@@ -2,7 +2,7 @@ package cz.mg.c.parser;
 
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
-import cz.mg.c.parser.entities.CFile;
+import cz.mg.c.entities.CFile;
 import cz.mg.c.parser.services.RootEntityParsers;
 import cz.mg.c.parser.services.bracket.BracketParsers;
 import cz.mg.c.preprocessor.Preprocessor;

@@ -2,10 +2,10 @@ package cz.mg.c.parser.test;
 
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
-import cz.mg.c.parser.entities.brackets.Brackets;
-import cz.mg.c.parser.entities.brackets.CurlyBrackets;
-import cz.mg.c.parser.entities.brackets.RoundBrackets;
-import cz.mg.c.parser.entities.brackets.SquareBrackets;
+import cz.mg.c.entities.brackets.Brackets;
+import cz.mg.c.entities.brackets.CurlyBrackets;
+import cz.mg.c.entities.brackets.RoundBrackets;
+import cz.mg.c.entities.brackets.SquareBrackets;
 import cz.mg.collections.list.List;
 import cz.mg.tokenizer.entities.Token;
 

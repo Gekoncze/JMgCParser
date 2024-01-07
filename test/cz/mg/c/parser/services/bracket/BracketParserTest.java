@@ -2,8 +2,8 @@ package cz.mg.c.parser.services.bracket;
 
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
-import cz.mg.c.parser.entities.brackets.Brackets;
-import cz.mg.c.parser.entities.brackets.RoundBrackets;
+import cz.mg.c.entities.brackets.Brackets;
+import cz.mg.c.entities.brackets.RoundBrackets;
 import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.c.parser.test.BracketFactory;
 import cz.mg.collections.list.List;

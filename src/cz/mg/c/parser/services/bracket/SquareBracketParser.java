@@ -1,7 +1,7 @@
 package cz.mg.c.parser.services.bracket;
 
 import cz.mg.annotations.classes.Service;
-import cz.mg.c.parser.entities.brackets.SquareBrackets;
+import cz.mg.c.entities.brackets.SquareBrackets;
 
 public @Service class SquareBracketParser extends BracketParser {
     private static volatile @Service SquareBracketParser instance;

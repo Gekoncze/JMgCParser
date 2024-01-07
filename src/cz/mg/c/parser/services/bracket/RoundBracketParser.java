@@ -1,7 +1,7 @@
 package cz.mg.c.parser.services.bracket;
 
 import cz.mg.annotations.classes.Service;
-import cz.mg.c.parser.entities.brackets.RoundBrackets;
+import cz.mg.c.entities.brackets.RoundBrackets;
 
 public @Service class RoundBracketParser extends BracketParser {
     private static volatile @Service RoundBracketParser instance;

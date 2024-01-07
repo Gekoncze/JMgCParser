@@ -3,7 +3,7 @@ package cz.mg.c.parser.services.entity.type;
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.c.parser.components.TokenReader;
-import cz.mg.c.parser.entities.CType;
+import cz.mg.c.entities.CType;
 import cz.mg.c.parser.services.entity.UnionParser;
 
 public @Service class UnionTypeParser implements InlineTypeParser {

@@ -4,7 +4,7 @@ import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.annotations.requirement.Optional;
 import cz.mg.c.parser.components.TokenReader;
-import cz.mg.c.parser.entities.CType;
+import cz.mg.c.entities.CType;
 import cz.mg.tokenizer.entities.tokens.WordToken;
 
 public @Service class InlineTypeParsers {
