@@ -2,18 +2,15 @@ package cz.mg.c.parser.services.entity;
 
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
-import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.entities.CFunction;
 import cz.mg.c.entities.CType;
+import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.c.parser.test.BracketFactory;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
 import cz.mg.tokenizer.entities.Token;
-import cz.mg.tokenizer.entities.tokens.NumberToken;
-import cz.mg.tokenizer.entities.tokens.OperatorToken;
-import cz.mg.tokenizer.entities.tokens.SeparatorToken;
-import cz.mg.tokenizer.entities.tokens.WordToken;
+import cz.mg.tokenizer.test.TokenFactory;
 
 public @Test class FunctionParserTest {
     public static void main(String[] args) {
@@ -39,6 +36,7 @@ public @Test class FunctionParserTest {
 
     private final @Service FunctionParser parser = FunctionParser.getInstance();
     private final @Service BracketFactory b = BracketFactory.getInstance();
+    private final @Service TokenFactory f = TokenFactory.getInstance();
 
     private void testEmpty() {
         Assert.assertThatCode(() -> {
@@ -48,8 +46,8 @@ public @Test class FunctionParserTest {
 
     private void testNoOutput() {
         List<Token> input = new List<>(
-            new WordToken("void", 0),
-            new WordToken("foo", 7),
+            f.word("void"),
+            f.word("foo"),
             b.roundBrackets()
         );
         CFunction function = parser.parse(new TokenReader(input));
@@ -61,7 +59,7 @@ public @Test class FunctionParserTest {
 
     private void testInterfaceAnonymous() {
         List<Token> input = new List<>(
-            new WordToken("void", 0),
+            f.word("void"),
             b.roundBrackets()
         );
         CFunction function = parser.parse(new TokenReader(input));
@@ -73,9 +71,9 @@ public @Test class FunctionParserTest {
 
     private void testInterfaceNoInput() {
         List<Token> input = new List<>(
-            new WordToken("int", 0),
-            new OperatorToken("*", 5),
-            new WordToken("foobar", 7),
+            f.word("int"),
+            f.operator("*"),
+            f.word("foobar"),
             b.roundBrackets()
         );
         CFunction function = parser.parse(new TokenReader(input));
@@ -88,12 +86,12 @@ public @Test class FunctionParserTest {
 
     private void testInterfaceSingleInput() {
         List<Token> input = new List<>(
-            new WordToken("int", 0),
-            new WordToken("const", 4),
-            new WordToken("constantin", 10),
+            f.word("int"),
+            f.word("const"),
+            f.word("constantin"),
             b.roundBrackets(
-                new WordToken("float", 13),
-                new WordToken("floating", 20)
+                f.word("float"),
+                f.word("floating")
             )
         );
         CFunction function = parser.parse(new TokenReader(input));
@@ -109,14 +107,14 @@ public @Test class FunctionParserTest {
 
     private void testInterfaceSingleInputArray() {
         List<Token> input = new List<>(
-            new WordToken("int", 0),
-            new WordToken("const", 4),
-            new WordToken("constantin", 10),
+            f.word("int"),
+            f.word("const"),
+            f.word("constantin"),
             b.roundBrackets(
-                new WordToken("float", 13),
-                new WordToken("floating", 20),
+                f.word("float"),
+                f.word("floating"),
                 b.squareBrackets(
-                    new NumberToken("10", 23)
+                    f.number("10")
                 )
             )
         );
@@ -133,19 +131,19 @@ public @Test class FunctionParserTest {
 
     private void testInterfaceMultipleInput() {
         List<Token> input = new List<>(
-            new WordToken("void", 0),
-            new WordToken("foobar", 10),
+            f.word("void"),
+            f.word("foobar"),
             b.roundBrackets(
-                new WordToken("float", 13),
-                new WordToken("floating", 20),
-                new SeparatorToken(",", 21),
-                new WordToken("double", 28),
-                new WordToken("doubling", 35),
-                new SeparatorToken(",", 36),
-                new WordToken("void", 44),
-                new OperatorToken("*", 50),
-                new OperatorToken("*", 51),
-                new WordToken("voiding", 53)
+                f.word("float"),
+                f.word("floating"),
+                f.separator(","),
+                f.word("double"),
+                f.word("doubling"),
+                f.separator(","),
+                f.word("void"),
+                f.operator("*"),
+                f.operator("*"),
+                f.word("voiding")
             )
         );
         CFunction function = parser.parse(new TokenReader(input));
@@ -164,15 +162,15 @@ public @Test class FunctionParserTest {
 
     private void testInterfaceAnonymousInput() {
         List<Token> input = new List<>(
-            new WordToken("void", 0),
+            f.word("void"),
             b.roundBrackets(
-                new WordToken("float", 13),
-                new SeparatorToken(",", 21),
-                new WordToken("double", 28),
-                new SeparatorToken(",", 36),
-                new WordToken("void", 44),
-                new OperatorToken("*", 50),
-                new OperatorToken("*", 51)
+                f.word("float"),
+                f.separator(","),
+                f.word("double"),
+                f.separator(","),
+                f.word("void"),
+                f.operator("*"),
+                f.operator("*")
             )
         );
         CFunction function = parser.parse(new TokenReader(input));
@@ -191,13 +189,13 @@ public @Test class FunctionParserTest {
 
     private void testInterfaceAnonymousInputArray() {
         List<Token> input = new List<>(
-            new WordToken("int", 0),
-            new WordToken("const", 4),
-            new WordToken("constantin", 10),
+            f.word("int"),
+            f.word("const"),
+            f.word("constantin"),
             b.roundBrackets(
-                new WordToken("float", 13),
+                f.word("float"),
                 b.squareBrackets(
-                    new NumberToken("10", 23)
+                    f.number("10")
                 )
             )
         );
@@ -215,13 +213,13 @@ public @Test class FunctionParserTest {
     private void testInterfaceInvalidInput() {
         Assert.assertThatCode(() -> {
             List<Token> input = new List<>(
-                new WordToken("void", 0),
-                new WordToken("foobar", 10),
+                f.word("void"),
+                f.word("foobar"),
                 b.roundBrackets(
-                    new WordToken("float", 13),
-                    new WordToken("floating", 20),
-                    new WordToken("double", 28),
-                    new WordToken("doubling", 35)
+                    f.word("float"),
+                    f.word("floating"),
+                    f.word("double"),
+                    f.word("doubling")
                 )
             );
             parser.parse(new TokenReader(input));
@@ -230,8 +228,8 @@ public @Test class FunctionParserTest {
 
     private void testFunctionEmpty() {
         List<Token> input = new List<>(
-            new WordToken("void", 0),
-            new WordToken("space", 6),
+            f.word("void"),
+            f.word("space"),
             b.roundBrackets(),
             b.curlyBrackets()
         );
@@ -245,22 +243,22 @@ public @Test class FunctionParserTest {
 
     private void testFunction() {
         List<Token> input = new List<>(
-            new WordToken("void", 0),
-            new OperatorToken("*", 5),
-            new WordToken("foobar", 10),
+            f.word("void"),
+            f.operator("*"),
+            f.word("foobar"),
             b.roundBrackets(
-                new WordToken("float", 13),
-                new OperatorToken("*", 19),
-                new WordToken("floating", 20),
-                new SeparatorToken(",", 21),
-                new WordToken("double", 28),
-                new OperatorToken("*", 34),
-                new WordToken("doubling", 35)
+                f.word("float"),
+                f.operator("*"),
+                f.word("floating"),
+                f.separator(","),
+                f.word("double"),
+                f.operator("*"),
+                f.word("doubling")
             ),
             b.curlyBrackets(
-                new WordToken("return", 40),
-                new WordToken("null", 47),
-                new SeparatorToken(";", 52)
+                f.word("return"),
+                f.word("null"),
+                f.separator(";")
             )
         );
         CFunction function = parser.parse(new TokenReader(input));
@@ -281,7 +279,7 @@ public @Test class FunctionParserTest {
 
     private void testParseWithType() {
         List<Token> input = new List<>(
-            new WordToken("space", 6),
+            f.word("space"),
             b.roundBrackets(),
             b.curlyBrackets()
         );

@@ -7,9 +7,7 @@ import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.c.parser.test.BracketFactory;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
-import cz.mg.tokenizer.entities.tokens.OperatorToken;
-import cz.mg.tokenizer.entities.tokens.SeparatorToken;
-import cz.mg.tokenizer.entities.tokens.WordToken;
+import cz.mg.tokenizer.test.TokenFactory;
 
 public @Test class VariableListParserTest {
     public static void main(String[] args) {
@@ -27,6 +25,7 @@ public @Test class VariableListParserTest {
 
     private final @Service VariableListParser parser = VariableListParser.getInstance();
     private final @Service BracketFactory b = BracketFactory.getInstance();
+    private final @Service TokenFactory f = TokenFactory.getInstance();
 
     private void testParseEmpty() {
         List<CVariable> variables = parser.parse(b.roundBrackets());
@@ -35,13 +34,13 @@ public @Test class VariableListParserTest {
 
     private void testParseIllegalList() {
         Assert.assertThatCode(() -> {
-            parser.parse(b.roundBrackets(new SeparatorToken(",", 0)));
+            parser.parse(b.roundBrackets(f.separator(",")));
         }).throwsException(ParseException.class);
     }
 
     private void testParseAnonymous() {
         List<CVariable> variables = parser.parse(b.roundBrackets(
-            new WordToken("int", 0)
+            f.word("int")
         ));
         Assert.assertEquals(1, variables.count());
         Assert.assertEquals("int", variables.getFirst().getType().getTypename().getName());
@@ -50,8 +49,8 @@ public @Test class VariableListParserTest {
 
     private void testParseSingle() {
         List<CVariable> variables = parser.parse(b.roundBrackets(
-            new WordToken("int", 0),
-            new WordToken("a", 5)
+            f.word("int"),
+            f.word("a")
         ));
         Assert.assertEquals(1, variables.count());
         Assert.assertEquals("int", variables.getFirst().getType().getTypename().getName());
@@ -60,12 +59,12 @@ public @Test class VariableListParserTest {
 
     private void testParseMultiple() {
         List<CVariable> variables = parser.parse(b.roundBrackets(
-            new WordToken("int", 0),
-            new OperatorToken("*", 4),
-            new WordToken("a", 5),
-            new SeparatorToken(",", 6),
-            new WordToken("float", 8),
-            new WordToken("b", 15)
+            f.word("int"),
+            f.operator("*"),
+            f.word("a"),
+            f.separator(","),
+            f.word("float"),
+            f.word("b")
         ));
         Assert.assertEquals(2, variables.count());
         Assert.assertEquals("int", variables.getFirst().getType().getTypename().getName());

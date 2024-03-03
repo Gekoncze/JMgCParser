@@ -6,9 +6,7 @@ import cz.mg.c.parser.components.TokenReader;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
 import cz.mg.tokenizer.entities.Token;
-import cz.mg.tokenizer.entities.tokens.DoubleQuoteToken;
-import cz.mg.tokenizer.entities.tokens.WordToken;
-import cz.mg.tokenizer.entities.tokens.NumberToken;
+import cz.mg.tokenizer.test.TokenFactory;
 
 public @Test class ConstParserTest {
     public static void main(String[] args) {
@@ -25,6 +23,7 @@ public @Test class ConstParserTest {
     }
 
     private final @Service ConstParser parser = ConstParser.getInstance();
+    private final @Service TokenFactory f = TokenFactory.getInstance();
 
     private void testParseEmpty() {
         Assert.assertEquals(
@@ -36,17 +35,17 @@ public @Test class ConstParserTest {
     private void testParseSingle() {
         Assert.assertEquals(
             true,
-            parser.parse(new TokenReader(new List<>(new WordToken("const", 0))))
+            parser.parse(new TokenReader(new List<>(f.word("const"))))
         );
 
         Assert.assertEquals(
             false,
-            parser.parse(new TokenReader(new List<>(new DoubleQuoteToken("const", 0))))
+            parser.parse(new TokenReader(new List<>(f.doubleQuote("const"))))
         );
 
         Assert.assertEquals(
             false,
-            parser.parse(new TokenReader(new List<>(new NumberToken("0", 0))))
+            parser.parse(new TokenReader(new List<>(f.number("0"))))
         );
     }
 
@@ -54,44 +53,44 @@ public @Test class ConstParserTest {
         Assert.assertEquals(
             true,
             parser.parse(new TokenReader(new List<>(
-                new WordToken("const", 0),
-                new WordToken("const", 0),
-                new WordToken("const", 0)
+                f.word("const"),
+                f.word("const"),
+                f.word("const")
             )))
         );
 
         Assert.assertEquals(
             false,
             parser.parse(new TokenReader(new List<>(
-                new WordToken("foo", 0),
-                new WordToken("bar", 0),
-                new WordToken("const", 0)
+                f.word("foo"),
+                f.word("bar"),
+                f.word("const")
             )))
         );
 
         Assert.assertEquals(
             true,
             parser.parse(new TokenReader(new List<>(
-                new WordToken("const", 0),
-                new WordToken("foo", 0),
-                new WordToken("bar", 0)
+                f.word("const"),
+                f.word("foo"),
+                f.word("bar")
             )))
         );
 
         Assert.assertEquals(
             false,
             parser.parse(new TokenReader(new List<>(
-                new WordToken("foo", 0),
-                new WordToken("bar", 0),
-                new WordToken("foobar", 0)
+                f.word("foo"),
+                f.word("bar"),
+                f.word("foobar")
             )))
         );
     }
 
     private void testParseRemainingTokens() {
         List<Token> input = new List<>(
-            new WordToken("const", 0),
-            new WordToken("foo", 0)
+            f.word("const"),
+            f.word("foo")
         );
         TokenReader reader = new TokenReader(input);
         parser.parse(reader);
@@ -100,8 +99,8 @@ public @Test class ConstParserTest {
 
     private void testParseNoRemainingTokens() {
         List<Token> input = new List<>(
-            new WordToken("const", 0),
-            new WordToken("const", 0)
+            f.word("const"),
+            f.word("const")
         );
         TokenReader reader = new TokenReader(input);
         parser.parse(reader);

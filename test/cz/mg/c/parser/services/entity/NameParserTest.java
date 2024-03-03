@@ -6,7 +6,7 @@ import cz.mg.c.parser.components.TokenReader;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
 import cz.mg.tokenizer.entities.tokens.SeparatorToken;
-import cz.mg.tokenizer.entities.tokens.WordToken;
+import cz.mg.tokenizer.test.TokenFactory;
 
 public @Test class NameParserTest {
     public static void main(String[] args) {
@@ -21,6 +21,7 @@ public @Test class NameParserTest {
     }
 
     private final @Service NameParser parser = NameParser.getInstance();
+    private final @Service TokenFactory f = TokenFactory.getInstance();
 
     private void testParseEmpty() {
         String name = parser.parse(new TokenReader(new List<>()));
@@ -28,14 +29,14 @@ public @Test class NameParserTest {
     }
 
     private void testParseAnonymous() {
-        TokenReader reader = new TokenReader(new List<>(new SeparatorToken(",", 10)));
+        TokenReader reader = new TokenReader(new List<>(f.separator(",")));
         String name = parser.parse(reader);
         Assert.assertNull(name);
         Assert.assertEquals(true, reader.has(",", SeparatorToken.class));
     }
 
     private void testParseName() {
-        TokenReader reader = new TokenReader(new List<>(new WordToken("foo", 0), new SeparatorToken(",", 10)));
+        TokenReader reader = new TokenReader(new List<>(f.word("foo"), f.separator(",")));
         String name = parser.parse(reader);
         Assert.assertEquals("foo", name);
         Assert.assertEquals(true, reader.has(",", SeparatorToken.class));

@@ -2,17 +2,15 @@ package cz.mg.c.parser.services.entity.type;
 
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
-import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.entities.CEnum;
 import cz.mg.c.entities.CType;
+import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.c.parser.test.BracketFactory;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
 import cz.mg.tokenizer.entities.Token;
-import cz.mg.tokenizer.entities.tokens.OperatorToken;
-import cz.mg.tokenizer.entities.tokens.SeparatorToken;
-import cz.mg.tokenizer.entities.tokens.WordToken;
+import cz.mg.tokenizer.test.TokenFactory;
 
 public @Test class EnumTypeParserTest {
     public static void main(String[] args) {
@@ -31,6 +29,7 @@ public @Test class EnumTypeParserTest {
 
     private final @Service EnumTypeParser parser = EnumTypeParser.getInstance();
     private final @Service BracketFactory b = BracketFactory.getInstance();
+    private final @Service TokenFactory f = TokenFactory.getInstance();
 
     private void testParseEmpty() {
         Assert.assertThatCode(() -> {
@@ -40,8 +39,8 @@ public @Test class EnumTypeParserTest {
 
     private void testParseNoFields() {
         List<Token> tokens = new List<>(
-            new WordToken("enum", 0),
-            new WordToken("Foo", 7),
+            f.word("enum"),
+            f.word("Foo"),
             b.curlyBrackets()
         );
         CType type = parser.parse(new TokenReader(tokens));
@@ -56,9 +55,9 @@ public @Test class EnumTypeParserTest {
 
     private void testParseAnonymous() {
         List<Token> tokens = new List<>(
-            new WordToken("enum", 0),
+            f.word("enum"),
             b.curlyBrackets(
-                new WordToken("foo", 17)
+                f.word("foo")
             )
         );
         CType type = parser.parse(new TokenReader(tokens));
@@ -75,12 +74,12 @@ public @Test class EnumTypeParserTest {
 
     private void testParseNamed() {
         List<Token> tokens = new List<>(
-            new WordToken("enum", 0),
-            new WordToken("FooBar", 7),
+            f.word("enum"),
+            f.word("FooBar"),
             b.curlyBrackets(
-                new WordToken("foo", 13),
-                new SeparatorToken(",", 20),
-                new WordToken("bar", 17)
+                f.word("foo"),
+                f.separator(","),
+                f.word("bar")
             )
         );
         CType type = parser.parse(new TokenReader(tokens));
@@ -95,21 +94,21 @@ public @Test class EnumTypeParserTest {
 
     private void testParseComplexConst() {
         List<Token> tokens = new List<>(
-            new WordToken("const", 0),
-            new WordToken("enum", 7),
-            new WordToken("FooBar", 14),
+            f.word("const"),
+            f.word("enum"),
+            f.word("FooBar"),
             b.curlyBrackets(
-                new WordToken("foo", 25),
-                new OperatorToken("=", 35),
-                new WordToken("1", 30),
-                new SeparatorToken(",", 32),
-                new WordToken("bar", 25),
-                new OperatorToken("=", 35),
-                new WordToken("2", 30)
+                f.word("foo"),
+                f.operator("="),
+                f.word("1"),
+                f.separator(","),
+                f.word("bar"),
+                f.operator("="),
+                f.word("2")
             ),
-            new WordToken("const", 55),
-            new OperatorToken("*", 60),
-            new WordToken("const", 65)
+            f.word("const"),
+            f.operator("*"),
+            f.word("const")
         );
         CType type = parser.parse(new TokenReader(tokens));
         Assert.assertEquals(true, type.isConstant());
@@ -132,10 +131,10 @@ public @Test class EnumTypeParserTest {
 
     private void testParseRemainingTokens() {
         List<Token> tokens = new List<>(
-            new WordToken("enum", 0),
-            new WordToken("Foo", 7),
+            f.word("enum"),
+            f.word("Foo"),
             b.curlyBrackets(),
-            new WordToken("Foo2", 16)
+            f.word("Foo2")
         );
         TokenReader reader = new TokenReader(tokens);
         parser.parse(reader);

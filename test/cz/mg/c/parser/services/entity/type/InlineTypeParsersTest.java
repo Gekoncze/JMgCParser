@@ -2,16 +2,16 @@ package cz.mg.c.parser.services.entity.type;
 
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
-import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.entities.CEnum;
 import cz.mg.c.entities.CStruct;
 import cz.mg.c.entities.CType;
 import cz.mg.c.entities.CUnion;
 import cz.mg.c.entities.brackets.CurlyBrackets;
+import cz.mg.c.parser.components.TokenReader;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
 import cz.mg.tokenizer.entities.Token;
-import cz.mg.tokenizer.entities.tokens.WordToken;
+import cz.mg.tokenizer.test.TokenFactory;
 
 public @Test class InlineTypeParsersTest {
     public static void main(String[] args) {
@@ -34,6 +34,7 @@ public @Test class InlineTypeParsersTest {
     }
 
     private final @Service InlineTypeParsers parsers = InlineTypeParsers.getInstance();
+    private final @Service TokenFactory f = TokenFactory.getInstance();
 
     private void testParseEmpty() {
         CType type = parsers.parse(new TokenReader(new List<>()), false);
@@ -42,8 +43,8 @@ public @Test class InlineTypeParsersTest {
 
     private void testParseStruct() {
         List<Token> input = new List<>(
-            new WordToken("struct", 0),
-            new WordToken("FooBar", 10),
+            f.word("struct"),
+            f.word("FooBar"),
             new CurlyBrackets()
         );
 
@@ -56,8 +57,8 @@ public @Test class InlineTypeParsersTest {
 
     private void testParseConstStruct() {
         List<Token> input = new List<>(
-            new WordToken("struct", 0),
-            new WordToken("FooBar", 10),
+            f.word("struct"),
+            f.word("FooBar"),
             new CurlyBrackets()
         );
 
@@ -70,7 +71,7 @@ public @Test class InlineTypeParsersTest {
 
     private void testParseAnonymousStruct() {
         List<Token> input = new List<>(
-            new WordToken("struct", 0),
+            f.word("struct"),
             new CurlyBrackets()
         );
 
@@ -83,8 +84,8 @@ public @Test class InlineTypeParsersTest {
 
     private void testParseUnion() {
         List<Token> input = new List<>(
-            new WordToken("union", 0),
-            new WordToken("FooBar", 10),
+            f.word("union"),
+            f.word("FooBar"),
             new CurlyBrackets()
         );
 
@@ -97,8 +98,8 @@ public @Test class InlineTypeParsersTest {
 
     private void testParseConstUnion() {
         List<Token> input = new List<>(
-            new WordToken("union", 0),
-            new WordToken("FooBar", 10),
+            f.word("union"),
+            f.word("FooBar"),
             new CurlyBrackets()
         );
 
@@ -111,7 +112,7 @@ public @Test class InlineTypeParsersTest {
 
     private void testParseAnonymousUnion() {
         List<Token> input = new List<>(
-            new WordToken("union", 0),
+            f.word("union"),
             new CurlyBrackets()
         );
 
@@ -124,8 +125,8 @@ public @Test class InlineTypeParsersTest {
 
     private void testParseEnum() {
         List<Token> input = new List<>(
-            new WordToken("enum", 0),
-            new WordToken("FooBar", 10),
+            f.word("enum"),
+            f.word("FooBar"),
             new CurlyBrackets()
         );
 
@@ -138,8 +139,8 @@ public @Test class InlineTypeParsersTest {
 
     private void testParseConstEnum() {
         List<Token> input = new List<>(
-            new WordToken("enum", 0),
-            new WordToken("FooBar", 10),
+            f.word("enum"),
+            f.word("FooBar"),
             new CurlyBrackets()
         );
 
@@ -152,7 +153,7 @@ public @Test class InlineTypeParsersTest {
 
     private void testParseAnonymousEnum() {
         List<Token> input = new List<>(
-            new WordToken("enum", 0),
+            f.word("enum"),
             new CurlyBrackets()
         );
 
@@ -165,8 +166,8 @@ public @Test class InlineTypeParsersTest {
 
     private void testParseUnknown() {
         List<Token> input = new List<>(
-            new WordToken("abc", 0),
-            new WordToken("FooBar", 10),
+            f.word("abc"),
+            f.word("FooBar"),
             new CurlyBrackets()
         );
 

@@ -2,18 +2,15 @@ package cz.mg.c.parser.services.entity;
 
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
-import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.entities.CStruct;
 import cz.mg.c.entities.CType;
 import cz.mg.c.entities.CVariable;
+import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.c.parser.test.BracketFactory;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
-import cz.mg.tokenizer.entities.tokens.NumberToken;
-import cz.mg.tokenizer.entities.tokens.OperatorToken;
-import cz.mg.tokenizer.entities.tokens.SeparatorToken;
-import cz.mg.tokenizer.entities.tokens.WordToken;
+import cz.mg.tokenizer.test.TokenFactory;
 import cz.mg.tokenizer.test.TokenValidator;
 
 public @Test class VariableParserTest {
@@ -37,6 +34,7 @@ public @Test class VariableParserTest {
     private final @Service VariableParser parser = VariableParser.getInstance();
     private final @Service TokenValidator tokenValidator = TokenValidator.getInstance();
     private final @Service BracketFactory b = BracketFactory.getInstance();
+    private final @Service TokenFactory f = TokenFactory.getInstance();
 
     private void testParseEmpty() {
         Assert.assertThatCode(() -> {
@@ -46,7 +44,7 @@ public @Test class VariableParserTest {
 
     private void testParseSimple() {
         TokenReader reader = new TokenReader(new List<>(
-            new WordToken("int", 2), new WordToken("foo", 5)
+            f.word("int"), f.word("foo")
         ));
 
         CVariable variable = parser.parse(reader);
@@ -60,7 +58,7 @@ public @Test class VariableParserTest {
     }
 
     private void testParseAnonymous() {
-        TokenReader reader = new TokenReader(new List<>(new WordToken("int", 2)));
+        TokenReader reader = new TokenReader(new List<>(f.word("int")));
 
         CVariable variable = parser.parse(reader);
 
@@ -74,10 +72,10 @@ public @Test class VariableParserTest {
 
     private void testParseArray() {
         TokenReader reader = new TokenReader(new List<>(
-            new WordToken("float", 1),
-            new WordToken("bar", 5),
+            f.word("float"),
+            f.word("bar"),
             b.squareBrackets(
-                new NumberToken("12", 7)
+                f.number("12")
             )
         ));
 
@@ -86,7 +84,7 @@ public @Test class VariableParserTest {
         Assert.assertEquals("bar", variable.getName());
         Assert.assertEquals(1, variable.getType().getArrays().count());
         tokenValidator.assertEquals(
-            new List<>(new NumberToken("12", 7)),
+            new List<>(f.number("12")),
             variable.getType().getArrays().getFirst().getExpression()
         );
         Assert.assertEquals(false, variable.getType().isConstant());
@@ -97,16 +95,16 @@ public @Test class VariableParserTest {
 
     private void testParseArrays() {
         TokenReader reader = new TokenReader(new List<>(
-            new WordToken("double", 1),
-            new WordToken("foobar", 5),
+            f.word("double"),
+            f.word("foobar"),
             b.squareBrackets(
-                new NumberToken("9", 7)
+                f.number("9")
             ),
             b.squareBrackets(
-                new NumberToken("3", 7)
+                f.number("3")
             ),
             b.squareBrackets(
-                new NumberToken("1", 7)
+                f.number("1")
             )
         ));
 
@@ -115,15 +113,15 @@ public @Test class VariableParserTest {
         Assert.assertEquals("foobar", variable.getName());
         Assert.assertEquals(3, variable.getType().getArrays().count());
         tokenValidator.assertEquals(
-            new List<>(new NumberToken("9", 7)),
+            new List<>(f.number("9")),
             variable.getType().getArrays().get(0).getExpression()
         );
         tokenValidator.assertEquals(
-            new List<>(new NumberToken("3", 7)),
+            new List<>(f.number("3")),
             variable.getType().getArrays().get(1).getExpression()
         );
         tokenValidator.assertEquals(
-            new List<>(new NumberToken("1", 7)),
+            new List<>(f.number("1")),
             variable.getType().getArrays().get(2).getExpression()
         );
         Assert.assertEquals(false, variable.getType().isConstant());
@@ -134,12 +132,12 @@ public @Test class VariableParserTest {
 
     private void testParseArrayExpression() {
         TokenReader reader = new TokenReader(new List<>(
-            new WordToken("float", 1),
-            new WordToken("bar", 5),
+            f.word("float"),
+            f.word("bar"),
             b.squareBrackets(
-                new NumberToken("12", 7),
-                new OperatorToken("+", 8),
-                new NumberToken("1.5", 9)
+                f.number("12"),
+                f.operator("+"),
+                f.number("1.5")
             )
         ));
 
@@ -149,9 +147,9 @@ public @Test class VariableParserTest {
         Assert.assertEquals(1, variable.getType().getArrays().count());
         tokenValidator.assertEquals(
             new List<>(
-                new NumberToken("12", 7),
-                new OperatorToken("+", 8),
-                new NumberToken("1.5", 9)
+                f.number("12"),
+                f.operator("+"),
+                f.number("1.5")
             ),
             variable.getType().getArrays().getFirst().getExpression()
         );
@@ -163,15 +161,15 @@ public @Test class VariableParserTest {
 
     private void testParseComplex() {
         TokenReader reader = new TokenReader(new List<>(
-            new WordToken("const", 0),
-            new WordToken("float", 6),
-            new OperatorToken("*", 11),
-            new WordToken("const", 12),
-            new WordToken("bar", 20),
+            f.word("const"),
+            f.word("float"),
+            f.operator("*"),
+            f.word("const"),
+            f.word("bar"),
             b.squareBrackets(
-                new NumberToken("12", 22),
-                new OperatorToken("+", 24),
-                new NumberToken("1.5", 25)
+                f.number("12"),
+                f.operator("+"),
+                f.number("1.5")
             )
         ));
 
@@ -181,9 +179,9 @@ public @Test class VariableParserTest {
         Assert.assertEquals(1, variable.getType().getArrays().count());
         tokenValidator.assertEquals(
             new List<>(
-                new NumberToken("12", 22),
-                new OperatorToken("+", 24),
-                new NumberToken("1.5", 25)
+                f.number("12"),
+                f.operator("+"),
+                f.number("1.5")
             ),
             variable.getType().getArrays().getFirst().getExpression()
         );
@@ -196,17 +194,17 @@ public @Test class VariableParserTest {
 
     private void testParseInlineType() {
         TokenReader reader = new TokenReader(new List<>(
-            new WordToken("const", 0),
-            new WordToken("struct", 7),
+            f.word("const"),
+            f.word("struct"),
             b.curlyBrackets(
-                new WordToken("int", 15),
-                new WordToken("a", 17),
-                new SeparatorToken(";", 18)
+                f.word("int"),
+                f.word("a"),
+                f.separator(";")
             ),
-            new OperatorToken("*", 20),
-            new WordToken("foobar", 22),
+            f.operator("*"),
+            f.word("foobar"),
             b.squareBrackets(
-                new NumberToken("2", 26)
+                f.number("2")
             )
         ));
 
@@ -221,7 +219,7 @@ public @Test class VariableParserTest {
     }
 
     private void testParseWithType() {
-        TokenReader reader = new TokenReader(new List<>(new WordToken("foo", 5)));
+        TokenReader reader = new TokenReader(new List<>(f.word("foo")));
         CType type = new CType();
 
         CVariable variable = parser.parse(reader, type);

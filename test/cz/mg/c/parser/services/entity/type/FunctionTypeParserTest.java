@@ -2,17 +2,14 @@ package cz.mg.c.parser.services.entity.type;
 
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
-import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.entities.CFunction;
 import cz.mg.c.entities.CType;
+import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.c.parser.test.BracketFactory;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
-import cz.mg.tokenizer.entities.tokens.NumberToken;
-import cz.mg.tokenizer.entities.tokens.OperatorToken;
-import cz.mg.tokenizer.entities.tokens.SeparatorToken;
-import cz.mg.tokenizer.entities.tokens.WordToken;
+import cz.mg.tokenizer.test.TokenFactory;
 
 public @Test class FunctionTypeParserTest {
     public static void main(String[] args) {
@@ -29,6 +26,7 @@ public @Test class FunctionTypeParserTest {
 
     private final @Service FunctionTypeParser parser = FunctionTypeParser.getInstance();
     private final @Service BracketFactory b = BracketFactory.getInstance();
+    private final @Service TokenFactory f = TokenFactory.getInstance();
 
     private void testParseEmpty() {
         Assert.assertThatCode(() -> {
@@ -40,8 +38,8 @@ public @Test class FunctionTypeParserTest {
         CType output = new CType();
         CType type = parser.parse(new TokenReader(new List<>(
             b.roundBrackets(
-                new OperatorToken("*", 1),
-                new WordToken("fooptr", 2)
+                f.operator("*"),
+                f.word("fooptr")
             ),
             b.roundBrackets()
         )), output);
@@ -59,13 +57,13 @@ public @Test class FunctionTypeParserTest {
         CType output = new CType();
         CType type = parser.parse(new TokenReader(new List<>(
             b.roundBrackets(
-                new OperatorToken("**", 1),
-                new WordToken("fooptrptr", 3)
+                f.operator("**"),
+                f.word("fooptrptr")
             ),
             b.roundBrackets(
-                new WordToken("int", 15),
-                new SeparatorToken(",", 19),
-                new WordToken("int", 21)
+                f.word("int"),
+                f.separator(","),
+                f.word("int")
             )
         )), output);
         Assert.assertEquals(2, type.getPointers().count());
@@ -81,20 +79,20 @@ public @Test class FunctionTypeParserTest {
         CType output = new CType();
         CType type = parser.parse(new TokenReader(new List<>(
             b.roundBrackets(
-                new OperatorToken("*", 1),
-                new WordToken("const", 3),
-                new OperatorToken("*", 10),
-                new WordToken("fooptrptrarr", 12),
+                f.operator("*"),
+                f.word("const"),
+                f.operator("*"),
+                f.word("fooptrptrarr"),
                 b.squareBrackets(
-                    new NumberToken("3", 21)
+                    f.number("3")
                 )
             ),
             b.roundBrackets(
-                new WordToken("int", 28),
-                new WordToken("foo", 32),
-                new SeparatorToken(",", 36),
-                new WordToken("int", 38),
-                new WordToken("bar", 42)
+                f.word("int"),
+                f.word("foo"),
+                f.separator(","),
+                f.word("int"),
+                f.word("bar")
             )
         )), output);
         Assert.assertEquals(2, type.getPointers().count());

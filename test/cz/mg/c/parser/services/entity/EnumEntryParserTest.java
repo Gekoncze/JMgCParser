@@ -2,15 +2,13 @@ package cz.mg.c.parser.services.entity;
 
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
-import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.entities.CEnumEntry;
+import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
 import cz.mg.tokenizer.entities.Token;
-import cz.mg.tokenizer.entities.tokens.WordToken;
-import cz.mg.tokenizer.entities.tokens.NumberToken;
-import cz.mg.tokenizer.entities.tokens.OperatorToken;
+import cz.mg.tokenizer.test.TokenFactory;
 
 public @Test class EnumEntryParserTest {
     public static void main(String[] args) {
@@ -25,6 +23,7 @@ public @Test class EnumEntryParserTest {
     }
 
     private final @Service EnumEntryParser parser = EnumEntryParser.getInstance();
+    private final @Service TokenFactory f = TokenFactory.getInstance();
 
     private void testEmpty() {
         Assert.assertThatCode(() -> {
@@ -34,7 +33,7 @@ public @Test class EnumEntryParserTest {
 
     private void testSimple() {
         List<Token> input = new List<>(
-            new WordToken("VALUE", 0)
+            f.word("VALUE")
         );
         CEnumEntry entry = parser.parse(new TokenReader(input));
         Assert.assertEquals("VALUE", entry.getName());
@@ -43,11 +42,11 @@ public @Test class EnumEntryParserTest {
 
     private void testExpression() {
         List<Token> input = new List<>(
-            new WordToken("COMPLEX_VALUE", 0),
-            new OperatorToken("=", 20),
-            new NumberToken("11", 22),
-            new OperatorToken("+", 24),
-            new NumberToken("2", 25)
+            f.word("COMPLEX_VALUE"),
+            f.operator("="),
+            f.number("11"),
+            f.operator("+"),
+            f.number("2")
         );
         CEnumEntry entry = parser.parse(new TokenReader(input));
         Assert.assertEquals("COMPLEX_VALUE", entry.getName());

@@ -6,10 +6,7 @@ import cz.mg.c.parser.components.TokenReader;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
 import cz.mg.tokenizer.entities.Token;
-import cz.mg.tokenizer.entities.tokens.WordToken;
-import cz.mg.tokenizer.entities.tokens.NumberToken;
-import cz.mg.tokenizer.entities.tokens.OperatorToken;
-import cz.mg.tokenizer.entities.tokens.SeparatorToken;
+import cz.mg.tokenizer.test.TokenFactory;
 import cz.mg.tokenizer.test.TokenValidator;
 
 public @Test class ListParserTest {
@@ -27,6 +24,7 @@ public @Test class ListParserTest {
 
     private final @Service ListParser parser = ListParser.getInstance();
     private final @Service TokenValidator validator = TokenValidator.getInstance();
+    private final @Service TokenFactory f = TokenFactory.getInstance();
 
     private void testParseEmpty() {
         List<Token> input = new List<>();
@@ -36,7 +34,7 @@ public @Test class ListParserTest {
     }
 
     private void testParseSingle() {
-        List<Token> input = new List<>(new WordToken("foo", 2));
+        List<Token> input = new List<>(f.word("foo"));
         List<List<Token>> output = parser.parse(new TokenReader(input));
         Assert.assertEquals(1, output.count());
         Assert.assertEquals(1, output.getFirst().count());
@@ -45,33 +43,33 @@ public @Test class ListParserTest {
 
     private void testParseMultiple() {
         List<Token> input = new List<>(
-            new WordToken("foo", 0),
-            new WordToken("bar", 4),
-            new SeparatorToken(",", 8),
-            new SeparatorToken(".", 9),
-            new SeparatorToken(",", 10),
-            new NumberToken("11", 12),
-            new OperatorToken("+", 14),
-            new NumberToken("0", 16)
+            f.word("foo"),
+            f.word("bar"),
+            f.separator(","),
+            f.separator("."),
+            f.separator(","),
+            f.number("11"),
+            f.operator("+"),
+            f.number("0")
         );
         List<List<Token>> output = parser.parse(new TokenReader(input));
         Assert.assertEquals(3, output.count());
         validator.assertEquals(new List<>(
-            new WordToken("foo", 0),
-            new WordToken("bar", 4)
+            f.word("foo"),
+            f.word("bar")
         ), output.get(0));
         validator.assertEquals(new List<>(
-            new SeparatorToken(".", 9)
+            f.separator(".")
         ), output.get(1));
         validator.assertEquals(new List<>(
-            new NumberToken("11", 12),
-            new OperatorToken("+", 14),
-            new NumberToken("0", 16)
+            f.number("11"),
+            f.operator("+"),
+            f.number("0")
         ), output.get(2));
     }
 
     private void testParseMultipleEmpty() {
-        List<Token> input = new List<>(new SeparatorToken(",", 2), new SeparatorToken(",", 2));
+        List<Token> input = new List<>(f.separator(","), f.separator(","));
         List<List<Token>> output = parser.parse(new TokenReader(input));
         Assert.assertEquals(3, output.count());
         Assert.assertEquals(0, output.get(0).count());

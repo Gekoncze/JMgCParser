@@ -2,17 +2,14 @@ package cz.mg.c.parser.services.entity;
 
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
-import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.entities.CEnum;
+import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.c.parser.test.BracketFactory;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
 import cz.mg.tokenizer.entities.Token;
-import cz.mg.tokenizer.entities.tokens.NumberToken;
-import cz.mg.tokenizer.entities.tokens.OperatorToken;
-import cz.mg.tokenizer.entities.tokens.SeparatorToken;
-import cz.mg.tokenizer.entities.tokens.WordToken;
+import cz.mg.tokenizer.test.TokenFactory;
 
 public @Test class EnumParserTest {
     public static void main(String[] args) {
@@ -32,6 +29,7 @@ public @Test class EnumParserTest {
 
     private final @Service EnumParser parser = EnumParser.getInstance();
     private final @Service BracketFactory b = BracketFactory.getInstance();
+    private final @Service TokenFactory f = TokenFactory.getInstance();
 
     private void testEmpty() {
         Assert.assertThatCode(() -> {
@@ -41,8 +39,8 @@ public @Test class EnumParserTest {
 
     private void testDeclaration() {
         List<Token> input = new List<>(
-            new WordToken("enum", 0),
-            new WordToken("Nom", 6)
+            f.word("enum"),
+            f.word("Nom")
         );
         CEnum enom = parser.parse(new TokenReader(input));
         Assert.assertEquals("Nom", enom.getName());
@@ -51,8 +49,8 @@ public @Test class EnumParserTest {
 
     private void testNoEntries() {
         List<Token> input = new List<>(
-            new WordToken("enum", 0),
-            new WordToken("NomNom", 6),
+            f.word("enum"),
+            f.word("NomNom"),
             b.curlyBrackets()
         );
         CEnum enom = parser.parse(new TokenReader(input));
@@ -63,7 +61,7 @@ public @Test class EnumParserTest {
 
     private void testAnonymous() {
         List<Token> input = new List<>(
-            new WordToken("enum", 0),
+            f.word("enum"),
             b.curlyBrackets()
         );
         CEnum enom = parser.parse(new TokenReader(input));
@@ -74,10 +72,10 @@ public @Test class EnumParserTest {
 
     private void testSingleEntry() {
         List<Token> input = new List<>(
-            new WordToken("enum", 0),
-            new WordToken("NomNom", 6),
+            f.word("enum"),
+            f.word("NomNom"),
             b.curlyBrackets(
-                new WordToken("NOM", 20)
+                f.word("NOM")
             )
         );
         CEnum enom = parser.parse(new TokenReader(input));
@@ -90,14 +88,14 @@ public @Test class EnumParserTest {
 
     private void testMultipleEntries() {
         List<Token> input = new List<>(
-            new WordToken("enum", 0),
-            new WordToken("NomNomNom", 6),
+            f.word("enum"),
+            f.word("NomNomNom"),
             b.curlyBrackets(
-                new WordToken("NOM", 20),
-                new OperatorToken("=", 24),
-                new NumberToken("22", 26),
-                new SeparatorToken(",", 28),
-                new WordToken("NOM2", 30)
+                f.word("NOM"),
+                f.operator("="),
+                f.number("22"),
+                f.separator(","),
+                f.word("NOM2")
             )
         );
         CEnum enom = parser.parse(new TokenReader(input));
@@ -114,12 +112,12 @@ public @Test class EnumParserTest {
     private void testIllegalEntry() {
         Assert.assertThatCode(() -> {
             parser.parse(new TokenReader(new List<>(
-                new WordToken("enum", 0),
-                new WordToken("NomNom", 6),
+                f.word("enum"),
+                f.word("NomNom"),
                 b.curlyBrackets(
-                    new WordToken("NOM", 20),
-                    new WordToken("NOM", 25),
-                    new WordToken("NOM", 30)
+                    f.word("NOM"),
+                    f.word("NOM"),
+                    f.word("NOM")
                 )
             )));
         }).throwsException(ParseException.class);

@@ -6,9 +6,7 @@ import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
 import cz.mg.tokenizer.entities.Token;
-import cz.mg.tokenizer.entities.tokens.WordToken;
-import cz.mg.tokenizer.entities.tokens.NumberToken;
-import cz.mg.tokenizer.entities.tokens.SeparatorToken;
+import cz.mg.tokenizer.test.TokenFactory;
 
 public @Test class SemicolonParserTest {
     public static void main(String[] args) {
@@ -25,6 +23,7 @@ public @Test class SemicolonParserTest {
     }
 
     private final @Service SemicolonParser parser = SemicolonParser.getInstance();
+    private final @Service TokenFactory f = TokenFactory.getInstance();
 
     private void testParseEmpty() {
         List<Token> input = new List<>();
@@ -34,9 +33,9 @@ public @Test class SemicolonParserTest {
 
     private void testParseSingle() {
         List<Token> input = new List<>(
-            new WordToken("foo", 1),
-            new WordToken("bar", 5),
-            new SeparatorToken(";", 8)
+            f.word("foo"),
+            f.word("bar"),
+            f.separator(";")
         );
         List<List<Token>> output = parser.parse(input);
 
@@ -47,20 +46,18 @@ public @Test class SemicolonParserTest {
 
         Token foo = group.getFirst();
         Assert.assertEquals("foo", foo.getText());
-        Assert.assertEquals(1, foo.getPosition());
 
         Token bar = group.getLast();
         Assert.assertEquals("bar", bar.getText());
-        Assert.assertEquals(5, bar.getPosition());
     }
 
     private void testParseMultiple() {
         List<Token> input = new List<>(
-            new WordToken("foo", 1),
-            new WordToken("bar", 5),
-            new SeparatorToken(";", 8),
-            new NumberToken("77", 12),
-            new SeparatorToken(";", 14)
+            f.word("foo"),
+            f.word("bar"),
+            f.separator(";"),
+            f.number("77"),
+            f.separator(";")
         );
         List<List<Token>> output = parser.parse(input);
 
@@ -71,14 +68,13 @@ public @Test class SemicolonParserTest {
 
         Token number = group.getFirst();
         Assert.assertEquals("77", number.getText());
-        Assert.assertEquals(12, number.getPosition());
     }
 
     private void testParseMissingSemicolon() {
         Assert.assertThatCode(() -> {
             List<Token> input = new List<>(
-                new WordToken("foo", 1),
-                new WordToken("bar", 5)
+                f.word("foo"),
+                f.word("bar")
             );
             parser.parse(input);
         }).throwsException(ParseException.class);
@@ -87,9 +83,9 @@ public @Test class SemicolonParserTest {
     private void testParseFakeSemicolon() {
         Assert.assertThatCode(() -> {
             List<Token> input = new List<>(
-                new WordToken("foo", 1),
-                new WordToken("bar", 5),
-                new Token(";", 8)
+                f.word("foo"),
+                f.word("bar"),
+                f.plain(";")
             );
             parser.parse(input);
         }).throwsException(ParseException.class);

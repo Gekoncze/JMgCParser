@@ -3,10 +3,10 @@ package cz.mg.c.parser;
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.c.entities.CFile;
+import cz.mg.c.entities.macro.Macros;
 import cz.mg.c.parser.services.RootEntityParsers;
 import cz.mg.c.parser.services.bracket.BracketParsers;
 import cz.mg.c.preprocessor.Preprocessor;
-import cz.mg.c.preprocessor.processors.macro.entities.Macros;
 import cz.mg.file.File;
 
 public @Service class Parser {
