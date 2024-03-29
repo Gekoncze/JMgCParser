@@ -44,6 +44,7 @@ public @Service class VariableParser implements CMainEntityParser {
         variable.setType(type);
         variable.setName(nameParser.parse(reader));
         variable.getType().setArrays(arrayParser.parse(reader));
+        variable.setExpression(initializerParser.parse(reader));
         return variable;
     }
 }

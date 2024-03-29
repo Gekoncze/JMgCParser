@@ -28,6 +28,7 @@ public @Test class VariableParserTest {
         test.testParseInlineType();
         test.testParseWithType();
         test.testParseWithInitializer();
+        test.testParseWithTypeAndInitializer();
 
         System.out.println("OK");
     }
@@ -246,6 +247,29 @@ public @Test class VariableParserTest {
 
         Assert.assertEquals("foo", variable.getName());
         Assert.assertEquals("int", variable.getType().getTypename().getName());
+        Assert.assertNotNull(variable.getExpression());
+        tokenValidator.assertEquals(
+            new List<>(f.number("1"), f.operator("+"), f.number("2")),
+            variable.getExpression()
+        );
+        reader.readEnd();
+    }
+
+    private void testParseWithTypeAndInitializer() {
+        TokenReader reader = new TokenReader(new List<>(
+            f.word("foo"),
+            f.operator("="),
+            f.number("1"),
+            f.operator("+"),
+            f.number("2")
+        ));
+
+        CType type = new CType();
+
+        CVariable variable = parser.parse(reader, type);
+
+        Assert.assertEquals("foo", variable.getName());
+        Assert.assertSame(type, variable.getType());
         Assert.assertNotNull(variable.getExpression());
         tokenValidator.assertEquals(
             new List<>(f.number("1"), f.operator("+"), f.number("2")),
