@@ -2,11 +2,14 @@ package cz.mg.c.parser.services.entity;
 
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
+import cz.mg.annotations.requirement.Optional;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.entities.CType;
 import cz.mg.c.entities.CVariable;
 import cz.mg.c.parser.services.CMainEntityParser;
 import cz.mg.c.parser.services.entity.type.ArrayParser;
+import cz.mg.tokenizer.entities.tokens.NumberToken;
+import cz.mg.tokenizer.entities.tokens.OperatorToken;
 
 public @Service class VariableParser implements CMainEntityParser {
     private static volatile @Service VariableParser instance;
@@ -31,12 +34,7 @@ public @Service class VariableParser implements CMainEntityParser {
 
     @Override
     public @Mandatory CVariable parse(@Mandatory TokenReader reader) {
-        CVariable variable = new CVariable();
-        variable.setType(typeParser.parse(reader));
-        variable.setName(nameParser.parse(reader));
-        variable.getType().setArrays(arrayParser.parse(reader));
-        variable.setExpression(initializerParser.parse(reader));
-        return variable;
+        return parse(reader, typeParser.parse(reader));
     }
 
     public @Mandatory CVariable parse(@Mandatory TokenReader reader, @Mandatory CType type) {
@@ -44,7 +42,17 @@ public @Service class VariableParser implements CMainEntityParser {
         variable.setType(type);
         variable.setName(nameParser.parse(reader));
         variable.getType().setArrays(arrayParser.parse(reader));
+        variable.setBit(readBitField(reader));
         variable.setExpression(initializerParser.parse(reader));
         return variable;
+    }
+
+    private @Optional Integer readBitField(@Mandatory TokenReader reader) {
+        if (reader.has(":", OperatorToken.class)) {
+            reader.read();
+            return Integer.parseInt(reader.read(NumberToken.class).getText());
+        } else {
+            return null;
+        }
     }
 }

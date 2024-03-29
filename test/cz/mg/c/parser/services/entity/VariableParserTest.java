@@ -30,6 +30,7 @@ public @Test class VariableParserTest {
         test.testParseWithType();
         test.testParseWithInitializer();
         test.testParseWithTypeAndInitializer();
+        test.testParseBitField();
 
         System.out.println("OK");
     }
@@ -278,6 +279,23 @@ public @Test class VariableParserTest {
             new List<>(f.number("1"), f.operator("+"), f.number("2")),
             variable.getExpression()
         );
+        reader.readEnd();
+    }
+
+    private void testParseBitField() {
+        TokenReader reader = new TokenReader(new List<>(
+            f.word("int"), f.word("foo"), f.operator(":"), f.number("8")
+        ));
+
+        CVariable variable = parser.parse(reader);
+
+        Assert.assertEquals("foo", variable.getName());
+        Assert.assertEquals(true, variable.getType().getArrays().isEmpty());
+        Assert.assertEquals(false, variable.getType().getModifiers().isConstant());
+        Assert.assertEquals("int", variable.getType().getTypename().getName());
+        Assert.assertEquals(true, variable.getType().getPointers().isEmpty());
+        Assert.assertEquals(8, variable.getBit());
+        Assert.assertNull(variable.getExpression());
         reader.readEnd();
     }
 }
