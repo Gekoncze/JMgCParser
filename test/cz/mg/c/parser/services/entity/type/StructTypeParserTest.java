@@ -44,7 +44,7 @@ public @Test class StructTypeParserTest {
             b.curlyBrackets()
         );
         CType type = parser.parse(new TokenReader(tokens));
-        Assert.assertEquals(false, type.isConstant());
+        Assert.assertEquals(false, type.getModifiers().isConstant());
         Assert.assertEquals(true, type.getPointers().isEmpty());
         Assert.assertEquals(true, type.getTypename() instanceof CStruct);
         CStruct struct = (CStruct) type.getTypename();
@@ -63,7 +63,7 @@ public @Test class StructTypeParserTest {
             )
         );
         CType type = parser.parse(new TokenReader(tokens));
-        Assert.assertEquals(false, type.isConstant());
+        Assert.assertEquals(false, type.getModifiers().isConstant());
         Assert.assertEquals(true, type.getPointers().isEmpty());
         Assert.assertEquals(true, type.getTypename() instanceof CStruct);
         CStruct struct = (CStruct) type.getTypename();
@@ -85,7 +85,7 @@ public @Test class StructTypeParserTest {
             )
         );
         CType type = parser.parse(new TokenReader(tokens));
-        Assert.assertEquals(false, type.isConstant());
+        Assert.assertEquals(false, type.getModifiers().isConstant());
         Assert.assertEquals(true, type.getPointers().isEmpty());
         Assert.assertEquals(true, type.getTypename() instanceof CStruct);
         CStruct struct = (CStruct) type.getTypename();
@@ -115,7 +115,7 @@ public @Test class StructTypeParserTest {
             f.word("const")
         );
         CType type = parser.parse(new TokenReader(tokens));
-        Assert.assertEquals(true, type.isConstant());
+        Assert.assertEquals(true, type.getModifiers().isConstant());
         Assert.assertEquals(1, type.getPointers().count());
         Assert.assertEquals(true, type.getPointers().getFirst().isConstant());
         Assert.assertEquals(true, type.getTypename() instanceof CStruct);
@@ -123,10 +123,10 @@ public @Test class StructTypeParserTest {
         Assert.assertEquals("FooBar", struct.getName());
         Assert.assertNotNull(struct.getVariables());
         Assert.assertEquals(2, struct.getVariables().count());
-        Assert.assertEquals(true, struct.getVariables().get(0).getType().isConstant());
+        Assert.assertEquals(true, struct.getVariables().get(0).getType().getModifiers().isConstant());
         Assert.assertEquals("int", struct.getVariables().get(0).getType().getTypename().getName());
         Assert.assertEquals("a", struct.getVariables().get(0).getName());
-        Assert.assertEquals(false, struct.getVariables().get(1).getType().isConstant());
+        Assert.assertEquals(false, struct.getVariables().get(1).getType().getModifiers().isConstant());
         Assert.assertEquals("int", struct.getVariables().get(1).getType().getTypename().getName());
         Assert.assertEquals("b", struct.getVariables().get(1).getName());
     }

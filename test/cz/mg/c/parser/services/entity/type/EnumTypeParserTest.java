@@ -44,7 +44,7 @@ public @Test class EnumTypeParserTest {
             b.curlyBrackets()
         );
         CType type = parser.parse(new TokenReader(tokens));
-        Assert.assertEquals(false, type.isConstant());
+        Assert.assertEquals(false, type.getModifiers().isConstant());
         Assert.assertEquals(true, type.getPointers().isEmpty());
         Assert.assertEquals(true, type.getTypename() instanceof CEnum);
         CEnum enom = (CEnum) type.getTypename();
@@ -61,7 +61,7 @@ public @Test class EnumTypeParserTest {
             )
         );
         CType type = parser.parse(new TokenReader(tokens));
-        Assert.assertEquals(false, type.isConstant());
+        Assert.assertEquals(false, type.getModifiers().isConstant());
         Assert.assertEquals(true, type.getPointers().isEmpty());
         Assert.assertEquals(true, type.getTypename() instanceof CEnum);
         CEnum enom = (CEnum) type.getTypename();
@@ -83,7 +83,7 @@ public @Test class EnumTypeParserTest {
             )
         );
         CType type = parser.parse(new TokenReader(tokens));
-        Assert.assertEquals(false, type.isConstant());
+        Assert.assertEquals(false, type.getModifiers().isConstant());
         Assert.assertEquals(true, type.getPointers().isEmpty());
         Assert.assertEquals(true, type.getTypename() instanceof CEnum);
         CEnum enom = (CEnum) type.getTypename();
@@ -111,7 +111,7 @@ public @Test class EnumTypeParserTest {
             f.word("const")
         );
         CType type = parser.parse(new TokenReader(tokens));
-        Assert.assertEquals(true, type.isConstant());
+        Assert.assertEquals(true, type.getModifiers().isConstant());
         Assert.assertEquals(1, type.getPointers().count());
         Assert.assertEquals(true, type.getPointers().getFirst().isConstant());
         Assert.assertEquals(true, type.getTypename() instanceof CEnum);

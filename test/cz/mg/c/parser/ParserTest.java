@@ -67,7 +67,7 @@ public @Test class ParserTest {
         Assert.assertEquals(true, typedef.getType().getTypename() instanceof CFunction);
         Assert.assertEquals(0, typedef.getType().getArrays().count());
         Assert.assertEquals(1, typedef.getType().getPointers().count());
-        Assert.assertEquals(false, typedef.getType().isConstant());
+        Assert.assertEquals(false, typedef.getType().getModifiers().isConstant());
         Assert.assertEquals(false, typedef.getType().getPointers().getFirst().isConstant());
 
         CFunction functionPointer = (CFunction) typedef.getType().getTypename();
@@ -120,7 +120,7 @@ public @Test class ParserTest {
         Assert.assertEquals(CStruct.class, variable.getType().getTypename().getClass());
         Assert.assertEquals(1, variable.getType().getPointers().count());
         Assert.assertEquals(2, variable.getType().getArrays().count());
-        Assert.assertEquals(true, variable.getType().isConstant());
+        Assert.assertEquals(true, variable.getType().getModifiers().isConstant());
         Assert.assertEquals(true, variable.getType().getPointers().getFirst().isConstant());
         Assert.assertEquals(1, variable.getType().getArrays().getFirst().getExpression().count());
         Assert.assertEquals(3, variable.getType().getArrays().getLast().getExpression().count());
@@ -134,7 +134,7 @@ public @Test class ParserTest {
         Assert.assertEquals("int", function.getOutput().getTypename().getName());
         Assert.assertEquals(true, function.getOutput().getArrays().isEmpty());
         Assert.assertEquals(true, function.getOutput().getPointers().isEmpty());
-        Assert.assertEquals(false, function.getOutput().isConstant());
+        Assert.assertEquals(false, function.getOutput().getModifiers().isConstant());
         Assert.assertEquals(2, function.getInput().count());
         Assert.assertEquals("argc", function.getInput().getFirst().getName());
         Assert.assertEquals("argv", function.getInput().getLast().getName());
@@ -144,8 +144,8 @@ public @Test class ParserTest {
         Assert.assertEquals(1, function.getInput().getLast().getType().getPointers().count());
         Assert.assertEquals(0, function.getInput().getFirst().getType().getArrays().count());
         Assert.assertEquals(0, function.getInput().getLast().getType().getArrays().count());
-        Assert.assertEquals(false, function.getInput().getFirst().getType().isConstant());
-        Assert.assertEquals(false, function.getInput().getLast().getType().isConstant());
+        Assert.assertEquals(false, function.getInput().getFirst().getType().getModifiers().isConstant());
+        Assert.assertEquals(false, function.getInput().getLast().getType().getModifiers().isConstant());
         Assert.assertEquals(false, function.getInput().getLast().getType().getPointers().getFirst().isConstant());
         Assert.assertNotNull(function.getImplementation());
         Assert.assertEquals("printf", function.getImplementation().getFirst().getText());

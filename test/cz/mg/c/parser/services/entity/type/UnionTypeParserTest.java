@@ -44,7 +44,7 @@ public @Test class UnionTypeParserTest {
             b.curlyBrackets()
         );
         CType type = parser.parse(new TokenReader(tokens));
-        Assert.assertEquals(false, type.isConstant());
+        Assert.assertEquals(false, type.getModifiers().isConstant());
         Assert.assertEquals(true, type.getPointers().isEmpty());
         Assert.assertEquals(true, type.getTypename() instanceof CUnion);
         CUnion union = (CUnion) type.getTypename();
@@ -63,7 +63,7 @@ public @Test class UnionTypeParserTest {
             )
         );
         CType type = parser.parse(new TokenReader(tokens));
-        Assert.assertEquals(false, type.isConstant());
+        Assert.assertEquals(false, type.getModifiers().isConstant());
         Assert.assertEquals(true, type.getPointers().isEmpty());
         Assert.assertEquals(true, type.getTypename() instanceof CUnion);
         CUnion union = (CUnion) type.getTypename();
@@ -85,7 +85,7 @@ public @Test class UnionTypeParserTest {
             )
         );
         CType type = parser.parse(new TokenReader(tokens));
-        Assert.assertEquals(false, type.isConstant());
+        Assert.assertEquals(false, type.getModifiers().isConstant());
         Assert.assertEquals(true, type.getPointers().isEmpty());
         Assert.assertEquals(true, type.getTypename() instanceof CUnion);
         CUnion union = (CUnion) type.getTypename();
@@ -115,7 +115,7 @@ public @Test class UnionTypeParserTest {
             f.word("const")
         );
         CType type = parser.parse(new TokenReader(tokens));
-        Assert.assertEquals(true, type.isConstant());
+        Assert.assertEquals(true, type.getModifiers().isConstant());
         Assert.assertEquals(1, type.getPointers().count());
         Assert.assertEquals(true, type.getPointers().getFirst().isConstant());
         Assert.assertEquals(true, type.getTypename() instanceof CUnion);
@@ -123,10 +123,10 @@ public @Test class UnionTypeParserTest {
         Assert.assertEquals("FooBar", union.getName());
         Assert.assertNotNull(union.getVariables());
         Assert.assertEquals(2, union.getVariables().count());
-        Assert.assertEquals(true, union.getVariables().get(0).getType().isConstant());
+        Assert.assertEquals(true, union.getVariables().get(0).getType().getModifiers().isConstant());
         Assert.assertEquals("int", union.getVariables().get(0).getType().getTypename().getName());
         Assert.assertEquals("a", union.getVariables().get(0).getName());
-        Assert.assertEquals(false, union.getVariables().get(1).getType().isConstant());
+        Assert.assertEquals(false, union.getVariables().get(1).getType().getModifiers().isConstant());
         Assert.assertEquals("int", union.getVariables().get(1).getType().getTypename().getName());
         Assert.assertEquals("b", union.getVariables().get(1).getName());
     }

@@ -18,6 +18,7 @@ public @Service class VariableParser implements CMainEntityParser {
                 instance.typeParser = TypeParser.getInstance();
                 instance.arrayParser = ArrayParser.getInstance();
                 instance.nameParser = NameParser.getInstance();
+                instance.initializerParser = InitializerParser.getInstance();
             }
         }
         return instance;
@@ -26,6 +27,7 @@ public @Service class VariableParser implements CMainEntityParser {
     private @Service TypeParser typeParser;
     private @Service ArrayParser arrayParser;
     private @Service NameParser nameParser;
+    private @Service InitializerParser initializerParser;
 
     @Override
     public @Mandatory CVariable parse(@Mandatory TokenReader reader) {
@@ -33,6 +35,7 @@ public @Service class VariableParser implements CMainEntityParser {
         variable.setType(typeParser.parse(reader));
         variable.setName(nameParser.parse(reader));
         variable.getType().setArrays(arrayParser.parse(reader));
+        variable.setExpression(initializerParser.parse(reader));
         return variable;
     }
 

@@ -141,7 +141,7 @@ public @Test class InlineTypeParsersTest {
             new CurlyBrackets()
         );
 
-        CType type = parsers.parse(new TokenReader(input), new CTypeModifiers());
+        CType type = parsers.parse(new TokenReader(input), new CTypeModifiers(true, false));
 
         Assert.assertNotNull(type);
         Assert.assertEquals(true, type.getModifiers().isConstant());

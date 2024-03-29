@@ -2,14 +2,10 @@ package cz.mg.c.parser.services.entity;
 
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
-import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.entities.CEnumEntry;
-import cz.mg.c.parser.exceptions.ParseException;
+import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.parser.services.CEntityParser;
-import cz.mg.collections.list.List;
-import cz.mg.tokenizer.entities.Token;
 import cz.mg.tokenizer.entities.tokens.WordToken;
-import cz.mg.tokenizer.entities.tokens.OperatorToken;
 
 public @Service class EnumEntryParser implements CEntityParser {
     private static volatile @Service EnumEntryParser instance;
@@ -19,11 +15,14 @@ public @Service class EnumEntryParser implements CEntityParser {
             synchronized (Service.class) {
                 if (instance == null) {
                     instance = new EnumEntryParser();
+                    instance.initializerParser = InitializerParser.getInstance();
                 }
             }
         }
         return instance;
     }
+
+    private @Service InitializerParser initializerParser;
 
     private EnumEntryParser() {
     }
@@ -32,21 +31,7 @@ public @Service class EnumEntryParser implements CEntityParser {
     public @Mandatory CEnumEntry parse(@Mandatory TokenReader reader) {
         CEnumEntry entry = new CEnumEntry();
         entry.setName(reader.read(WordToken.class).getText());
-        if (reader.has("=", OperatorToken.class)) {
-            entry.setExpression(readExpression(reader));
-        }
+        entry.setExpression(initializerParser.parse(reader));
         return entry;
-    }
-
-    private @Mandatory List<Token> readExpression(TokenReader reader) {
-        int position = reader.read("=", OperatorToken.class).getPosition();
-        List<Token> expression = new List<>();
-        while (reader.has()) {
-            expression.addLast(reader.read());
-        }
-        if (expression.isEmpty()) {
-            throw new ParseException(position, "Missing expression.");
-        }
-        return expression;
     }
 }

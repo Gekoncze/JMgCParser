@@ -2,6 +2,7 @@ package cz.mg.c.parser.services.entity.type;
 
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
+import cz.mg.c.entities.CTypeModifiers;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.entities.CFunction;
 import cz.mg.c.entities.CType;
@@ -52,6 +53,7 @@ public @Service class FunctionTypeParser {
         CFunction function = new CFunction();
         function.setOutput(output);
         CType type = new CType();
+        type.setModifiers(new CTypeModifiers());
         type.setTypename(function);
         type.setPointers(pointerParser.parse(bracketReader));
         function.setName(bracketReader.read(WordToken.class).getText());
