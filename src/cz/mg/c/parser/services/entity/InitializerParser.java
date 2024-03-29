@@ -8,6 +8,7 @@ import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.collections.list.List;
 import cz.mg.tokenizer.entities.Token;
 import cz.mg.tokenizer.entities.tokens.OperatorToken;
+import cz.mg.tokenizer.entities.tokens.SeparatorToken;
 
 public @Service class InitializerParser {
     private static volatile @Service InitializerParser instance;
@@ -30,7 +31,7 @@ public @Service class InitializerParser {
         if (reader.has("=", OperatorToken.class)) {
             int position = reader.read("=", OperatorToken.class).getPosition();
             List<Token> expression = new List<>();
-            while (reader.has()) {
+            while (reader.has() && !reader.has(";", SeparatorToken.class)) {
                 expression.addLast(reader.read());
             }
             if (expression.isEmpty()) {

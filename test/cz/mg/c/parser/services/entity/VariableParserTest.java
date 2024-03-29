@@ -10,6 +10,7 @@ import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.c.parser.test.BracketFactory;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
+import cz.mg.tokenizer.entities.tokens.SeparatorToken;
 import cz.mg.tokenizer.test.TokenFactory;
 import cz.mg.tokenizer.test.TokenValidator;
 
@@ -240,7 +241,8 @@ public @Test class VariableParserTest {
             f.operator("="),
             f.number("1"),
             f.operator("+"),
-            f.number("2")
+            f.number("2"),
+            f.separator(";")
         ));
 
         CVariable variable = parser.parse(reader);
@@ -252,6 +254,7 @@ public @Test class VariableParserTest {
             new List<>(f.number("1"), f.operator("+"), f.number("2")),
             variable.getExpression()
         );
+        reader.read(";", SeparatorToken.class);
         reader.readEnd();
     }
 
