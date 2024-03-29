@@ -96,7 +96,7 @@ public @Test class FunctionParserTest {
         );
         CFunction function = parser.parse(new TokenReader(input));
         Assert.assertEquals("int", function.getOutput().getTypename().getName());
-        Assert.assertEquals(true, function.getOutput().isConstant());
+        Assert.assertEquals(true, function.getOutput().getModifiers().isConstant());
         Assert.assertEquals("constantin", function.getName());
         Assert.assertEquals(1, function.getInput().count());
         Assert.assertEquals("float", function.getInput().getFirst().getType().getTypename().getName());
@@ -120,7 +120,7 @@ public @Test class FunctionParserTest {
         );
         CFunction function = parser.parse(new TokenReader(input));
         Assert.assertEquals("int", function.getOutput().getTypename().getName());
-        Assert.assertEquals(true, function.getOutput().isConstant());
+        Assert.assertEquals(true, function.getOutput().getModifiers().isConstant());
         Assert.assertEquals("constantin", function.getName());
         Assert.assertEquals(1, function.getInput().count());
         Assert.assertEquals("float", function.getInput().getFirst().getType().getTypename().getName());
@@ -201,7 +201,7 @@ public @Test class FunctionParserTest {
         );
         CFunction function = parser.parse(new TokenReader(input));
         Assert.assertEquals("int", function.getOutput().getTypename().getName());
-        Assert.assertEquals(true, function.getOutput().isConstant());
+        Assert.assertEquals(true, function.getOutput().getModifiers().isConstant());
         Assert.assertEquals("constantin", function.getName());
         Assert.assertEquals(1, function.getInput().count());
         Assert.assertEquals("float", function.getInput().getFirst().getType().getTypename().getName());

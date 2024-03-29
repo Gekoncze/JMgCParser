@@ -17,14 +17,14 @@ public @Service class PointerParser {
             synchronized (Service.class) {
                 if (instance == null) {
                     instance = new PointerParser();
-                    instance.constParser = ConstParser.getInstance();
+                    instance.modifiersParser = TypeModifiersParser.getInstance();
                 }
             }
         }
         return instance;
     }
 
-    private @Service ConstParser constParser;
+    private @Service TypeModifiersParser modifiersParser;
 
     private PointerParser() {
     }
@@ -41,7 +41,7 @@ public @Service class PointerParser {
                     throw new ParseException(p.getPosition(), "Unexpected character '" + ch + "' at pointer.");
                 }
             }
-            pointers.getLast().setConstant(constParser.parse(reader));
+            pointers.getLast().setConstant(modifiersParser.parse(reader).isConstant());
         }
         return pointers;
     }

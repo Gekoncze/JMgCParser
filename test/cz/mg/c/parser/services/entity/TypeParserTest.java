@@ -50,7 +50,7 @@ public @Test class TypeParserTest {
 
         CType type = parser.parse(reader);
 
-        Assert.assertEquals(false, type.isConstant());
+        Assert.assertEquals(false, type.getModifiers().isConstant());
         Assert.assertEquals("foo", type.getTypename().getName());
         Assert.assertEquals(true, type.getPointers().isEmpty());
         reader.readEnd();
@@ -64,7 +64,7 @@ public @Test class TypeParserTest {
 
         CType type = parser.parse(reader);
 
-        Assert.assertEquals(true, type.isConstant());
+        Assert.assertEquals(true, type.getModifiers().isConstant());
         Assert.assertEquals("foo", type.getTypename().getName());
         Assert.assertEquals(true, type.getPointers().isEmpty());
         reader.readEnd();
@@ -78,7 +78,7 @@ public @Test class TypeParserTest {
 
         CType type = parser.parse(reader);
 
-        Assert.assertEquals(true, type.isConstant());
+        Assert.assertEquals(true, type.getModifiers().isConstant());
         Assert.assertEquals("foo", type.getTypename().getName());
         Assert.assertEquals(true, type.getPointers().isEmpty());
         reader.readEnd();
@@ -92,7 +92,7 @@ public @Test class TypeParserTest {
 
         CType type = parser.parse(reader);
 
-        Assert.assertEquals(false, type.isConstant());
+        Assert.assertEquals(false, type.getModifiers().isConstant());
         Assert.assertEquals("foo", type.getTypename().getName());
         Assert.assertEquals(true, type.getPointers().isEmpty());
         Assert.assertEquals("bar", reader.read().getText());
@@ -109,7 +109,7 @@ public @Test class TypeParserTest {
 
         CType type = parser.parse(reader);
 
-        Assert.assertEquals(false, type.isConstant());
+        Assert.assertEquals(false, type.getModifiers().isConstant());
         Assert.assertEquals("foo", type.getTypename().getName());
         Assert.assertEquals(3, type.getPointers().count());
 
@@ -128,7 +128,7 @@ public @Test class TypeParserTest {
 
         CType type = parser.parse(reader);
 
-        Assert.assertEquals(false, type.isConstant());
+        Assert.assertEquals(false, type.getModifiers().isConstant());
         Assert.assertEquals("dst", type.getTypename().getName());
         Assert.assertEquals(3, type.getPointers().count());
 
@@ -210,7 +210,7 @@ public @Test class TypeParserTest {
 
         CType type = parser.parse(reader);
 
-        Assert.assertEquals(typenameConst, type.isConstant());
+        Assert.assertEquals(typenameConst, type.getModifiers().isConstant());
         Assert.assertEquals("foo", type.getTypename().getName());
         Assert.assertEquals(pointersConst.length, type.getPointers().count());
 
@@ -247,7 +247,7 @@ public @Test class TypeParserTest {
         CType type = parser.parse(reader);
 
         Assert.assertEquals(1, type.getPointers().count());
-        Assert.assertEquals(true, type.isConstant());
+        Assert.assertEquals(true, type.getModifiers().isConstant());
         Assert.assertEquals(true, type.getTypename() instanceof CStruct);
         Assert.assertNull(type.getTypename().getName());
     }

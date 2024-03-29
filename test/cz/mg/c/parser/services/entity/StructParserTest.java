@@ -90,7 +90,7 @@ public @Test class StructParserTest {
         Assert.assertEquals("bar", struct.getVariables().getFirst().getName());
         CVariable variable = struct.getVariables().getFirst();
         Assert.assertEquals("int", variable.getType().getTypename().getName());
-        Assert.assertEquals(true, variable.getType().isConstant());
+        Assert.assertEquals(true, variable.getType().getModifiers().isConstant());
         Assert.assertEquals(1, struct.getVariables().getFirst().getType().getPointers().count());
     }
 

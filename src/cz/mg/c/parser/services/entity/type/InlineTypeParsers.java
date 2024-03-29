@@ -3,6 +3,7 @@ package cz.mg.c.parser.services.entity.type;
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.annotations.requirement.Optional;
+import cz.mg.c.entities.CTypeModifiers;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.entities.CType;
 import cz.mg.tokenizer.entities.tokens.WordToken;
@@ -31,10 +32,10 @@ public @Service class InlineTypeParsers {
     private InlineTypeParsers() {
     }
 
-    public @Optional CType parse(@Mandatory TokenReader reader, boolean constant) {
+    public @Optional CType parse(@Mandatory TokenReader reader, @Mandatory CTypeModifiers modifiers) {
         CType type = parse(reader);
         if (type != null) {
-            type.setConstant(constant);
+            type.setModifiers(modifiers);
         }
         return type;
     }

@@ -90,7 +90,7 @@ public @Test class UnionParserTest {
         Assert.assertEquals("bar", union.getVariables().getFirst().getName());
         CVariable variable = union.getVariables().getFirst();
         Assert.assertEquals("int", variable.getType().getTypename().getName());
-        Assert.assertEquals(true, variable.getType().isConstant());
+        Assert.assertEquals(true, variable.getType().getModifiers().isConstant());
         Assert.assertEquals(1, union.getVariables().getFirst().getType().getPointers().count());
     }
 

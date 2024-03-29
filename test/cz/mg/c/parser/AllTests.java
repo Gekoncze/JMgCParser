@@ -19,7 +19,7 @@ public @Test class AllTests {
 
         // cz.mg.c.parser.services.entity.type
         ArrayParserTest.main(args);
-        ConstParserTest.main(args);
+        TypeModifiersParserTest.main(args);
         EnumTypeParserTest.main(args);
         FunctionTypeParserTest.main(args);
         InlineTypeParsersTest.main(args);

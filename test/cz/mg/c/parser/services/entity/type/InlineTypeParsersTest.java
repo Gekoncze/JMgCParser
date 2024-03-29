@@ -2,10 +2,7 @@ package cz.mg.c.parser.services.entity.type;
 
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
-import cz.mg.c.entities.CEnum;
-import cz.mg.c.entities.CStruct;
-import cz.mg.c.entities.CType;
-import cz.mg.c.entities.CUnion;
+import cz.mg.c.entities.*;
 import cz.mg.c.entities.brackets.CurlyBrackets;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.collections.list.List;
@@ -37,7 +34,7 @@ public @Test class InlineTypeParsersTest {
     private final @Service TokenFactory f = TokenFactory.getInstance();
 
     private void testParseEmpty() {
-        CType type = parsers.parse(new TokenReader(new List<>()), false);
+        CType type = parsers.parse(new TokenReader(new List<>()), new CTypeModifiers());
         Assert.assertNull(type);
     }
 
@@ -48,10 +45,10 @@ public @Test class InlineTypeParsersTest {
             new CurlyBrackets()
         );
 
-        CType type = parsers.parse(new TokenReader(input), false);
+        CType type = parsers.parse(new TokenReader(input), new CTypeModifiers());
 
         Assert.assertNotNull(type);
-        Assert.assertEquals(false, type.isConstant());
+        Assert.assertEquals(false, type.getModifiers().isConstant());
         Assert.assertEquals(true, type.getTypename() instanceof CStruct);
     }
 
@@ -62,10 +59,10 @@ public @Test class InlineTypeParsersTest {
             new CurlyBrackets()
         );
 
-        CType type = parsers.parse(new TokenReader(input), true);
+        CType type = parsers.parse(new TokenReader(input), new CTypeModifiers(true, false));
 
         Assert.assertNotNull(type);
-        Assert.assertEquals(true, type.isConstant());
+        Assert.assertEquals(true, type.getModifiers().isConstant());
         Assert.assertEquals(true, type.getTypename() instanceof CStruct);
     }
 
@@ -75,10 +72,10 @@ public @Test class InlineTypeParsersTest {
             new CurlyBrackets()
         );
 
-        CType type = parsers.parse(new TokenReader(input), false);
+        CType type = parsers.parse(new TokenReader(input), new CTypeModifiers());
 
         Assert.assertNotNull(type);
-        Assert.assertEquals(false, type.isConstant());
+        Assert.assertEquals(false, type.getModifiers().isConstant());
         Assert.assertEquals(true, type.getTypename() instanceof CStruct);
     }
 
@@ -89,10 +86,10 @@ public @Test class InlineTypeParsersTest {
             new CurlyBrackets()
         );
 
-        CType type = parsers.parse(new TokenReader(input), false);
+        CType type = parsers.parse(new TokenReader(input), new CTypeModifiers());
 
         Assert.assertNotNull(type);
-        Assert.assertEquals(false, type.isConstant());
+        Assert.assertEquals(false, type.getModifiers().isConstant());
         Assert.assertEquals(true, type.getTypename() instanceof CUnion);
     }
 
@@ -103,10 +100,10 @@ public @Test class InlineTypeParsersTest {
             new CurlyBrackets()
         );
 
-        CType type = parsers.parse(new TokenReader(input), true);
+        CType type = parsers.parse(new TokenReader(input), new CTypeModifiers(true, false));
 
         Assert.assertNotNull(type);
-        Assert.assertEquals(true, type.isConstant());
+        Assert.assertEquals(true, type.getModifiers().isConstant());
         Assert.assertEquals(true, type.getTypename() instanceof CUnion);
     }
 
@@ -116,10 +113,10 @@ public @Test class InlineTypeParsersTest {
             new CurlyBrackets()
         );
 
-        CType type = parsers.parse(new TokenReader(input), false);
+        CType type = parsers.parse(new TokenReader(input), new CTypeModifiers());
 
         Assert.assertNotNull(type);
-        Assert.assertEquals(false, type.isConstant());
+        Assert.assertEquals(false, type.getModifiers().isConstant());
         Assert.assertEquals(true, type.getTypename() instanceof CUnion);
     }
 
@@ -130,10 +127,10 @@ public @Test class InlineTypeParsersTest {
             new CurlyBrackets()
         );
 
-        CType type = parsers.parse(new TokenReader(input), false);
+        CType type = parsers.parse(new TokenReader(input), new CTypeModifiers());
 
         Assert.assertNotNull(type);
-        Assert.assertEquals(false, type.isConstant());
+        Assert.assertEquals(false, type.getModifiers().isConstant());
         Assert.assertEquals(true, type.getTypename() instanceof CEnum);
     }
 
@@ -144,10 +141,10 @@ public @Test class InlineTypeParsersTest {
             new CurlyBrackets()
         );
 
-        CType type = parsers.parse(new TokenReader(input), true);
+        CType type = parsers.parse(new TokenReader(input), new CTypeModifiers());
 
         Assert.assertNotNull(type);
-        Assert.assertEquals(true, type.isConstant());
+        Assert.assertEquals(true, type.getModifiers().isConstant());
         Assert.assertEquals(true, type.getTypename() instanceof CEnum);
     }
 
@@ -157,10 +154,10 @@ public @Test class InlineTypeParsersTest {
             new CurlyBrackets()
         );
 
-        CType type = parsers.parse(new TokenReader(input), false);
+        CType type = parsers.parse(new TokenReader(input), new CTypeModifiers());
 
         Assert.assertNotNull(type);
-        Assert.assertEquals(false, type.isConstant());
+        Assert.assertEquals(false, type.getModifiers().isConstant());
         Assert.assertEquals(true, type.getTypename() instanceof CEnum);
     }
 
@@ -171,7 +168,7 @@ public @Test class InlineTypeParsersTest {
             new CurlyBrackets()
         );
 
-        CType type = parsers.parse(new TokenReader(input), true);
+        CType type = parsers.parse(new TokenReader(input), new CTypeModifiers(true, false));
 
         Assert.assertNull(type);
     }

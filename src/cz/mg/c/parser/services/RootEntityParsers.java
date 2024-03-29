@@ -95,7 +95,7 @@ public @Service class RootEntityParsers {
     }
 
     private boolean isPlainType(@Mandatory CType type) {
-        return type.getArrays().isEmpty() && type.getPointers().isEmpty() && !type.isConstant();
+        return type.getArrays().isEmpty() && type.getPointers().isEmpty() && !type.getModifiers().isConstant();
     }
 
     private boolean isFunctionPointer(@Mandatory CType type) {
