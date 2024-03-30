@@ -93,7 +93,7 @@ public @Test class TypedefParserTest {
                 f.word("typedef"),
                 f.word("void"),
                 b.roundBrackets(
-                    f.operator("*"),
+                    f.symbol("*"),
                     f.word("FooBar"),
                     b.squareBrackets(
                         f.number("2")

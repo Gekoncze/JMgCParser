@@ -9,10 +9,9 @@ import cz.mg.c.parser.test.BracketFactory;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
 import cz.mg.token.Token;
-import cz.mg.token.tokens.BracketToken;
-import cz.mg.token.tokens.DoubleQuoteToken;
+import cz.mg.token.tokens.SymbolToken;
 import cz.mg.token.tokens.WordToken;
-import cz.mg.token.tokens.OperatorToken;
+import cz.mg.token.tokens.quote.DoubleQuoteToken;
 
 public @Test class BracketParserTest {
     public static void main(String[] args) {
@@ -46,7 +45,7 @@ public @Test class BracketParserTest {
     }
 
     private void testParseOnlyGroup() {
-        List<Token> input = new List<>(new BracketToken("(", 3), new BracketToken(")", 4));
+        List<Token> input = new List<>(new SymbolToken("(", 3), new SymbolToken(")", 4));
         List<Token> output = parser.parse(input);
         Assert.assertEquals(1, output.count());
         Assert.assertEquals(RoundBrackets.class, output.getFirst().getClass());
@@ -56,7 +55,7 @@ public @Test class BracketParserTest {
 
     private void testParseMissingLeftBracket() {
         ParseException exception = Assert.assertThatCode(() -> {
-            List<Token> input = new List<>(new BracketToken(")", 4));
+            List<Token> input = new List<>(new SymbolToken(")", 4));
             parser.parse(input);
         }).throwsException(ParseException.class);
         Assert.assertEquals("Missing left test parenthesis.", exception.getMessage());
@@ -65,7 +64,7 @@ public @Test class BracketParserTest {
 
     private void testParseMissingRightBracket() {
         ParseException exception = Assert.assertThatCode(() -> {
-            List<Token> input = new List<>(new BracketToken("(", 3));
+            List<Token> input = new List<>(new SymbolToken("(", 3));
             parser.parse(input);
         }).throwsException(ParseException.class);
         Assert.assertEquals("Missing right test parenthesis.", exception.getMessage());
@@ -74,15 +73,15 @@ public @Test class BracketParserTest {
 
     private void testParseNested() {
         List<Token> input = new List<>(
-            new OperatorToken("+", 0),
-            new BracketToken("(", 1),
+            new SymbolToken("+", 0),
+            new SymbolToken("(", 1),
             new WordToken("foo", 2),
-            new BracketToken("(", 5),
+            new SymbolToken("(", 5),
             new DoubleQuoteToken("(", 6),
-            new BracketToken(")", 9),
+            new SymbolToken(")", 9),
             new WordToken("bar", 10),
-            new BracketToken(")", 13),
-            new OperatorToken("*", 14)
+            new SymbolToken(")", 13),
+            new SymbolToken("*", 14)
         );
 
         List<Token> output = parser.parse(input);
@@ -116,11 +115,11 @@ public @Test class BracketParserTest {
 
     private void testParseExistingGroups() {
         List<Token> input = new List<>(
-            new BracketToken("(", 3),
-            new BracketToken(")", 4),
+            new SymbolToken("(", 3),
+            new SymbolToken(")", 4),
             b.roundBrackets(
-                new BracketToken("(", 12),
-                new BracketToken(")", 13)
+                new SymbolToken("(", 12),
+                new SymbolToken(")", 13)
             )
         );
 

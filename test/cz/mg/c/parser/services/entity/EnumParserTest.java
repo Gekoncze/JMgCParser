@@ -92,9 +92,9 @@ public @Test class EnumParserTest {
             f.word("NomNomNom"),
             b.curlyBrackets(
                 f.word("NOM"),
-                f.operator("="),
+                f.symbol("="),
                 f.number("22"),
-                f.separator(","),
+                f.symbol(","),
                 f.word("NOM2")
             )
         );

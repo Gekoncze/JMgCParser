@@ -38,7 +38,7 @@ public @Test class FunctionTypeParserTest {
         CType output = new CType();
         CType type = parser.parse(new TokenReader(new List<>(
             b.roundBrackets(
-                f.operator("*"),
+                f.symbol("*"),
                 f.word("fooptr")
             ),
             b.roundBrackets()
@@ -57,12 +57,12 @@ public @Test class FunctionTypeParserTest {
         CType output = new CType();
         CType type = parser.parse(new TokenReader(new List<>(
             b.roundBrackets(
-                f.operator("**"),
+                f.symbol("**"),
                 f.word("fooptrptr")
             ),
             b.roundBrackets(
                 f.word("int"),
-                f.separator(","),
+                f.symbol(","),
                 f.word("int")
             )
         )), output);
@@ -79,9 +79,9 @@ public @Test class FunctionTypeParserTest {
         CType output = new CType();
         CType type = parser.parse(new TokenReader(new List<>(
             b.roundBrackets(
-                f.operator("*"),
+                f.symbol("*"),
                 f.word("const"),
-                f.operator("*"),
+                f.symbol("*"),
                 f.word("fooptrptrarr"),
                 b.squareBrackets(
                     f.number("3")
@@ -90,7 +90,7 @@ public @Test class FunctionTypeParserTest {
             b.roundBrackets(
                 f.word("int"),
                 f.word("foo"),
-                f.separator(","),
+                f.symbol(","),
                 f.word("int"),
                 f.word("bar")
             )

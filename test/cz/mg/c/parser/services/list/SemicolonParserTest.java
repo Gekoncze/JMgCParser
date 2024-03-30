@@ -35,7 +35,7 @@ public @Test class SemicolonParserTest {
         List<Token> input = new List<>(
             f.word("foo"),
             f.word("bar"),
-            f.separator(";")
+            f.symbol(";")
         );
         List<List<Token>> output = parser.parse(input);
 
@@ -55,9 +55,9 @@ public @Test class SemicolonParserTest {
         List<Token> input = new List<>(
             f.word("foo"),
             f.word("bar"),
-            f.separator(";"),
+            f.symbol(";"),
             f.number("77"),
-            f.separator(";")
+            f.symbol(";")
         );
         List<List<Token>> output = parser.parse(input);
 
@@ -85,7 +85,7 @@ public @Test class SemicolonParserTest {
             List<Token> input = new List<>(
                 f.word("foo"),
                 f.word("bar"),
-                f.plain(";")
+                f.token(";")
             );
             parser.parse(input);
         }).throwsException(ParseException.class);

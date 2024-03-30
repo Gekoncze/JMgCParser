@@ -22,7 +22,7 @@ public @Test class RoundBracketParserTest {
     private final @Service TokenFactory f = TokenFactory.getInstance();
 
     private void testParse() {
-        List<Token> input = new List<>(f.bracket("("), f.bracket(")"));
+        List<Token> input = new List<>(f.symbol("("), f.symbol(")"));
         List<Token> output = parser.parse(input);
         Assert.assertEquals(1, output.count());
         Assert.assertEquals(RoundBrackets.class, output.getFirst().getClass());

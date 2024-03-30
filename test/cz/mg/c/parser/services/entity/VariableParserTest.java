@@ -10,7 +10,7 @@ import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.c.parser.test.BracketFactory;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
-import cz.mg.token.tokens.SeparatorToken;
+import cz.mg.token.tokens.SymbolToken;
 import cz.mg.tokenizer.test.TokenFactory;
 import cz.mg.tokenizer.test.TokenValidator;
 
@@ -142,7 +142,7 @@ public @Test class VariableParserTest {
             f.word("bar"),
             b.squareBrackets(
                 f.number("12"),
-                f.operator("+"),
+                f.symbol("+"),
                 f.number("1.5")
             )
         ));
@@ -154,7 +154,7 @@ public @Test class VariableParserTest {
         tokenValidator.assertEquals(
             new List<>(
                 f.number("12"),
-                f.operator("+"),
+                f.symbol("+"),
                 f.number("1.5")
             ),
             variable.getType().getArrays().getFirst().getExpression()
@@ -169,12 +169,12 @@ public @Test class VariableParserTest {
         TokenReader reader = new TokenReader(new List<>(
             f.word("const"),
             f.word("float"),
-            f.operator("*"),
+            f.symbol("*"),
             f.word("const"),
             f.word("bar"),
             b.squareBrackets(
                 f.number("12"),
-                f.operator("+"),
+                f.symbol("+"),
                 f.number("1.5")
             )
         ));
@@ -186,7 +186,7 @@ public @Test class VariableParserTest {
         tokenValidator.assertEquals(
             new List<>(
                 f.number("12"),
-                f.operator("+"),
+                f.symbol("+"),
                 f.number("1.5")
             ),
             variable.getType().getArrays().getFirst().getExpression()
@@ -205,9 +205,9 @@ public @Test class VariableParserTest {
             b.curlyBrackets(
                 f.word("int"),
                 f.word("a"),
-                f.separator(";")
+                f.symbol(";")
             ),
-            f.operator("*"),
+            f.symbol("*"),
             f.word("foobar"),
             b.squareBrackets(
                 f.number("2")
@@ -239,11 +239,11 @@ public @Test class VariableParserTest {
         TokenReader reader = new TokenReader(new List<>(
             f.word("int"),
             f.word("foo"),
-            f.operator("="),
+            f.symbol("="),
             f.number("1"),
-            f.operator("+"),
+            f.symbol("+"),
             f.number("2"),
-            f.separator(";")
+            f.symbol(";")
         ));
 
         CVariable variable = parser.parse(reader);
@@ -252,19 +252,19 @@ public @Test class VariableParserTest {
         Assert.assertEquals("int", variable.getType().getTypename().getName());
         Assert.assertNotNull(variable.getExpression());
         tokenValidator.assertEquals(
-            new List<>(f.number("1"), f.operator("+"), f.number("2")),
+            new List<>(f.number("1"), f.symbol("+"), f.number("2")),
             variable.getExpression()
         );
-        reader.read(";", SeparatorToken.class);
+        reader.read(";", SymbolToken.class);
         reader.readEnd();
     }
 
     private void testParseWithTypeAndInitializer() {
         TokenReader reader = new TokenReader(new List<>(
             f.word("foo"),
-            f.operator("="),
+            f.symbol("="),
             f.number("1"),
-            f.operator("+"),
+            f.symbol("+"),
             f.number("2")
         ));
 
@@ -276,7 +276,7 @@ public @Test class VariableParserTest {
         Assert.assertSame(type, variable.getType());
         Assert.assertNotNull(variable.getExpression());
         tokenValidator.assertEquals(
-            new List<>(f.number("1"), f.operator("+"), f.number("2")),
+            new List<>(f.number("1"), f.symbol("+"), f.number("2")),
             variable.getExpression()
         );
         reader.readEnd();
@@ -284,7 +284,7 @@ public @Test class VariableParserTest {
 
     private void testParseBitField() {
         TokenReader reader = new TokenReader(new List<>(
-            f.word("int"), f.word("foo"), f.operator(":"), f.number("8")
+            f.word("int"), f.word("foo"), f.symbol(":"), f.number("8")
         ));
 
         CVariable variable = parser.parse(reader);

@@ -39,9 +39,9 @@ public @Test class RootEntityParsersTest {
 
     private void testParseSemicolons() {
         List<Token> input = new List<>(
-            f.separator(";"),
-            f.separator(";"),
-            f.separator(";")
+            f.symbol(";"),
+            f.symbol(";"),
+            f.symbol(";")
         );
 
         List<CMainEntity> entities = parsers.parse(input);
@@ -53,9 +53,9 @@ public @Test class RootEntityParsersTest {
             f.word("typedef"),
             f.word("const"),
             f.word("int"),
-            f.operator("*"),
+            f.symbol("*"),
             f.word("IntPtr"),
-            f.separator(";")
+            f.symbol(";")
         );
 
         List<CMainEntity> entities = parsers.parse(input);
@@ -72,15 +72,15 @@ public @Test class RootEntityParsersTest {
     private void testParseVariable() {
         List<Token> input = new List<>(
             f.word("int"),
-            f.operator("*"),
-            f.operator("*"),
+            f.symbol("*"),
+            f.symbol("*"),
             f.word("foo"),
             b.squareBrackets(
                 f.number("1"),
-                f.operator("+"),
+                f.symbol("+"),
                 f.number("1")
             ),
-            f.separator(";")
+            f.symbol(";")
         );
 
         List<CMainEntity> entities = parsers.parse(input);
@@ -98,12 +98,12 @@ public @Test class RootEntityParsersTest {
     private void testParseFunction() {
         List<Token> input = new List<>(
             f.word("void"),
-            f.operator("*"),
+            f.symbol("*"),
             f.word("getAddress"),
             b.roundBrackets(
                 f.word("foo"),
                 f.word("bar"),
-                f.separator(","),
+                f.symbol(","),
                 f.word("const"),
                 f.word("int"),
                 f.word("constant")
@@ -111,7 +111,7 @@ public @Test class RootEntityParsersTest {
             b.curlyBrackets(
                 f.word("return"),
                 f.number("0"),
-                f.separator(";")
+                f.symbol(";")
             )
         );
 
@@ -142,13 +142,13 @@ public @Test class RootEntityParsersTest {
             b.curlyBrackets(
                 f.word("int"),
                 f.word("a"),
-                f.separator(";"),
+                f.symbol(";"),
                 f.word("int"),
-                f.operator("*"),
+                f.symbol("*"),
                 f.word("b"),
-                f.separator(";")
+                f.symbol(";")
             ),
-            f.separator(";")
+            f.symbol(";")
         );
 
         List<CMainEntity> entities = parsers.parse(input);
@@ -173,18 +173,18 @@ public @Test class RootEntityParsersTest {
             b.curlyBrackets(
                 f.word("int"),
                 f.word("i"),
-                f.separator(";"),
+                f.symbol(";"),
                 f.word("char"),
                 f.word("c"),
                 b.squareBrackets(
                     f.number("4")
                 ),
-                f.separator(";"),
+                f.symbol(";"),
                 f.word("float"),
                 f.word("f"),
-                f.separator(";")
+                f.symbol(";")
             ),
-            f.separator(";")
+            f.symbol(";")
         );
 
         List<CMainEntity> entities = parsers.parse(input);
@@ -215,16 +215,16 @@ public @Test class RootEntityParsersTest {
             f.word("Color"),
             b.curlyBrackets(
                 f.word("RED"),
-                f.operator("="),
+                f.symbol("="),
                 f.number("0"),
-                f.separator(","),
+                f.symbol(","),
                 f.word("GREEN"),
-                f.separator(","),
+                f.symbol(","),
                 f.word("BLUE"),
-                f.separator(","),
+                f.symbol(","),
                 f.word("ALPHA")
             ),
-            f.separator(";")
+            f.symbol(";")
         );
 
         List<CMainEntity> entities = parsers.parse(input);
@@ -253,11 +253,11 @@ public @Test class RootEntityParsersTest {
         List<Token> input = new List<>(
             f.word("void"),
             b.roundBrackets(
-                f.operator("*"),
+                f.symbol("*"),
                 f.word("fptr")
             ),
             b.roundBrackets(),
-            f.separator(";")
+            f.symbol(";")
         );
 
         List<CMainEntity> entities = parsers.parse(input);
@@ -279,17 +279,17 @@ public @Test class RootEntityParsersTest {
             f.word("typedef"),
             f.word("const"),
             f.word("int"),
-            f.operator("*"),
+            f.symbol("*"),
             f.word("IntPtr"),
-            f.separator(";"),
+            f.symbol(";"),
 
             f.word("void"),
-            f.operator("*"),
+            f.symbol("*"),
             f.word("getAddress"),
             b.roundBrackets(
                 f.word("foo"),
                 f.word("bar"),
-                f.separator(","),
+                f.symbol(","),
                 f.word("const"),
                 f.word("int"),
                 f.word("constant")
@@ -297,7 +297,7 @@ public @Test class RootEntityParsersTest {
             b.curlyBrackets(
                 f.word("return"),
                 f.number("0"),
-                f.separator(";")
+                f.symbol(";")
             ),
 
             f.word("struct"),
@@ -305,21 +305,21 @@ public @Test class RootEntityParsersTest {
             b.curlyBrackets(
                 f.word("int"),
                 f.word("a"),
-                f.separator(";"),
+                f.symbol(";"),
                 f.word("int"),
-                f.operator("*"),
+                f.symbol("*"),
                 f.word("b"),
-                f.separator(";")
+                f.symbol(";")
             ),
-            f.separator(";"),
+            f.symbol(";"),
 
             f.word("void"),
             b.roundBrackets(
-                f.operator("*"),
+                f.symbol("*"),
                 f.word("fptr")
             ),
             b.roundBrackets(),
-            f.separator(";")
+            f.symbol(";")
         );
 
         List<CMainEntity> entities = parsers.parse(input);

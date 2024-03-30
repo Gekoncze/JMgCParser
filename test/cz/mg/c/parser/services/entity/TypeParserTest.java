@@ -102,9 +102,9 @@ public @Test class TypeParserTest {
     private void testParsePointersSeparate() {
         TokenReader reader = new TokenReader(new List<>(
             f.word("foo"),
-            f.operator("*"),
-            f.operator("*"),
-            f.operator("*")
+            f.symbol("*"),
+            f.symbol("*"),
+            f.symbol("*")
         ));
 
         CType type = parser.parse(reader);
@@ -123,7 +123,7 @@ public @Test class TypeParserTest {
     private void testParsePointersTogether() {
         TokenReader reader = new TokenReader(new List<>(
             f.word("dst"),
-            f.operator("***")
+            f.symbol("***")
         ));
 
         CType type = parser.parse(reader);
@@ -143,38 +143,38 @@ public @Test class TypeParserTest {
         testParsePointersConst(new List<>(
             f.word("const"),
             f.word("foo"),
-            f.operator("*"),
-            f.operator("*"),
-            f.operator("*"),
+            f.symbol("*"),
+            f.symbol("*"),
+            f.symbol("*"),
             f.word("const")
         ), true, false, false, true);
 
         testParsePointersConst(new List<>(
             f.word("foo"),
             f.word("const"),
-            f.operator("*"),
-            f.operator("*"),
+            f.symbol("*"),
+            f.symbol("*"),
             f.word("const"),
-            f.operator("*")
+            f.symbol("*")
         ), true, false, true, false);
 
         testParsePointersConst(new List<>(
             f.word("foo"),
-            f.operator("*"),
+            f.symbol("*"),
             f.word("const"),
-            f.operator("*"),
-            f.operator("*")
+            f.symbol("*"),
+            f.symbol("*")
         ), false, true, false, false);
 
         testParsePointersConst(new List<>(
             f.word("const"),
             f.word("foo"),
             f.word("const"),
-            f.operator("*"),
+            f.symbol("*"),
             f.word("const"),
-            f.operator("*"),
+            f.symbol("*"),
             f.word("const"),
-            f.operator("*"),
+            f.symbol("*"),
             f.word("const")
         ), true, true, true, true);
 
@@ -186,15 +186,15 @@ public @Test class TypeParserTest {
             f.word("const"),
             f.word("const"),
             f.word("const"),
-            f.operator("*"),
+            f.symbol("*"),
             f.word("const"),
             f.word("const"),
             f.word("const"),
-            f.operator("*"),
+            f.symbol("*"),
             f.word("const"),
             f.word("const"),
             f.word("const"),
-            f.operator("*"),
+            f.symbol("*"),
             f.word("const"),
             f.word("const"),
             f.word("const")
@@ -227,7 +227,7 @@ public @Test class TypeParserTest {
         Assert.assertThatCode(() -> {
             parser.parse(new TokenReader(new List<>(
                 f.word("foo"),
-                f.operator("*/")
+                f.symbol("*/")
             )));
         }).throwsException(ParseException.class);
     }
@@ -239,9 +239,9 @@ public @Test class TypeParserTest {
             b.curlyBrackets(
                 f.word("int"),
                 f.word("a"),
-                f.separator(";")
+                f.symbol(";")
             ),
-            f.operator("*")
+            f.symbol("*")
         ));
 
         CType type = parser.parse(reader);

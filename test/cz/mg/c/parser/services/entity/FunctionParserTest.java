@@ -72,7 +72,7 @@ public @Test class FunctionParserTest {
     private void testInterfaceNoInput() {
         List<Token> input = new List<>(
             f.word("int"),
-            f.operator("*"),
+            f.symbol("*"),
             f.word("foobar"),
             b.roundBrackets()
         );
@@ -136,13 +136,13 @@ public @Test class FunctionParserTest {
             b.roundBrackets(
                 f.word("float"),
                 f.word("floating"),
-                f.separator(","),
+                f.symbol(","),
                 f.word("double"),
                 f.word("doubling"),
-                f.separator(","),
+                f.symbol(","),
                 f.word("void"),
-                f.operator("*"),
-                f.operator("*"),
+                f.symbol("*"),
+                f.symbol("*"),
                 f.word("voiding")
             )
         );
@@ -165,12 +165,12 @@ public @Test class FunctionParserTest {
             f.word("void"),
             b.roundBrackets(
                 f.word("float"),
-                f.separator(","),
+                f.symbol(","),
                 f.word("double"),
-                f.separator(","),
+                f.symbol(","),
                 f.word("void"),
-                f.operator("*"),
-                f.operator("*")
+                f.symbol("*"),
+                f.symbol("*")
             )
         );
         CFunction function = parser.parse(new TokenReader(input));
@@ -244,21 +244,21 @@ public @Test class FunctionParserTest {
     private void testFunction() {
         List<Token> input = new List<>(
             f.word("void"),
-            f.operator("*"),
+            f.symbol("*"),
             f.word("foobar"),
             b.roundBrackets(
                 f.word("float"),
-                f.operator("*"),
+                f.symbol("*"),
                 f.word("floating"),
-                f.separator(","),
+                f.symbol(","),
                 f.word("double"),
-                f.operator("*"),
+                f.symbol("*"),
                 f.word("doubling")
             ),
             b.curlyBrackets(
                 f.word("return"),
                 f.word("null"),
-                f.separator(";")
+                f.symbol(";")
             )
         );
         CFunction function = parser.parse(new TokenReader(input));

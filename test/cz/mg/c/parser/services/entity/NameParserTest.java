@@ -5,7 +5,7 @@ import cz.mg.annotations.classes.Test;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
-import cz.mg.token.tokens.SeparatorToken;
+import cz.mg.token.tokens.SymbolToken;
 import cz.mg.tokenizer.test.TokenFactory;
 
 public @Test class NameParserTest {
@@ -29,16 +29,16 @@ public @Test class NameParserTest {
     }
 
     private void testParseAnonymous() {
-        TokenReader reader = new TokenReader(new List<>(f.separator(",")));
+        TokenReader reader = new TokenReader(new List<>(f.symbol(",")));
         String name = parser.parse(reader);
         Assert.assertNull(name);
-        Assert.assertEquals(true, reader.has(",", SeparatorToken.class));
+        Assert.assertEquals(true, reader.has(",", SymbolToken.class));
     }
 
     private void testParseName() {
-        TokenReader reader = new TokenReader(new List<>(f.word("foo"), f.separator(",")));
+        TokenReader reader = new TokenReader(new List<>(f.word("foo"), f.symbol(",")));
         String name = parser.parse(reader);
         Assert.assertEquals("foo", name);
-        Assert.assertEquals(true, reader.has(",", SeparatorToken.class));
+        Assert.assertEquals(true, reader.has(",", SymbolToken.class));
     }
 }

@@ -45,11 +45,11 @@ public @Test class ListParserTest {
         List<Token> input = new List<>(
             f.word("foo"),
             f.word("bar"),
-            f.separator(","),
-            f.separator("."),
-            f.separator(","),
+            f.symbol(","),
+            f.symbol("."),
+            f.symbol(","),
             f.number("11"),
-            f.operator("+"),
+            f.symbol("+"),
             f.number("0")
         );
         List<List<Token>> output = parser.parse(new TokenReader(input));
@@ -59,17 +59,17 @@ public @Test class ListParserTest {
             f.word("bar")
         ), output.get(0));
         validator.assertEquals(new List<>(
-            f.separator(".")
+            f.symbol(".")
         ), output.get(1));
         validator.assertEquals(new List<>(
             f.number("11"),
-            f.operator("+"),
+            f.symbol("+"),
             f.number("0")
         ), output.get(2));
     }
 
     private void testParseMultipleEmpty() {
-        List<Token> input = new List<>(f.separator(","), f.separator(","));
+        List<Token> input = new List<>(f.symbol(","), f.symbol(","));
         List<List<Token>> output = parser.parse(new TokenReader(input));
         Assert.assertEquals(3, output.count());
         Assert.assertEquals(0, output.get(0).count());

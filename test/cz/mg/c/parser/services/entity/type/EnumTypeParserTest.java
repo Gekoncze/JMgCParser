@@ -78,7 +78,7 @@ public @Test class EnumTypeParserTest {
             f.word("FooBar"),
             b.curlyBrackets(
                 f.word("foo"),
-                f.separator(","),
+                f.symbol(","),
                 f.word("bar")
             )
         );
@@ -99,15 +99,15 @@ public @Test class EnumTypeParserTest {
             f.word("FooBar"),
             b.curlyBrackets(
                 f.word("foo"),
-                f.operator("="),
+                f.symbol("="),
                 f.word("1"),
-                f.separator(","),
+                f.symbol(","),
                 f.word("bar"),
-                f.operator("="),
+                f.symbol("="),
                 f.word("2")
             ),
             f.word("const"),
-            f.operator("*"),
+            f.symbol("*"),
             f.word("const")
         );
         CType type = parser.parse(new TokenReader(tokens));

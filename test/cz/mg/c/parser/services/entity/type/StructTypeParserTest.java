@@ -59,7 +59,7 @@ public @Test class StructTypeParserTest {
             b.curlyBrackets(
                 f.word("int"),
                 f.word("bar"),
-                f.separator(";")
+                f.symbol(";")
             )
         );
         CType type = parser.parse(new TokenReader(tokens));
@@ -81,7 +81,7 @@ public @Test class StructTypeParserTest {
             b.curlyBrackets(
                 f.word("int"),
                 f.word("bar"),
-                f.separator(";")
+                f.symbol(";")
             )
         );
         CType type = parser.parse(new TokenReader(tokens));
@@ -105,13 +105,13 @@ public @Test class StructTypeParserTest {
                 f.word("const"),
                 f.word("int"),
                 f.word("a"),
-                f.separator(";"),
+                f.symbol(";"),
                 f.word("int"),
                 f.word("b"),
-                f.separator(";")
+                f.symbol(";")
             ),
             f.word("const"),
-            f.operator("*"),
+            f.symbol("*"),
             f.word("const")
         );
         CType type = parser.parse(new TokenReader(tokens));

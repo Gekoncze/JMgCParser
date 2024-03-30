@@ -33,8 +33,8 @@ public @Test class BracketParsersTest {
 
     private void testParseOne() {
         List<Token> input = new List<>(
-            f.bracket("{"),
-            f.bracket("}")
+            f.symbol("{"),
+            f.symbol("}")
         );
 
         List<Token> output = parsers.parse(input);
@@ -48,20 +48,20 @@ public @Test class BracketParsersTest {
         List<Token> input = new List<>(
             f.word("void"),
             f.word("fooBar"),
-            f.bracket("("),
+            f.symbol("("),
             f.word("struct"),
-            f.bracket("{"),
-            f.bracket("}"),
+            f.symbol("{"),
+            f.symbol("}"),
             f.word("parameter"),
-            f.bracket(")"),
-            f.bracket("{"),
+            f.symbol(")"),
+            f.symbol("{"),
             f.word("if"),
-            f.bracket("("),
+            f.symbol("("),
             f.word("true"),
-            f.bracket(")"),
+            f.symbol(")"),
             f.word("return"),
-            f.special(";"),
-            f.bracket("}")
+            f.symbol(";"),
+            f.symbol("}")
         );
 
         List<Token> output = parsers.parse(input);
@@ -80,7 +80,7 @@ public @Test class BracketParsersTest {
                         f.word("true")
                     ),
                     f.word("return"),
-                    f.special(";")
+                    f.symbol(";")
                 )
             ),
             output

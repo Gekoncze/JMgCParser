@@ -46,7 +46,7 @@ public @Test class ArrayParserTest {
             b.squareBrackets(f.number("7")),
             b.squareBrackets(
                 f.number("1"),
-                f.operator("+"),
+                f.symbol("+"),
                 f.number("3")
             )
         );

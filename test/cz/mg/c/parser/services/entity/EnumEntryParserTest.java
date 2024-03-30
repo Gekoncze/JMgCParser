@@ -43,9 +43,9 @@ public @Test class EnumEntryParserTest {
     private void testExpression() {
         List<Token> input = new List<>(
             f.word("COMPLEX_VALUE"),
-            f.operator("="),
+            f.symbol("="),
             f.number("11"),
-            f.operator("+"),
+            f.symbol("+"),
             f.number("2")
         );
         CEnumEntry entry = parser.parse(new TokenReader(input));

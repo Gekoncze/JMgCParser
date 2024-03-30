@@ -78,9 +78,9 @@ public @Test class UnionParserTest {
             b.curlyBrackets(
                 f.word("const"),
                 f.word("int"),
-                f.operator("*"),
+                f.symbol("*"),
                 f.word("bar"),
-                f.separator(";")
+                f.symbol(";")
             )
         );
         CUnion union = parser.parse(new TokenReader(input));
@@ -101,13 +101,13 @@ public @Test class UnionParserTest {
             b.curlyBrackets(
                 f.word("int"),
                 f.word("i"),
-                f.separator(";"),
+                f.symbol(";"),
                 f.word("long"),
                 f.word("l"),
-                f.separator(";"),
+                f.symbol(";"),
                 f.word("short"),
                 f.word("s"),
-                f.separator(";")
+                f.symbol(";")
             )
         );
         CUnion union = parser.parse(new TokenReader(input));
@@ -128,7 +128,7 @@ public @Test class UnionParserTest {
                     f.word("int"),
                     f.word("i"),
                     f.word("iii"),
-                    f.separator(";")
+                    f.symbol(";")
                 )
             )));
         }).throwsException(ParseException.class);

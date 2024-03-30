@@ -34,7 +34,7 @@ public @Test class VariableListParserTest {
 
     private void testParseIllegalList() {
         Assert.assertThatCode(() -> {
-            parser.parse(b.roundBrackets(f.separator(",")));
+            parser.parse(b.roundBrackets(f.symbol(",")));
         }).throwsException(ParseException.class);
     }
 
@@ -60,9 +60,9 @@ public @Test class VariableListParserTest {
     private void testParseMultiple() {
         List<CVariable> variables = parser.parse(b.roundBrackets(
             f.word("int"),
-            f.operator("*"),
+            f.symbol("*"),
             f.word("a"),
-            f.separator(","),
+            f.symbol(","),
             f.word("float"),
             f.word("b")
         ));
