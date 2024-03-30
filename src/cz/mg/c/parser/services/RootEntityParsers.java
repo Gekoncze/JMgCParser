@@ -7,7 +7,7 @@ import cz.mg.c.entities.CFunction;
 import cz.mg.c.entities.CMainEntity;
 import cz.mg.c.entities.CType;
 import cz.mg.c.entities.CVariable;
-import cz.mg.c.entities.brackets.RoundBrackets;
+import cz.mg.token.tokens.brackets.RoundBrackets;
 import cz.mg.c.parser.services.entity.FunctionParser;
 import cz.mg.c.parser.services.entity.TypeParser;
 import cz.mg.c.parser.services.entity.TypedefParser;

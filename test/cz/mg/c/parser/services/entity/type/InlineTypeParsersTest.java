@@ -3,7 +3,7 @@ package cz.mg.c.parser.services.entity.type;
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
 import cz.mg.c.entities.*;
-import cz.mg.c.entities.brackets.CurlyBrackets;
+import cz.mg.token.tokens.brackets.CurlyBrackets;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;

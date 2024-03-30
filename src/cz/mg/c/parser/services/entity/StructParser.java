@@ -5,7 +5,7 @@ import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.entities.CStruct;
 import cz.mg.c.entities.CVariable;
-import cz.mg.c.entities.brackets.CurlyBrackets;
+import cz.mg.token.tokens.brackets.CurlyBrackets;
 import cz.mg.c.parser.services.list.SemicolonParser;
 import cz.mg.collections.list.List;
 import cz.mg.token.Token;

@@ -5,7 +5,7 @@ import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.entities.CFunction;
 import cz.mg.c.entities.CTypedef;
-import cz.mg.c.entities.brackets.SquareBrackets;
+import cz.mg.token.tokens.brackets.SquareBrackets;
 import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.c.parser.services.entity.type.ArrayParser;
 import cz.mg.token.tokens.WordToken;
