@@ -47,6 +47,6 @@ public @Test class AllTests {
         RootEntityParsersTest.main(args);
 
         // cz.mg.c.parser
-        ParserTest.main(args);
+        CParserTest.main(args);
     }
 }

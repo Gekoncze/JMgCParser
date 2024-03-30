@@ -3,6 +3,7 @@ package cz.mg.c.parser;
 import cz.mg.annotations.classes.Component;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.c.entities.CFile;
+import cz.mg.c.entities.macro.Macros;
 import cz.mg.c.parser.services.RootEntityParsers;
 import cz.mg.c.parser.services.bracket.BracketParsers;
 import cz.mg.c.preprocessor.CPreprocessor;
@@ -12,6 +13,10 @@ public @Component class CParser {
     private final @Mandatory BracketParsers bracketParsers = BracketParsers.getInstance();
     private final @Mandatory RootEntityParsers rootEntityParsers = RootEntityParsers.getInstance();
     private final @Mandatory CPreprocessor preprocessor;
+
+    public CParser(@Mandatory Macros macros) {
+        this(new CPreprocessor(macros));
+    }
 
     public CParser(@Mandatory CPreprocessor preprocessor) {
         this.preprocessor = preprocessor;

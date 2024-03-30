@@ -4,8 +4,6 @@ import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.c.entities.*;
-import cz.mg.c.preprocessor.CPreprocessor;
-import cz.mg.c.tokenizer.CTokenizer;
 import cz.mg.token.tokens.brackets.CurlyBrackets;
 import cz.mg.token.tokens.brackets.RoundBrackets;
 import cz.mg.token.tokens.brackets.SquareBrackets;
@@ -26,16 +24,16 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.file.Path;
 
-public @Test class ParserTest {
+public @Test class CParserTest {
     private static final @Mandatory String TEST_FILE_DEFINITIONS = "definitions.c";
     private static final @Mandatory String TEST_FILE_DECLARATIONS = "declarations.c";
     private static final @Mandatory String TEST_FILE_PREPROCESSING = "preprocessing.c";
     private static final @Mandatory String TEST_FILE_BROKEN = "broken.c";
 
     public static void main(String[] args) {
-        System.out.print("Running " + ParserTest.class.getSimpleName() + " ... ");
+        System.out.print("Running " + CParserTest.class.getSimpleName() + " ... ");
 
-        ParserTest test = new ParserTest();
+        CParserTest test = new CParserTest();
         test.testParseDefinitions();
         test.testParseDeclarations();
         test.testParsePreprocessing();
@@ -51,7 +49,7 @@ public @Test class ParserTest {
         File file = new File(Path.of(TEST_FILE_DEFINITIONS), content);
         Macros macros = new Macros();
 
-        CParser parser = new CParser(new CPreprocessor(new CTokenizer(), macros));
+        CParser parser = new CParser(macros);
         CFile cFile = parser.parse(file);
         Assert.assertEquals(file.getPath(), cFile.getPath());
 
@@ -158,7 +156,7 @@ public @Test class ParserTest {
         File file = new File(Path.of(TEST_FILE_DECLARATIONS), content);
         Macros macros = new Macros();
 
-        CParser parser = new CParser(new CPreprocessor(new CTokenizer(), macros));
+        CParser parser = new CParser(macros);
         CFile cFile = parser.parse(file);
         Assert.assertEquals(file.getPath(), cFile.getPath());
 
@@ -200,7 +198,7 @@ public @Test class ParserTest {
         Macro externalCondition = new Macro(new WordToken("EXTERNAL_CONDITION", -1), null, new List<>());
         macros.getDefinitions().addLast(externalCondition);
 
-        CParser parser = new CParser(new CPreprocessor(new CTokenizer(), macros));
+        CParser parser = new CParser(macros);
         CFile cFile = parser.parse(file);
         Assert.assertEquals(file.getPath(), cFile.getPath());
 
@@ -279,7 +277,7 @@ public @Test class ParserTest {
         String content = readTestFile(TEST_FILE_BROKEN);
         File file = new File(Path.of(TEST_FILE_BROKEN), content);
         Macros macros = new Macros();
-        CParser parser = new CParser(new CPreprocessor(new CTokenizer(), macros));
+        CParser parser = new CParser(macros);
 
         ParseException exception = Assert.assertThatCode(() -> {
             parser.parse(file);
@@ -316,7 +314,7 @@ public @Test class ParserTest {
     }
 
     private @Mandatory String readTestFile(@Mandatory String name) {
-        InputStream stream = ParserTest.class.getResourceAsStream(name);
+        InputStream stream = CParserTest.class.getResourceAsStream(name);
         if (stream != null) {
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(stream))) {
                 StringBuilder content = new StringBuilder();
