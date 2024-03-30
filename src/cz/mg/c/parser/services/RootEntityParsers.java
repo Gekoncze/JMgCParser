@@ -13,9 +13,9 @@ import cz.mg.c.parser.services.entity.TypeParser;
 import cz.mg.c.parser.services.entity.TypedefParser;
 import cz.mg.c.parser.services.entity.VariableParser;
 import cz.mg.collections.list.List;
-import cz.mg.tokenizer.entities.Token;
-import cz.mg.tokenizer.entities.tokens.SeparatorToken;
-import cz.mg.tokenizer.entities.tokens.WordToken;
+import cz.mg.token.Token;
+import cz.mg.token.tokens.SeparatorToken;
+import cz.mg.token.tokens.WordToken;
 
 public @Service class RootEntityParsers {
     private static volatile @Service RootEntityParsers instance;

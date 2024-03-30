@@ -8,9 +8,9 @@ import cz.mg.c.entities.CFunction;
 import cz.mg.c.entities.CType;
 import cz.mg.c.entities.brackets.RoundBrackets;
 import cz.mg.c.parser.services.entity.VariableListParser;
-import cz.mg.tokenizer.entities.Token;
-import cz.mg.tokenizer.entities.tokens.WordToken;
-import cz.mg.tokenizer.entities.tokens.OperatorToken;
+import cz.mg.token.Token;
+import cz.mg.token.tokens.WordToken;
+import cz.mg.token.tokens.OperatorToken;
 
 public @Service class FunctionTypeParser {
     private static volatile @Service FunctionTypeParser instance;

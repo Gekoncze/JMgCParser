@@ -9,7 +9,7 @@ import cz.mg.c.entities.brackets.CurlyBrackets;
 import cz.mg.c.entities.brackets.RoundBrackets;
 import cz.mg.c.parser.services.CMainEntityParser;
 import cz.mg.collections.list.List;
-import cz.mg.tokenizer.entities.Token;
+import cz.mg.token.Token;
 
 public @Service class FunctionParser implements CMainEntityParser {
     private static volatile @Service FunctionParser instance;

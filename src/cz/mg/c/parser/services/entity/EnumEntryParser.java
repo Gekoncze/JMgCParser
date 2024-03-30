@@ -5,7 +5,7 @@ import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.c.entities.CEnumEntry;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.parser.services.CEntityParser;
-import cz.mg.tokenizer.entities.tokens.WordToken;
+import cz.mg.token.tokens.WordToken;
 
 public @Service class EnumEntryParser implements CEntityParser {
     private static volatile @Service EnumEntryParser instance;

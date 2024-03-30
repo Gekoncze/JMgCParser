@@ -13,9 +13,9 @@ import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.collections.list.List;
 import cz.mg.file.File;
 import cz.mg.test.Assert;
-import cz.mg.tokenizer.entities.Position;
-import cz.mg.tokenizer.entities.Token;
-import cz.mg.tokenizer.entities.tokens.WordToken;
+import cz.mg.token.Position;
+import cz.mg.token.Token;
+import cz.mg.token.tokens.WordToken;
 import cz.mg.tokenizer.services.PositionService;
 
 import java.io.BufferedReader;

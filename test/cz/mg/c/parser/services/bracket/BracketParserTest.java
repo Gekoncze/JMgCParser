@@ -8,11 +8,11 @@ import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.c.parser.test.BracketFactory;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
-import cz.mg.tokenizer.entities.Token;
-import cz.mg.tokenizer.entities.tokens.BracketToken;
-import cz.mg.tokenizer.entities.tokens.DoubleQuoteToken;
-import cz.mg.tokenizer.entities.tokens.WordToken;
-import cz.mg.tokenizer.entities.tokens.OperatorToken;
+import cz.mg.token.Token;
+import cz.mg.token.tokens.BracketToken;
+import cz.mg.token.tokens.DoubleQuoteToken;
+import cz.mg.token.tokens.WordToken;
+import cz.mg.token.tokens.OperatorToken;
 
 public @Test class BracketParserTest {
     public static void main(String[] args) {

@@ -10,7 +10,7 @@ import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.c.parser.test.BracketFactory;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
-import cz.mg.tokenizer.entities.tokens.SeparatorToken;
+import cz.mg.token.tokens.SeparatorToken;
 import cz.mg.tokenizer.test.TokenFactory;
 import cz.mg.tokenizer.test.TokenValidator;
 

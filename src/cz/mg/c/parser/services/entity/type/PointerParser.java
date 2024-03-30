@@ -6,8 +6,8 @@ import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.entities.CPointer;
 import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.collections.list.List;
-import cz.mg.tokenizer.entities.Token;
-import cz.mg.tokenizer.entities.tokens.OperatorToken;
+import cz.mg.token.Token;
+import cz.mg.token.tokens.OperatorToken;
 
 public @Service class PointerParser {
     private static volatile @Service PointerParser instance;

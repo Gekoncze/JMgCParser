@@ -4,7 +4,7 @@ import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.annotations.requirement.Optional;
 import cz.mg.c.parser.components.TokenReader;
-import cz.mg.tokenizer.entities.tokens.WordToken;
+import cz.mg.token.tokens.WordToken;
 
 public @Service class NameParser {
     private static volatile @Service NameParser instance;

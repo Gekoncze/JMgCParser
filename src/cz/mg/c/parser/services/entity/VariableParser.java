@@ -8,8 +8,8 @@ import cz.mg.c.entities.CType;
 import cz.mg.c.entities.CVariable;
 import cz.mg.c.parser.services.CMainEntityParser;
 import cz.mg.c.parser.services.entity.type.ArrayParser;
-import cz.mg.tokenizer.entities.tokens.NumberToken;
-import cz.mg.tokenizer.entities.tokens.OperatorToken;
+import cz.mg.token.tokens.NumberToken;
+import cz.mg.token.tokens.OperatorToken;
 
 public @Service class VariableParser implements CMainEntityParser {
     private static volatile @Service VariableParser instance;

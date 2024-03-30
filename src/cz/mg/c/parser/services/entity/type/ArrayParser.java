@@ -6,7 +6,7 @@ import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.entities.CArray;
 import cz.mg.c.entities.brackets.SquareBrackets;
 import cz.mg.collections.list.List;
-import cz.mg.tokenizer.entities.Token;
+import cz.mg.token.Token;
 
 public @Service class ArrayParser {
     private static volatile @Service ArrayParser instance;

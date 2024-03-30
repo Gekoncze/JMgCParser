@@ -7,7 +7,7 @@ import cz.mg.c.entities.brackets.CurlyBrackets;
 import cz.mg.c.entities.brackets.RoundBrackets;
 import cz.mg.c.entities.brackets.SquareBrackets;
 import cz.mg.collections.list.List;
-import cz.mg.tokenizer.entities.Token;
+import cz.mg.token.Token;
 
 public @Service class BracketFactory {
     private static volatile @Service BracketFactory instance;

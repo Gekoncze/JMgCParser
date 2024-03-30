@@ -5,7 +5,7 @@ import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.annotations.requirement.Required;
 import cz.mg.c.entities.CTypeModifiers;
 import cz.mg.c.parser.components.TokenReader;
-import cz.mg.tokenizer.entities.tokens.WordToken;
+import cz.mg.token.tokens.WordToken;
 
 public @Service class TypeModifiersParser {
     private static volatile @Service TypeModifiersParser instance;

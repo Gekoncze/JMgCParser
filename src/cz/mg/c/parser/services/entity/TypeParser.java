@@ -9,7 +9,7 @@ import cz.mg.c.entities.CType;
 import cz.mg.c.entities.CTypename;
 import cz.mg.c.parser.services.CEntityParser;
 import cz.mg.c.parser.services.entity.type.*;
-import cz.mg.tokenizer.entities.tokens.WordToken;
+import cz.mg.token.tokens.WordToken;
 
 public @Service class TypeParser implements CEntityParser {
     private static volatile @Service TypeParser instance;

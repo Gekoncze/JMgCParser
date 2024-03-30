@@ -8,8 +8,8 @@ import cz.mg.c.entities.CEnumEntry;
 import cz.mg.c.entities.brackets.CurlyBrackets;
 import cz.mg.c.parser.services.list.ListParser;
 import cz.mg.collections.list.List;
-import cz.mg.tokenizer.entities.Token;
-import cz.mg.tokenizer.entities.tokens.WordToken;
+import cz.mg.token.Token;
+import cz.mg.token.tokens.WordToken;
 
 public @Service class EnumParser {
     private static volatile @Service EnumParser instance;

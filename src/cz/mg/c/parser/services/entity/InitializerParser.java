@@ -6,9 +6,9 @@ import cz.mg.annotations.requirement.Optional;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.collections.list.List;
-import cz.mg.tokenizer.entities.Token;
-import cz.mg.tokenizer.entities.tokens.OperatorToken;
-import cz.mg.tokenizer.entities.tokens.SeparatorToken;
+import cz.mg.token.Token;
+import cz.mg.token.tokens.OperatorToken;
+import cz.mg.token.tokens.SeparatorToken;
 
 public @Service class InitializerParser {
     private static volatile @Service InitializerParser instance;

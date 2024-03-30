@@ -8,7 +8,7 @@ import cz.mg.c.entities.CTypedef;
 import cz.mg.c.entities.brackets.SquareBrackets;
 import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.c.parser.services.entity.type.ArrayParser;
-import cz.mg.tokenizer.entities.tokens.WordToken;
+import cz.mg.token.tokens.WordToken;
 
 public @Service class TypedefParser {
     private static volatile @Service TypedefParser instance;

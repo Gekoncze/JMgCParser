@@ -4,7 +4,7 @@ import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.collections.list.List;
 import cz.mg.collections.list.ReadableList;
-import cz.mg.tokenizer.entities.Token;
+import cz.mg.token.Token;
 
 public @Service class BracketParsers {
     private static volatile @Service BracketParsers instance;

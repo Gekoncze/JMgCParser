@@ -6,7 +6,7 @@ import cz.mg.annotations.requirement.Optional;
 import cz.mg.c.entities.CTypeModifiers;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.entities.CType;
-import cz.mg.tokenizer.entities.tokens.WordToken;
+import cz.mg.token.tokens.WordToken;
 
 public @Service class InlineTypeParsers {
     private static volatile @Service InlineTypeParsers instance;
