@@ -12,7 +12,7 @@ import cz.mg.collections.list.List;
 import cz.mg.collections.list.ReadableList;
 import cz.mg.collections.list.WriteableList;
 import cz.mg.token.Token;
-import cz.mg.token.tokens.BracketToken;
+import cz.mg.token.tokens.SymbolToken;
 
 public @Base @Service class BracketParser {
     private final @Mandatory String name;
@@ -45,9 +45,9 @@ public @Base @Service class BracketParser {
         @Optional Integer openingPosition
     ) {
         while (reader.has()) {
-            if (reader.has(openingBracket, BracketToken.class)) {
+            if (reader.has(openingBracket, SymbolToken.class)) {
                 output.addLast(parse(reader));
-            } else if (reader.has(closingBracket, BracketToken.class)) {
+            } else if (reader.has(closingBracket, SymbolToken.class)) {
                 int position = reader.read().getPosition();
                 if (openingPosition != null) {
                     return;

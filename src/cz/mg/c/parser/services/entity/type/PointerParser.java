@@ -7,7 +7,7 @@ import cz.mg.c.entities.CPointer;
 import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.collections.list.List;
 import cz.mg.token.Token;
-import cz.mg.token.tokens.OperatorToken;
+import cz.mg.token.tokens.SymbolToken;
 
 public @Service class PointerParser {
     private static volatile @Service PointerParser instance;
@@ -47,6 +47,6 @@ public @Service class PointerParser {
     }
 
     private boolean pointer(@Mandatory Token token) {
-        return token instanceof OperatorToken && token.getText().startsWith("*");
+        return token instanceof SymbolToken && token.getText().startsWith("*");
     }
 }

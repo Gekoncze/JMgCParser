@@ -9,8 +9,8 @@ import cz.mg.c.entities.CType;
 import cz.mg.c.entities.brackets.RoundBrackets;
 import cz.mg.c.parser.services.entity.VariableListParser;
 import cz.mg.token.Token;
+import cz.mg.token.tokens.SymbolToken;
 import cz.mg.token.tokens.WordToken;
-import cz.mg.token.tokens.OperatorToken;
 
 public @Service class FunctionTypeParser {
     private static volatile @Service FunctionTypeParser instance;
@@ -41,7 +41,7 @@ public @Service class FunctionTypeParser {
             RoundBrackets brackets = (RoundBrackets) token;
             if (!brackets.getTokens().isEmpty()) {
                 token = brackets.getTokens().getFirst();
-                return token instanceof OperatorToken && token.getText().startsWith("*");
+                return token instanceof SymbolToken && token.getText().startsWith("*");
             }
         }
 

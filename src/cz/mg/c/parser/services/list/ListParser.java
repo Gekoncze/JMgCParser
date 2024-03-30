@@ -5,7 +5,7 @@ import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.collections.list.List;
 import cz.mg.token.Token;
-import cz.mg.token.tokens.SeparatorToken;
+import cz.mg.token.tokens.SymbolToken;
 
 public @Service class ListParser {
     private static volatile @Service ListParser instance;
@@ -28,7 +28,7 @@ public @Service class ListParser {
         List<List<Token>> groups = new List<>();
         groups.addLast(new List<>());
         while (reader.has()) {
-            if (reader.has(",", SeparatorToken.class)) {
+            if (reader.has(",", SymbolToken.class)) {
                 reader.read();
                 groups.addLast(new List<>());
             } else {

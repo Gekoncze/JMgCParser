@@ -9,7 +9,7 @@ import cz.mg.c.entities.CVariable;
 import cz.mg.c.parser.services.CMainEntityParser;
 import cz.mg.c.parser.services.entity.type.ArrayParser;
 import cz.mg.token.tokens.NumberToken;
-import cz.mg.token.tokens.OperatorToken;
+import cz.mg.token.tokens.SymbolToken;
 
 public @Service class VariableParser implements CMainEntityParser {
     private static volatile @Service VariableParser instance;
@@ -48,7 +48,7 @@ public @Service class VariableParser implements CMainEntityParser {
     }
 
     private @Optional Integer readBitField(@Mandatory TokenReader reader) {
-        if (reader.has(":", OperatorToken.class)) {
+        if (reader.has(":", SymbolToken.class)) {
             reader.read();
             return Integer.parseInt(reader.read(NumberToken.class).getText());
         } else {

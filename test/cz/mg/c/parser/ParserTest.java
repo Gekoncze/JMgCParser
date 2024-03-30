@@ -42,7 +42,7 @@ public @Test class ParserTest {
         System.out.println("OK");
     }
 
-    private final @Service Parser parser = Parser.getInstance();
+    private final @Service CParser parser = CParser.getInstance();
     private final @Service PositionService positionService = PositionService.getInstance();
 
     private void testParseDefinitions() {

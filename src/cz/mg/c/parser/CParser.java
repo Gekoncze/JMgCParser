@@ -6,18 +6,18 @@ import cz.mg.c.entities.CFile;
 import cz.mg.c.entities.macro.Macros;
 import cz.mg.c.parser.services.RootEntityParsers;
 import cz.mg.c.parser.services.bracket.BracketParsers;
-import cz.mg.c.preprocessor.Preprocessor;
+import cz.mg.c.preprocessor.CPreprocessor;
+import cz.mg.c.tokenizer.CTokenizer;
 import cz.mg.file.File;
 
-public @Service class Parser {
-    private static volatile @Service Parser instance;
+public @Service class CParser {
+    private static volatile @Service CParser instance;
 
-    public static @Service Parser getInstance() {
+    public static @Service CParser getInstance() {
         if (instance == null) {
             synchronized (Service.class) {
                 if (instance == null) {
-                    instance = new Parser();
-                    instance.preprocessor = Preprocessor.getInstance();
+                    instance = new CParser();
                     instance.bracketParsers = BracketParsers.getInstance();
                     instance.rootEntityParsers = RootEntityParsers.getInstance();
                 }
@@ -26,11 +26,10 @@ public @Service class Parser {
         return instance;
     }
 
-    private @Service Preprocessor preprocessor;
     private @Service BracketParsers bracketParsers;
     private @Service RootEntityParsers rootEntityParsers;
 
-    private Parser() {
+    private CParser() {
     }
 
     public @Mandatory CFile parse(@Mandatory File file, @Mandatory Macros macros) {
@@ -38,7 +37,7 @@ public @Service class Parser {
             file.getPath(),
             rootEntityParsers.parse(
                 bracketParsers.parse(
-                    preprocessor.preprocess(file, macros)
+                    new CPreprocessor(new CTokenizer(), macros).preprocess(file)
                 )
             )
         );

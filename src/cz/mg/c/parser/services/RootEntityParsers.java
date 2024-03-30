@@ -14,7 +14,7 @@ import cz.mg.c.parser.services.entity.TypedefParser;
 import cz.mg.c.parser.services.entity.VariableParser;
 import cz.mg.collections.list.List;
 import cz.mg.token.Token;
-import cz.mg.token.tokens.SeparatorToken;
+import cz.mg.token.tokens.SymbolToken;
 import cz.mg.token.tokens.WordToken;
 
 public @Service class RootEntityParsers {
@@ -51,23 +51,23 @@ public @Service class RootEntityParsers {
                 reader.read();
             } else if (isTypedef(reader)) {
                 entities.addLast(typedefParser.parse(reader));
-                reader.read(";", SeparatorToken.class);
+                reader.read(";", SymbolToken.class);
             } else if (reader.has()) {
                 CType type = typeParser.parse(reader);
                 if (isFunction(reader)) {
                     entities.addLast(functionParser.parse(reader, type));
                 } else if (isVariable(reader)) {
                     entities.addLast(variableParser.parse(reader, type));
-                    reader.read(";", SeparatorToken.class);
+                    reader.read(";", SymbolToken.class);
                 } else if (isPlainType(type)) {
                     entities.addLast(type.getTypename());
-                    reader.read(";", SeparatorToken.class);
+                    reader.read(";", SymbolToken.class);
                 } else if (isFunctionPointer(type)) {
                     CVariable variable = new CVariable();
                     variable.setName(type.getTypename().getName());
                     variable.setType(type);
                     entities.addLast(variable);
-                    reader.read(";", SeparatorToken.class);
+                    reader.read(";", SymbolToken.class);
                 } else {
                     throw new UnsupportedOperationException(
                         "Unsupported type '" + type.getTypename().getName() + "'."
@@ -79,7 +79,7 @@ public @Service class RootEntityParsers {
     }
 
     private boolean isSemicolon(@Mandatory TokenReader reader) {
-        return reader.has(";", SeparatorToken.class);
+        return reader.has(";", SymbolToken.class);
     }
 
     private boolean isTypedef(@Mandatory TokenReader reader) {

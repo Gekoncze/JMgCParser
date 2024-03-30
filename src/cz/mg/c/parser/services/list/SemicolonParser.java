@@ -6,7 +6,7 @@ import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.collections.list.List;
 import cz.mg.token.Token;
-import cz.mg.token.tokens.SeparatorToken;
+import cz.mg.token.tokens.SymbolToken;
 
 public @Service class SemicolonParser {
     private static volatile @Service SemicolonParser instance;
@@ -31,7 +31,7 @@ public @Service class SemicolonParser {
         TokenReader reader = new TokenReader(tokens);
 
         while (reader.has()) {
-            if (reader.has(";", SeparatorToken.class)) {
+            if (reader.has(";", SymbolToken.class)) {
                 reader.read();
                 if (!group.isEmpty()) {
                     groups.addLast(group);
