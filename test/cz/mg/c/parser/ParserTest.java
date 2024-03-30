@@ -4,6 +4,8 @@ import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.c.entities.*;
+import cz.mg.c.preprocessor.CPreprocessor;
+import cz.mg.c.tokenizer.CTokenizer;
 import cz.mg.token.tokens.brackets.CurlyBrackets;
 import cz.mg.token.tokens.brackets.RoundBrackets;
 import cz.mg.token.tokens.brackets.SquareBrackets;
@@ -42,7 +44,6 @@ public @Test class ParserTest {
         System.out.println("OK");
     }
 
-    private final @Service CParser parser = CParser.getInstance();
     private final @Service PositionService positionService = PositionService.getInstance();
 
     private void testParseDefinitions() {
@@ -50,7 +51,8 @@ public @Test class ParserTest {
         File file = new File(Path.of(TEST_FILE_DEFINITIONS), content);
         Macros macros = new Macros();
 
-        CFile cFile = parser.parse(file, macros);
+        CParser parser = new CParser(new CPreprocessor(new CTokenizer(), macros));
+        CFile cFile = parser.parse(file);
         Assert.assertEquals(file.getPath(), cFile.getPath());
 
         List<CMainEntity> entities = cFile.getEntities();
@@ -156,7 +158,8 @@ public @Test class ParserTest {
         File file = new File(Path.of(TEST_FILE_DECLARATIONS), content);
         Macros macros = new Macros();
 
-        CFile cFile = parser.parse(file, macros);
+        CParser parser = new CParser(new CPreprocessor(new CTokenizer(), macros));
+        CFile cFile = parser.parse(file);
         Assert.assertEquals(file.getPath(), cFile.getPath());
 
         List<CMainEntity> entities = cFile.getEntities();
@@ -197,7 +200,8 @@ public @Test class ParserTest {
         Macro externalCondition = new Macro(new WordToken("EXTERNAL_CONDITION", -1), null, new List<>());
         macros.getDefinitions().addLast(externalCondition);
 
-        CFile cFile = parser.parse(file, macros);
+        CParser parser = new CParser(new CPreprocessor(new CTokenizer(), macros));
+        CFile cFile = parser.parse(file);
         Assert.assertEquals(file.getPath(), cFile.getPath());
 
         List<CMainEntity> entities = cFile.getEntities();
@@ -275,9 +279,10 @@ public @Test class ParserTest {
         String content = readTestFile(TEST_FILE_BROKEN);
         File file = new File(Path.of(TEST_FILE_BROKEN), content);
         Macros macros = new Macros();
+        CParser parser = new CParser(new CPreprocessor(new CTokenizer(), macros));
 
         ParseException exception = Assert.assertThatCode(() -> {
-            parser.parse(file, macros);
+            parser.parse(file);
         }).throwsException(ParseException.class);
 
         Position position = positionService.find(file.getContent(), exception.getPosition());
