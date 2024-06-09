@@ -4,7 +4,7 @@ import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.entities.CFunction;
-import cz.mg.c.entities.CType;
+import cz.mg.c.entities.types.CType;
 import cz.mg.c.parser.services.CEntityParser;
 import cz.mg.token.tokens.brackets.CurlyBrackets;
 import cz.mg.token.tokens.brackets.RoundBrackets;

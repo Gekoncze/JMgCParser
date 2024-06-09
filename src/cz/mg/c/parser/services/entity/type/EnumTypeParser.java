@@ -5,7 +5,7 @@ import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.c.entities.CTypeModifiers;
 import cz.mg.c.parser.components.Modifiers;
 import cz.mg.c.parser.components.TokenReader;
-import cz.mg.c.entities.CType;
+import cz.mg.c.entities.types.CType;
 import cz.mg.c.parser.services.entity.EnumParser;
 
 public @Service class EnumTypeParser implements InlineTypeParser {
