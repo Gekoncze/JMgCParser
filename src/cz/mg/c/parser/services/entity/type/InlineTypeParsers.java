@@ -3,9 +3,10 @@ package cz.mg.c.parser.services.entity.type;
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.annotations.requirement.Optional;
-import cz.mg.c.entities.CTypeModifiers;
-import cz.mg.c.parser.components.TokenReader;
+import cz.mg.c.entities.CModifier;
 import cz.mg.c.entities.types.CType;
+import cz.mg.c.parser.components.TokenReader;
+import cz.mg.collections.set.Set;
 import cz.mg.token.tokens.WordToken;
 
 public @Service class InlineTypeParsers {
@@ -32,7 +33,7 @@ public @Service class InlineTypeParsers {
     private InlineTypeParsers() {
     }
 
-    public @Optional CType parse(@Mandatory TokenReader reader, @Mandatory CTypeModifiers modifiers) {
+    public @Optional CType parse(@Mandatory TokenReader reader, @Mandatory Set<CModifier> modifiers) {
         CType type = parse(reader);
         if (type != null) {
             type.setModifiers(modifiers);

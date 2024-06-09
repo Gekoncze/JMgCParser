@@ -2,6 +2,7 @@ package cz.mg.c.parser.services.entity.type;
 
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
+import cz.mg.c.entities.CModifier;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.entities.CPointer;
 import cz.mg.c.parser.exceptions.ParseException;
@@ -17,14 +18,14 @@ public @Service class PointerParser {
             synchronized (Service.class) {
                 if (instance == null) {
                     instance = new PointerParser();
-                    instance.modifiersParser = TypeModifiersParser.getInstance();
+                    instance.modifiersParser = ModifiersParser.getInstance();
                 }
             }
         }
         return instance;
     }
 
-    private @Service TypeModifiersParser modifiersParser;
+    private @Service ModifiersParser modifiersParser;
 
     private PointerParser() {
     }
@@ -41,7 +42,7 @@ public @Service class PointerParser {
                     throw new ParseException(p.getPosition(), "Unexpected character '" + ch + "' at pointer.");
                 }
             }
-            pointers.getLast().setConstant(modifiersParser.parse(reader).isConstant());
+            pointers.getLast().setConstant(modifiersParser.parse(reader).contains(CModifier.CONST));
         }
         return pointers;
     }

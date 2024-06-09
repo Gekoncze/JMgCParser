@@ -64,7 +64,7 @@ public @Test class RootEntityParsersTest {
 
         CTypedef typedef = (CTypedef) entities.getFirst();
         Assert.assertEquals("IntPtr", typedef.getName());
-        Assert.assertEquals(true, typedef.getType().getModifiers().isConstant());
+        Assert.assertEquals(true, typedef.getType().getModifiers().contains(CModifier.CONST));
         Assert.assertEquals(true, typedef.getType().getArrays().isEmpty());
         Assert.assertEquals(1, typedef.getType().getPointers().count());
     }
@@ -124,13 +124,13 @@ public @Test class RootEntityParsersTest {
         Assert.assertEquals("void", function.getOutput().getTypename().getName());
         Assert.assertEquals(1, function.getOutput().getPointers().count());
         Assert.assertEquals(true, function.getOutput().getArrays().isEmpty());
-        Assert.assertEquals(false, function.getOutput().getModifiers().isConstant());
+        Assert.assertEquals(false, function.getOutput().getModifiers().contains(CModifier.CONST));
         Assert.assertEquals(2, function.getInput().count());
         Assert.assertEquals("bar", function.getInput().getFirst().getName());
         Assert.assertEquals("foo", function.getInput().getFirst().getType().getTypename().getName());
         Assert.assertEquals("constant", function.getInput().getLast().getName());
         Assert.assertEquals("int", function.getInput().getLast().getType().getTypename().getName());
-        Assert.assertEquals(true, function.getInput().getLast().getType().getModifiers().isConstant());
+        Assert.assertEquals(true, function.getInput().getLast().getType().getModifiers().contains(CModifier.CONST));
         Assert.assertNotNull(function.getImplementation());
         Assert.assertEquals(3, function.getImplementation().count());
     }

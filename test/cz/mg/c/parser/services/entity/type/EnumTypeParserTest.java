@@ -3,6 +3,7 @@ package cz.mg.c.parser.services.entity.type;
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
 import cz.mg.c.entities.CEnum;
+import cz.mg.c.entities.CModifier;
 import cz.mg.c.entities.types.CType;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.parser.exceptions.ParseException;
@@ -44,7 +45,7 @@ public @Test class EnumTypeParserTest {
             b.curlyBrackets()
         );
         CType type = parser.parse(new TokenReader(tokens));
-        Assert.assertEquals(false, type.getModifiers().isConstant());
+        Assert.assertEquals(false, type.getModifiers().contains(CModifier.CONST));
         Assert.assertEquals(true, type.getPointers().isEmpty());
         Assert.assertEquals(true, type.getTypename() instanceof CEnum);
         CEnum enom = (CEnum) type.getTypename();
@@ -61,7 +62,7 @@ public @Test class EnumTypeParserTest {
             )
         );
         CType type = parser.parse(new TokenReader(tokens));
-        Assert.assertEquals(false, type.getModifiers().isConstant());
+        Assert.assertEquals(false, type.getModifiers().contains(CModifier.CONST));
         Assert.assertEquals(true, type.getPointers().isEmpty());
         Assert.assertEquals(true, type.getTypename() instanceof CEnum);
         CEnum enom = (CEnum) type.getTypename();
@@ -83,7 +84,7 @@ public @Test class EnumTypeParserTest {
             )
         );
         CType type = parser.parse(new TokenReader(tokens));
-        Assert.assertEquals(false, type.getModifiers().isConstant());
+        Assert.assertEquals(false, type.getModifiers().contains(CModifier.CONST));
         Assert.assertEquals(true, type.getPointers().isEmpty());
         Assert.assertEquals(true, type.getTypename() instanceof CEnum);
         CEnum enom = (CEnum) type.getTypename();
@@ -111,7 +112,7 @@ public @Test class EnumTypeParserTest {
             f.word("const")
         );
         CType type = parser.parse(new TokenReader(tokens));
-        Assert.assertEquals(true, type.getModifiers().isConstant());
+        Assert.assertEquals(true, type.getModifiers().contains(CModifier.CONST));
         Assert.assertEquals(1, type.getPointers().count());
         Assert.assertEquals(true, type.getPointers().getFirst().isConstant());
         Assert.assertEquals(true, type.getTypename() instanceof CEnum);

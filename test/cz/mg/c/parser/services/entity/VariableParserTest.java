@@ -2,6 +2,7 @@ package cz.mg.c.parser.services.entity;
 
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
+import cz.mg.c.entities.CModifier;
 import cz.mg.c.entities.CStruct;
 import cz.mg.c.entities.types.CType;
 import cz.mg.c.entities.CVariable;
@@ -55,7 +56,7 @@ public @Test class VariableParserTest {
 
         Assert.assertEquals("foo", variable.getName());
         Assert.assertEquals(true, variable.getType().getArrays().isEmpty());
-        Assert.assertEquals(false, variable.getType().getModifiers().isConstant());
+        Assert.assertEquals(false, variable.getType().getModifiers().contains(CModifier.CONST));
         Assert.assertEquals("int", variable.getType().getTypename().getName());
         Assert.assertEquals(true, variable.getType().getPointers().isEmpty());
         Assert.assertNull(variable.getExpression());
@@ -69,7 +70,7 @@ public @Test class VariableParserTest {
 
         Assert.assertNull(variable.getName());
         Assert.assertEquals(true, variable.getType().getArrays().isEmpty());
-        Assert.assertEquals(false, variable.getType().getModifiers().isConstant());
+        Assert.assertEquals(false, variable.getType().getModifiers().contains(CModifier.CONST));
         Assert.assertEquals("int", variable.getType().getTypename().getName());
         Assert.assertEquals(true, variable.getType().getPointers().isEmpty());
         Assert.assertNull(variable.getExpression());
@@ -93,7 +94,7 @@ public @Test class VariableParserTest {
             new List<>(f.number("12")),
             variable.getType().getArrays().getFirst().getExpression()
         );
-        Assert.assertEquals(false, variable.getType().getModifiers().isConstant());
+        Assert.assertEquals(false, variable.getType().getModifiers().contains(CModifier.CONST));
         Assert.assertEquals("float", variable.getType().getTypename().getName());
         Assert.assertEquals(true, variable.getType().getPointers().isEmpty());
         reader.readEnd();
@@ -130,7 +131,7 @@ public @Test class VariableParserTest {
             new List<>(f.number("1")),
             variable.getType().getArrays().get(2).getExpression()
         );
-        Assert.assertEquals(false, variable.getType().getModifiers().isConstant());
+        Assert.assertEquals(false, variable.getType().getModifiers().contains(CModifier.CONST));
         Assert.assertEquals("double", variable.getType().getTypename().getName());
         Assert.assertEquals(true, variable.getType().getPointers().isEmpty());
         reader.readEnd();
@@ -159,7 +160,7 @@ public @Test class VariableParserTest {
             ),
             variable.getType().getArrays().getFirst().getExpression()
         );
-        Assert.assertEquals(false, variable.getType().getModifiers().isConstant());
+        Assert.assertEquals(false, variable.getType().getModifiers().contains(CModifier.CONST));
         Assert.assertEquals("float", variable.getType().getTypename().getName());
         Assert.assertEquals(true, variable.getType().getPointers().isEmpty());
         reader.readEnd();
@@ -191,7 +192,7 @@ public @Test class VariableParserTest {
             ),
             variable.getType().getArrays().getFirst().getExpression()
         );
-        Assert.assertEquals(true, variable.getType().getModifiers().isConstant());
+        Assert.assertEquals(true, variable.getType().getModifiers().contains(CModifier.CONST));
         Assert.assertEquals("float", variable.getType().getTypename().getName());
         Assert.assertEquals(1, variable.getType().getPointers().count());
         Assert.assertEquals(true, variable.getType().getPointers().getFirst().isConstant());
@@ -219,7 +220,7 @@ public @Test class VariableParserTest {
         Assert.assertEquals("foobar", variable.getName());
         Assert.assertEquals(1, variable.getType().getArrays().count());
         Assert.assertEquals(1, variable.getType().getPointers().count());
-        Assert.assertEquals(true, variable.getType().getModifiers().isConstant());
+        Assert.assertEquals(true, variable.getType().getModifiers().contains(CModifier.CONST));
         Assert.assertEquals(true, variable.getType().getTypename() instanceof CStruct);
         Assert.assertNull(variable.getType().getTypename().getName());
     }
@@ -291,7 +292,7 @@ public @Test class VariableParserTest {
 
         Assert.assertEquals("foo", variable.getName());
         Assert.assertEquals(true, variable.getType().getArrays().isEmpty());
-        Assert.assertEquals(false, variable.getType().getModifiers().isConstant());
+        Assert.assertEquals(false, variable.getType().getModifiers().contains(CModifier.CONST));
         Assert.assertEquals("int", variable.getType().getTypename().getName());
         Assert.assertEquals(true, variable.getType().getPointers().isEmpty());
         Assert.assertEquals(8, variable.getBit());

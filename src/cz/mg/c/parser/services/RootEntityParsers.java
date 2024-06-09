@@ -3,6 +3,7 @@ package cz.mg.c.parser.services;
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.c.entities.CEntity;
+import cz.mg.c.entities.CModifier;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.entities.CFunction;
 import cz.mg.c.entities.types.CType;
@@ -95,7 +96,9 @@ public @Service class RootEntityParsers {
     }
 
     private boolean isPlainType(@Mandatory CType type) {
-        return type.getArrays().isEmpty() && type.getPointers().isEmpty() && !type.getModifiers().isConstant();
+        return type.getArrays().isEmpty()
+            && type.getPointers().isEmpty()
+            && !type.getModifiers().contains(CModifier.CONST);
     }
 
     private boolean isFunctionPointer(@Mandatory CType type) {

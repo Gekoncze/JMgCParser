@@ -2,6 +2,7 @@ package cz.mg.c.parser.services.entity.type;
 
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
+import cz.mg.c.entities.CModifier;
 import cz.mg.c.entities.CStruct;
 import cz.mg.c.entities.types.CType;
 import cz.mg.c.parser.components.TokenReader;
@@ -44,7 +45,7 @@ public @Test class StructTypeParserTest {
             b.curlyBrackets()
         );
         CType type = parser.parse(new TokenReader(tokens));
-        Assert.assertEquals(false, type.getModifiers().isConstant());
+        Assert.assertEquals(false, type.getModifiers().contains(CModifier.CONST));
         Assert.assertEquals(true, type.getPointers().isEmpty());
         Assert.assertEquals(true, type.getTypename() instanceof CStruct);
         CStruct struct = (CStruct) type.getTypename();
@@ -63,7 +64,7 @@ public @Test class StructTypeParserTest {
             )
         );
         CType type = parser.parse(new TokenReader(tokens));
-        Assert.assertEquals(false, type.getModifiers().isConstant());
+        Assert.assertEquals(false, type.getModifiers().contains(CModifier.CONST));
         Assert.assertEquals(true, type.getPointers().isEmpty());
         Assert.assertEquals(true, type.getTypename() instanceof CStruct);
         CStruct struct = (CStruct) type.getTypename();
@@ -85,7 +86,7 @@ public @Test class StructTypeParserTest {
             )
         );
         CType type = parser.parse(new TokenReader(tokens));
-        Assert.assertEquals(false, type.getModifiers().isConstant());
+        Assert.assertEquals(false, type.getModifiers().contains(CModifier.CONST));
         Assert.assertEquals(true, type.getPointers().isEmpty());
         Assert.assertEquals(true, type.getTypename() instanceof CStruct);
         CStruct struct = (CStruct) type.getTypename();
@@ -115,7 +116,7 @@ public @Test class StructTypeParserTest {
             f.word("const")
         );
         CType type = parser.parse(new TokenReader(tokens));
-        Assert.assertEquals(true, type.getModifiers().isConstant());
+        Assert.assertEquals(true, type.getModifiers().contains(CModifier.CONST));
         Assert.assertEquals(1, type.getPointers().count());
         Assert.assertEquals(true, type.getPointers().getFirst().isConstant());
         Assert.assertEquals(true, type.getTypename() instanceof CStruct);
@@ -123,10 +124,10 @@ public @Test class StructTypeParserTest {
         Assert.assertEquals("FooBar", struct.getName());
         Assert.assertNotNull(struct.getVariables());
         Assert.assertEquals(2, struct.getVariables().count());
-        Assert.assertEquals(true, struct.getVariables().get(0).getType().getModifiers().isConstant());
+        Assert.assertEquals(true, struct.getVariables().get(0).getType().getModifiers().contains(CModifier.CONST));
         Assert.assertEquals("int", struct.getVariables().get(0).getType().getTypename().getName());
         Assert.assertEquals("a", struct.getVariables().get(0).getName());
-        Assert.assertEquals(false, struct.getVariables().get(1).getType().getModifiers().isConstant());
+        Assert.assertEquals(false, struct.getVariables().get(1).getType().getModifiers().contains(CModifier.CONST));
         Assert.assertEquals("int", struct.getVariables().get(1).getType().getTypename().getName());
         Assert.assertEquals("b", struct.getVariables().get(1).getName());
     }

@@ -3,9 +3,11 @@ package cz.mg.c.parser.services.entity.type;
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
 import cz.mg.annotations.requirement.Mandatory;
-import cz.mg.c.entities.CTypeModifiers;
+import cz.mg.c.entities.CModifier;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.collections.list.List;
+import cz.mg.collections.set.Set;
+import cz.mg.collections.set.Sets;
 import cz.mg.test.Assert;
 import cz.mg.token.Token;
 import cz.mg.tokenizer.test.TokenFactory;
@@ -24,49 +26,49 @@ public @Test class TypeModifiersParserTest {
         System.out.println("OK");
     }
 
-    private final @Service TypeModifiersParser parser = TypeModifiersParser.getInstance();
+    private final @Service ModifiersParser parser = ModifiersParser.getInstance();
     private final @Service TokenFactory f = TokenFactory.getInstance();
 
     private void testParseEmpty() {
-        assertEquals(
-            false, false,
+        verify(
+            Sets.create(),
             parser.parse(new TokenReader(new List<>()))
         );
     }
 
     private void testParseSingle() {
-        assertEquals(
-            true, false,
+        verify(
+            Sets.create(CModifier.CONST),
             parser.parse(new TokenReader(new List<>(f.word("const"))))
         );
 
-        assertEquals(
-            false, true,
+        verify(
+            Sets.create(CModifier.STATIC),
             parser.parse(new TokenReader(new List<>(f.word("static"))))
         );
 
-        assertEquals(
-            false, false,
+        verify(
+            Sets.create(),
             parser.parse(new TokenReader(new List<>(f.doubleQuote("const"))))
         );
 
-        assertEquals(
-            false, false,
+        verify(
+            Sets.create(),
             parser.parse(new TokenReader(new List<>(f.number("0"))))
         );
     }
 
     private void testParseMultiple() {
-        assertEquals(
-            true, true,
+        verify(
+            Sets.create(CModifier.CONST, CModifier.STATIC),
             parser.parse(new TokenReader(new List<>(
                 f.word("const"),
                 f.word("static")
             )))
         );
 
-        assertEquals(
-            true, false,
+        verify(
+            Sets.create(CModifier.CONST),
             parser.parse(new TokenReader(new List<>(
                 f.word("const"),
                 f.word("const"),
@@ -74,8 +76,8 @@ public @Test class TypeModifiersParserTest {
             )))
         );
 
-        assertEquals(
-            true, true,
+        verify(
+            Sets.create(CModifier.CONST, CModifier.STATIC),
             parser.parse(new TokenReader(new List<>(
                 f.word("static"),
                 f.word("const"),
@@ -83,8 +85,8 @@ public @Test class TypeModifiersParserTest {
             )))
         );
 
-        assertEquals(
-            false, false,
+        verify(
+            Sets.create(),
             parser.parse(new TokenReader(new List<>(
                 f.word("foo"),
                 f.word("bar"),
@@ -92,8 +94,8 @@ public @Test class TypeModifiersParserTest {
             )))
         );
 
-        assertEquals(
-            true, false,
+        verify(
+            Sets.create(CModifier.CONST),
             parser.parse(new TokenReader(new List<>(
                 f.word("const"),
                 f.word("foo"),
@@ -101,8 +103,8 @@ public @Test class TypeModifiersParserTest {
             )))
         );
 
-        assertEquals(
-            false, false,
+        verify(
+            Sets.create(),
             parser.parse(new TokenReader(new List<>(
                 f.word("foo"),
                 f.word("bar"),
@@ -131,8 +133,10 @@ public @Test class TypeModifiersParserTest {
         Assert.assertEquals(false, reader.has());
     }
 
-    private void assertEquals(boolean constant, boolean isStatic, @Mandatory CTypeModifiers modifiers) {
-        Assert.assertEquals(constant, modifiers.isConstant());
-        Assert.assertEquals(isStatic, modifiers.isStatic());
+    private void verify(@Mandatory Set<CModifier> expectations, Set<CModifier> reality) {
+        Assert.assertEquals(expectations.count(), reality.count());
+        for (CModifier expectation : expectations) {
+            Assert.assertEquals(true, reality.contains(expectation));
+        }
     }
 }

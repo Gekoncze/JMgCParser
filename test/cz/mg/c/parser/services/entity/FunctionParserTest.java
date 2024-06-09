@@ -3,6 +3,7 @@ package cz.mg.c.parser.services.entity;
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
 import cz.mg.c.entities.CFunction;
+import cz.mg.c.entities.CModifier;
 import cz.mg.c.entities.types.CType;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.parser.exceptions.ParseException;
@@ -96,7 +97,7 @@ public @Test class FunctionParserTest {
         );
         CFunction function = parser.parse(new TokenReader(input));
         Assert.assertEquals("int", function.getOutput().getTypename().getName());
-        Assert.assertEquals(true, function.getOutput().getModifiers().isConstant());
+        Assert.assertEquals(true, function.getOutput().getModifiers().contains(CModifier.CONST));
         Assert.assertEquals("constantin", function.getName());
         Assert.assertEquals(1, function.getInput().count());
         Assert.assertEquals("float", function.getInput().getFirst().getType().getTypename().getName());
@@ -120,7 +121,7 @@ public @Test class FunctionParserTest {
         );
         CFunction function = parser.parse(new TokenReader(input));
         Assert.assertEquals("int", function.getOutput().getTypename().getName());
-        Assert.assertEquals(true, function.getOutput().getModifiers().isConstant());
+        Assert.assertEquals(true, function.getOutput().getModifiers().contains(CModifier.CONST));
         Assert.assertEquals("constantin", function.getName());
         Assert.assertEquals(1, function.getInput().count());
         Assert.assertEquals("float", function.getInput().getFirst().getType().getTypename().getName());
@@ -201,7 +202,7 @@ public @Test class FunctionParserTest {
         );
         CFunction function = parser.parse(new TokenReader(input));
         Assert.assertEquals("int", function.getOutput().getTypename().getName());
-        Assert.assertEquals(true, function.getOutput().getModifiers().isConstant());
+        Assert.assertEquals(true, function.getOutput().getModifiers().contains(CModifier.CONST));
         Assert.assertEquals("constantin", function.getName());
         Assert.assertEquals(1, function.getInput().count());
         Assert.assertEquals("float", function.getInput().getFirst().getType().getTypename().getName());

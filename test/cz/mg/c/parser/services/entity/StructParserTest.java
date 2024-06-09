@@ -2,6 +2,7 @@ package cz.mg.c.parser.services.entity;
 
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
+import cz.mg.c.entities.CModifier;
 import cz.mg.c.entities.CStruct;
 import cz.mg.c.entities.CVariable;
 import cz.mg.c.parser.components.TokenReader;
@@ -90,7 +91,7 @@ public @Test class StructParserTest {
         Assert.assertEquals("bar", struct.getVariables().getFirst().getName());
         CVariable variable = struct.getVariables().getFirst();
         Assert.assertEquals("int", variable.getType().getTypename().getName());
-        Assert.assertEquals(true, variable.getType().getModifiers().isConstant());
+        Assert.assertEquals(true, variable.getType().getModifiers().contains(CModifier.CONST));
         Assert.assertEquals(1, struct.getVariables().getFirst().getType().getPointers().count());
     }
 
