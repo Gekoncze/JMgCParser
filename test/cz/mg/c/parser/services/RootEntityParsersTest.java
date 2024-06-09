@@ -33,7 +33,7 @@ public @Test class RootEntityParsersTest {
     private final @Service BracketFactory b = BracketFactory.getInstance();
 
     private void testParseEmpty() {
-        List<CMainEntity> entities = parsers.parse(new List<>());
+        List<CEntity> entities = parsers.parse(new List<>());
         Assert.assertEquals(true, entities.isEmpty());
     }
 
@@ -44,7 +44,7 @@ public @Test class RootEntityParsersTest {
             f.symbol(";")
         );
 
-        List<CMainEntity> entities = parsers.parse(input);
+        List<CEntity> entities = parsers.parse(input);
         Assert.assertEquals(true, entities.isEmpty());
     }
 
@@ -58,7 +58,7 @@ public @Test class RootEntityParsersTest {
             f.symbol(";")
         );
 
-        List<CMainEntity> entities = parsers.parse(input);
+        List<CEntity> entities = parsers.parse(input);
         Assert.assertEquals(1, entities.count());
         Assert.assertEquals(true, entities.getFirst() instanceof CTypedef);
 
@@ -83,7 +83,7 @@ public @Test class RootEntityParsersTest {
             f.symbol(";")
         );
 
-        List<CMainEntity> entities = parsers.parse(input);
+        List<CEntity> entities = parsers.parse(input);
         Assert.assertEquals(1, entities.count());
         Assert.assertEquals(true, entities.getFirst() instanceof CVariable);
 
@@ -115,7 +115,7 @@ public @Test class RootEntityParsersTest {
             )
         );
 
-        List<CMainEntity> entities = parsers.parse(input);
+        List<CEntity> entities = parsers.parse(input);
         Assert.assertEquals(1, entities.count());
         Assert.assertEquals(true, entities.getFirst() instanceof CFunction);
 
@@ -151,7 +151,7 @@ public @Test class RootEntityParsersTest {
             f.symbol(";")
         );
 
-        List<CMainEntity> entities = parsers.parse(input);
+        List<CEntity> entities = parsers.parse(input);
         Assert.assertEquals(1, entities.count());
         Assert.assertEquals(true, entities.getFirst() instanceof CStruct);
 
@@ -187,7 +187,7 @@ public @Test class RootEntityParsersTest {
             f.symbol(";")
         );
 
-        List<CMainEntity> entities = parsers.parse(input);
+        List<CEntity> entities = parsers.parse(input);
         Assert.assertEquals(1, entities.count());
         Assert.assertEquals(true, entities.getFirst() instanceof CUnion);
 
@@ -227,7 +227,7 @@ public @Test class RootEntityParsersTest {
             f.symbol(";")
         );
 
-        List<CMainEntity> entities = parsers.parse(input);
+        List<CEntity> entities = parsers.parse(input);
         Assert.assertEquals(1, entities.count());
         Assert.assertEquals(true, entities.getFirst() instanceof CEnum);
 
@@ -260,7 +260,7 @@ public @Test class RootEntityParsersTest {
             f.symbol(";")
         );
 
-        List<CMainEntity> entities = parsers.parse(input);
+        List<CEntity> entities = parsers.parse(input);
         Assert.assertEquals(1, entities.count());
         Assert.assertEquals(true, entities.getFirst() instanceof CVariable);
 
@@ -322,7 +322,7 @@ public @Test class RootEntityParsersTest {
             f.symbol(";")
         );
 
-        List<CMainEntity> entities = parsers.parse(input);
+        List<CEntity> entities = parsers.parse(input);
         Assert.assertEquals(4, entities.count());
         Assert.assertEquals(true, entities.get(0) instanceof CTypedef);
         Assert.assertEquals(true, entities.get(1) instanceof CFunction);

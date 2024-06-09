@@ -2,9 +2,9 @@ package cz.mg.c.parser.services;
 
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
+import cz.mg.c.entities.CEntity;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.entities.CFunction;
-import cz.mg.c.entities.CMainEntity;
 import cz.mg.c.entities.CType;
 import cz.mg.c.entities.CVariable;
 import cz.mg.token.tokens.brackets.RoundBrackets;
@@ -43,9 +43,9 @@ public @Service class RootEntityParsers {
     private RootEntityParsers() {
     }
 
-    public List<CMainEntity> parse(@Mandatory List<Token> tokens) {
+    public List<CEntity> parse(@Mandatory List<Token> tokens) {
         TokenReader reader = new TokenReader(tokens);
-        List<CMainEntity> entities = new List<>();
+        List<CEntity> entities = new List<>();
         while (reader.has()) {
             if (isSemicolon(reader)) {
                 reader.read();

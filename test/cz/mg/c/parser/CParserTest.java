@@ -53,7 +53,7 @@ public @Test class CParserTest {
         CFile cFile = parser.parse(file);
         Assert.assertEquals(file.getPath(), cFile.getPath());
 
-        List<CMainEntity> entities = cFile.getEntities();
+        List<CEntity> entities = cFile.getEntities();
 
         Assert.assertEquals(6, entities.count());
         Assert.assertEquals(true, entities.get(0) instanceof CTypedef);
@@ -160,7 +160,7 @@ public @Test class CParserTest {
         CFile cFile = parser.parse(file);
         Assert.assertEquals(file.getPath(), cFile.getPath());
 
-        List<CMainEntity> entities = cFile.getEntities();
+        List<CEntity> entities = cFile.getEntities();
 
         Assert.assertEquals(5, entities.count());
         Assert.assertEquals(true, entities.get(0) instanceof CEnum);
@@ -202,11 +202,13 @@ public @Test class CParserTest {
         CFile cFile = parser.parse(file);
         Assert.assertEquals(file.getPath(), cFile.getPath());
 
-        List<CMainEntity> entities = cFile.getEntities();
+        List<CEntity> entities = cFile.getEntities();
 
         List<String> entityNames = new List<>();
-        for (CMainEntity entity : entities) {
-            entityNames.addLast(entity.getName());
+        for (CEntity entity : entities) {
+            if (entity instanceof CNamed) {
+                entityNames.addLast(((CNamed) entity).getName());
+            }
         }
 
         Assert.assertThatCollections(

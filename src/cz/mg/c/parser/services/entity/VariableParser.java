@@ -6,12 +6,12 @@ import cz.mg.annotations.requirement.Optional;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.entities.CType;
 import cz.mg.c.entities.CVariable;
-import cz.mg.c.parser.services.CMainEntityParser;
+import cz.mg.c.parser.services.CEntityParser;
 import cz.mg.c.parser.services.entity.type.ArrayParser;
 import cz.mg.token.tokens.NumberToken;
 import cz.mg.token.tokens.SymbolToken;
 
-public @Service class VariableParser implements CMainEntityParser {
+public @Service class VariableParser implements CEntityParser {
     private static volatile @Service VariableParser instance;
 
     public static @Service VariableParser getInstance() {

@@ -5,13 +5,13 @@ import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.entities.CFunction;
 import cz.mg.c.entities.CType;
+import cz.mg.c.parser.services.CEntityParser;
 import cz.mg.token.tokens.brackets.CurlyBrackets;
 import cz.mg.token.tokens.brackets.RoundBrackets;
-import cz.mg.c.parser.services.CMainEntityParser;
 import cz.mg.collections.list.List;
 import cz.mg.token.Token;
 
-public @Service class FunctionParser implements CMainEntityParser {
+public @Service class FunctionParser implements CEntityParser {
     private static volatile @Service FunctionParser instance;
 
     public static @Service FunctionParser getInstance() {
