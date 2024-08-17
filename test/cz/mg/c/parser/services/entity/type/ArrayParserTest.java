@@ -23,7 +23,7 @@ public @Test class ArrayParserTest {
         System.out.println("OK");
     }
 
-    private final @Service ArrayParser parser = ArrayParser.getInstance();
+    private final @Service ArrayTypeParser parser = ArrayTypeParser.getInstance();
     private final @Service BracketFactory b = BracketFactory.getInstance();
     private final @Service TokenFactory f = TokenFactory.getInstance();
 

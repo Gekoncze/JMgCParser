@@ -27,7 +27,7 @@ public @Test class PointerParserTest {
         System.out.println("OK");
     }
 
-    private final @Service PointerParser parser = PointerParser.getInstance();
+    private final @Service PointerTypeParser parser = PointerTypeParser.getInstance();
     private final @Service TokenFactory f = TokenFactory.getInstance();
 
     private void testParseEmpty() {

@@ -10,7 +10,7 @@ import cz.mg.c.parser.services.CEntityParser;
 import cz.mg.c.parser.services.entity.type.FunctionTypeParser;
 import cz.mg.c.parser.services.entity.type.InlineTypeParsers;
 import cz.mg.c.parser.services.entity.type.ModifiersParser;
-import cz.mg.c.parser.services.entity.type.PointerParser;
+import cz.mg.c.parser.services.entity.type.PointerTypeParser;
 import cz.mg.collections.set.Set;
 import cz.mg.collections.set.Sets;
 import cz.mg.token.tokens.WordToken;
@@ -23,7 +23,7 @@ public @Service class TypeParser implements CEntityParser {
             synchronized (Service.class) {
                 instance = new TypeParser();
                 instance.modifiersParser = ModifiersParser.getInstance();
-                instance.pointerParser = PointerParser.getInstance();
+                instance.pointerTypeParser = PointerTypeParser.getInstance();
                 instance.inlineTypeParsers = InlineTypeParsers.getInstance();
                 instance.functionTypeParser = FunctionTypeParser.getInstance();
             }
@@ -32,7 +32,7 @@ public @Service class TypeParser implements CEntityParser {
     }
 
     private @Service ModifiersParser modifiersParser;
-    private @Service PointerParser pointerParser;
+    private @Service PointerTypeParser pointerTypeParser;
     private @Service InlineTypeParsers inlineTypeParsers;
     private @Service FunctionTypeParser functionTypeParser;
 
@@ -53,7 +53,7 @@ public @Service class TypeParser implements CEntityParser {
         CType type = new CType();
         type.setTypename(new CTypename(reader.read(WordToken.class).getText()));
         type.setModifiers(Sets.union(modifiers, modifiersParser.parse(reader)));
-        type.setPointers(pointerParser.parse(reader));
+        type.setPointers(pointerTypeParser.parse(reader));
         return type;
     }
 }

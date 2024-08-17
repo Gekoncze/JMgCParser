@@ -18,7 +18,7 @@ public @Service class UnionTypeParser implements InlineTypeParser {
                 if (instance == null) {
                     instance = new UnionTypeParser();
                     instance.modifiersParser = ModifiersParser.getInstance();
-                    instance.pointerParser = PointerParser.getInstance();
+                    instance.pointerTypeParser = PointerTypeParser.getInstance();
                     instance.unionParser = UnionParser.getInstance();
                 }
             }
@@ -27,7 +27,7 @@ public @Service class UnionTypeParser implements InlineTypeParser {
     }
 
     private @Service ModifiersParser modifiersParser;
-    private @Service PointerParser pointerParser;
+    private @Service PointerTypeParser pointerTypeParser;
     private @Service UnionParser unionParser;
 
     private UnionTypeParser() {
@@ -39,7 +39,7 @@ public @Service class UnionTypeParser implements InlineTypeParser {
         Set<CModifier> modifiers = modifiersParser.parse(reader);
         type.setTypename(unionParser.parse(reader));
         type.setModifiers(Sets.union(modifiers, modifiersParser.parse(reader)));
-        type.setPointers(pointerParser.parse(reader));
+        type.setPointers(pointerTypeParser.parse(reader));
         return type;
     }
 }

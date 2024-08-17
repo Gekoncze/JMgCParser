@@ -7,7 +7,7 @@ import cz.mg.c.entities.CFunction;
 import cz.mg.c.entities.CTypedef;
 import cz.mg.token.tokens.brackets.SquareBrackets;
 import cz.mg.c.parser.exceptions.ParseException;
-import cz.mg.c.parser.services.entity.type.ArrayParser;
+import cz.mg.c.parser.services.entity.type.ArrayTypeParser;
 import cz.mg.token.tokens.WordToken;
 
 public @Service class TypedefParser {
@@ -20,7 +20,7 @@ public @Service class TypedefParser {
                     instance = new TypedefParser();
                     instance.typeParser = TypeParser.getInstance();
                     instance.nameParser = NameParser.getInstance();
-                    instance.arrayParser = ArrayParser.getInstance();
+                    instance.arrayTypeParser = ArrayTypeParser.getInstance();
                 }
             }
         }
@@ -29,7 +29,7 @@ public @Service class TypedefParser {
 
     private @Service TypeParser typeParser;
     private @Service NameParser nameParser;
-    private @Service ArrayParser arrayParser;
+    private @Service ArrayTypeParser arrayTypeParser;
 
     private TypedefParser() {
     }
@@ -44,7 +44,7 @@ public @Service class TypedefParser {
             typedef.setName(typedef.getType().getTypename().getName());
         } else if (reader.has(SquareBrackets.class)) {
             if (typedef.getType().getArrays().count() == 0) {
-                typedef.getType().setArrays(arrayParser.parse(reader));
+                typedef.getType().setArrays(arrayTypeParser.parse(reader));
             } else {
                 SquareBrackets brackets = reader.read(SquareBrackets.class);
                 throw new ParseException(brackets.getPosition(), "Unexpected array combination.");

@@ -19,8 +19,8 @@ public @Service class FunctionTypeParser {
             synchronized (Service.class) {
                 if (instance == null) {
                     instance = new FunctionTypeParser();
-                    instance.pointerParser = PointerParser.getInstance();
-                    instance.arrayParser = ArrayParser.getInstance();
+                    instance.pointerTypeParser = PointerTypeParser.getInstance();
+                    instance.arrayTypeParser = ArrayTypeParser.getInstance();
                     instance.variableListParser = VariableListParser.getInstance();
                 }
             }
@@ -28,8 +28,8 @@ public @Service class FunctionTypeParser {
         return instance;
     }
 
-    private @Service PointerParser pointerParser;
-    private @Service ArrayParser arrayParser;
+    private @Service PointerTypeParser pointerTypeParser;
+    private @Service ArrayTypeParser arrayTypeParser;
     private @Service VariableListParser variableListParser;
 
     private FunctionTypeParser() {
@@ -53,9 +53,9 @@ public @Service class FunctionTypeParser {
         function.setOutput(output);
         CType type = new CType();
         type.setTypename(function);
-        type.setPointers(pointerParser.parse(bracketReader));
+        type.setPointers(pointerTypeParser.parse(bracketReader));
         function.setName(bracketReader.read(WordToken.class).getText());
-        type.setArrays(arrayParser.parse(bracketReader));
+        type.setArrays(arrayTypeParser.parse(bracketReader));
         function.setInput(variableListParser.parse(reader.read(RoundBrackets.class)));
         bracketReader.readEnd();
         return type;

@@ -17,6 +17,7 @@ import cz.mg.collections.list.List;
 import cz.mg.token.Token;
 import cz.mg.token.tokens.SymbolToken;
 import cz.mg.token.tokens.WordToken;
+import cz.mg.token.tokens.brackets.SquareBrackets;
 
 public @Service class RootEntityParsers {
     private static volatile @Service RootEntityParsers instance;
@@ -92,7 +93,8 @@ public @Service class RootEntityParsers {
     }
 
     private boolean isVariable(@Mandatory TokenReader reader) {
-        return reader.has(WordToken.class);
+        return reader.has(WordToken.class)
+            || (reader.has(RoundBrackets.class) && reader.hasNext(SquareBrackets.class));
     }
 
     private boolean isPlainType(@Mandatory CType type) {

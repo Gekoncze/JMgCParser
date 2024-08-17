@@ -18,7 +18,7 @@ public @Service class EnumTypeParser implements InlineTypeParser {
                 if (instance == null) {
                     instance = new EnumTypeParser();
                     instance.modifiersParser = ModifiersParser.getInstance();
-                    instance.pointerParser = PointerParser.getInstance();
+                    instance.pointerTypeParser = PointerTypeParser.getInstance();
                     instance.enumParser = EnumParser.getInstance();
                 }
             }
@@ -27,7 +27,7 @@ public @Service class EnumTypeParser implements InlineTypeParser {
     }
 
     private @Service ModifiersParser modifiersParser;
-    private @Service PointerParser pointerParser;
+    private @Service PointerTypeParser pointerTypeParser;
     private @Service EnumParser enumParser;
 
     private EnumTypeParser() {
@@ -39,7 +39,7 @@ public @Service class EnumTypeParser implements InlineTypeParser {
         Set<CModifier> modifiers = modifiersParser.parse(reader);
         type.setTypename(enumParser.parse(reader));
         type.setModifiers(Sets.union(modifiers, modifiersParser.parse(reader)));
-        type.setPointers(pointerParser.parse(reader));
+        type.setPointers(pointerTypeParser.parse(reader));
         return type;
     }
 }

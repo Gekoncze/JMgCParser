@@ -18,7 +18,7 @@ public @Service class StructTypeParser implements InlineTypeParser {
                 if (instance == null) {
                     instance = new StructTypeParser();
                     instance.modifiersParser = ModifiersParser.getInstance();
-                    instance.pointerParser = PointerParser.getInstance();
+                    instance.pointerTypeParser = PointerTypeParser.getInstance();
                     instance.structParser = StructParser.getInstance();
                 }
             }
@@ -27,7 +27,7 @@ public @Service class StructTypeParser implements InlineTypeParser {
     }
 
     private @Service ModifiersParser modifiersParser;
-    private @Service PointerParser pointerParser;
+    private @Service PointerTypeParser pointerTypeParser;
     private @Service StructParser structParser;
 
     private StructTypeParser() {
@@ -39,7 +39,7 @@ public @Service class StructTypeParser implements InlineTypeParser {
         Set<CModifier> modifiers = modifiersParser.parse(reader);
         type.setTypename(structParser.parse(reader));
         type.setModifiers(Sets.union(modifiers, modifiersParser.parse(reader)));
-        type.setPointers(pointerParser.parse(reader));
+        type.setPointers(pointerTypeParser.parse(reader));
         return type;
     }
 }
