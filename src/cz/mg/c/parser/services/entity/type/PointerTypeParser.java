@@ -7,7 +7,6 @@ import cz.mg.c.entities.types.CPointerType;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.collections.list.List;
-import cz.mg.collections.list.ListItem;
 import cz.mg.collections.pair.Pair;
 import cz.mg.token.Token;
 import cz.mg.token.tokens.SymbolToken;
@@ -21,6 +20,7 @@ public @Service class PointerTypeParser {
                 if (instance == null) {
                     instance = new PointerTypeParser();
                     instance.modifiersParser = ModifiersParser.getInstance();
+                    instance.typeConnector = TypeConnector.getInstance();
                 }
             }
         }
@@ -28,14 +28,14 @@ public @Service class PointerTypeParser {
     }
 
     private @Service ModifiersParser modifiersParser;
+    private @Service TypeConnector typeConnector;
 
     private PointerTypeParser() {
     }
 
     /**
-     * Parses series of pointers. Pointers are nested into each other.
-     * Returns first and last pointer type object.
-     * Returns null if there are no pointers to parse.
+     * Parses series of pointers. Pointers are connected into chain.
+     * @return first and last pointer type object or null if there are no pointers to parse
      */
     public @Optional Pair<CPointerType, CPointerType> parse(@Mandatory TokenReader reader) {
         List<CPointerType> pointers = new List<>();
@@ -53,32 +53,10 @@ public @Service class PointerTypeParser {
             pointers.getLast().getModifiers().addCollectionLast(modifiersParser.parse(reader));
         }
 
-        return nest(pointers);
+        return typeConnector.connect(pointers);
     }
 
     private boolean pointer(@Mandatory Token token) {
         return token instanceof SymbolToken && token.getText().startsWith("*");
-    }
-
-    private @Optional Pair<CPointerType, CPointerType> nest(@Mandatory List<CPointerType> pointers) {
-        if (pointers.isEmpty()) {
-            return null;
-        }
-
-        if (pointers.count() == 1) {
-            return new Pair<>(pointers.getFirst(), pointers.getFirst());
-        }
-
-        for (
-            ListItem<CPointerType> item = pointers.getFirstItem().getNextItem();
-            item != null;
-            item = item.getNextItem()
-        ) {
-            CPointerType previous = item.getPreviousItem().get();
-            CPointerType current = item.get();
-            previous.setType(current);
-        }
-
-        return new Pair<>(pointers.getFirst(), pointers.getLast());
     }
 }
