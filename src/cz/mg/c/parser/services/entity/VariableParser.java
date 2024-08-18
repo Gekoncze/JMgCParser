@@ -37,8 +37,10 @@ public @Service class VariableParser implements CEntityParser {
 
     @Override
     public @Mandatory CVariable parse(@Mandatory TokenReader reader) {
-        CType type = typeParser.parse(reader);
+        return parse(reader, typeParser.parse(reader));
+    }
 
+    public @Mandatory CVariable parse(@Mandatory TokenReader reader, @Mandatory CType type) {
         CVariable variable = new CVariable();
         variable.setName(nameParser.parse(reader));
         variable.setType(typeConnector.connect(arrayTypeParser.parse(reader), type));
