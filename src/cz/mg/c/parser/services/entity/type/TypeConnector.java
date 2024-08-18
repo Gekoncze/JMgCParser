@@ -33,17 +33,17 @@ public @Service class TypeConnector {
      * Types are connected in parameter order, where earlier types are outer types and later types are inner types.
      * Null types are skipped.
      * @param types connected wrapper types
-     * @param dataType data type
+     * @param type last inner type
      */
     public CType connect(
         @Optional Pair<? extends CWrapperType, ? extends CWrapperType> types,
-        @Mandatory CDataType dataType
+        @Mandatory CType type
     ) {
         if (types != null) {
-            types.getValue().setType(dataType);
+            types.getValue().setType(type);
             return types.getKey();
         } else {
-            return dataType;
+            return type;
         }
     }
 
@@ -53,26 +53,26 @@ public @Service class TypeConnector {
      * Null types are skipped.
      * @param firstTypes connected wrapper types
      * @param secondTypes connected wrapper types
-     * @param dataType data type
+     * @param type last inner type
      * @return resulting outer type
      */
     public CType connect(
         @Optional Pair<? extends CWrapperType, ? extends CWrapperType> firstTypes,
         @Optional Pair<? extends CWrapperType, ? extends CWrapperType> secondTypes,
-        @Mandatory CDataType dataType
+        @Mandatory CType type
     ) {
         if (firstTypes != null && secondTypes != null) {
             firstTypes.getValue().setType(secondTypes.getKey());
-            secondTypes.getValue().setType(dataType);
+            secondTypes.getValue().setType(type);
             return firstTypes.getKey();
         } else if (firstTypes != null) {
-            firstTypes.getValue().setType(dataType);
+            firstTypes.getValue().setType(type);
             return firstTypes.getKey();
         } else if (secondTypes != null) {
-            secondTypes.getValue().setType(dataType);
+            secondTypes.getValue().setType(type);
             return secondTypes.getKey();
         } else {
-            return dataType;
+            return type;
         }
     }
 

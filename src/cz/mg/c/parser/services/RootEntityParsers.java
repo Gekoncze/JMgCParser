@@ -5,11 +5,11 @@ import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.c.entities.CEntity;
 import cz.mg.c.entities.CModifier;
 import cz.mg.c.entities.types.CDataType;
-import cz.mg.c.entities.types.CWrapperType;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.entities.CFunction;
 import cz.mg.c.entities.types.CType;
 import cz.mg.c.entities.CVariable;
+import cz.mg.c.parser.services.entity.type.TypeUnwrapper;
 import cz.mg.token.tokens.brackets.RoundBrackets;
 import cz.mg.c.parser.services.entity.FunctionParser;
 import cz.mg.c.parser.services.entity.TypeParser;
@@ -31,6 +31,7 @@ public @Service class RootEntityParsers {
                     instance = new RootEntityParsers();
                     instance.typedefParser = TypedefParser.getInstance();
                     instance.typeParser = TypeParser.getInstance();
+                    instance.typeUnwrapper = TypeUnwrapper.getInstance();
                     instance.variableParser = VariableParser.getInstance();
                     instance.functionParser = FunctionParser.getInstance();
                 }
@@ -41,6 +42,7 @@ public @Service class RootEntityParsers {
 
     private TypedefParser typedefParser;
     private TypeParser typeParser;
+    private TypeUnwrapper typeUnwrapper;
     private VariableParser variableParser;
     private FunctionParser functionParser;
 
@@ -105,23 +107,7 @@ public @Service class RootEntityParsers {
     }
 
     private boolean isFunctionVariableDeclaration(@Mandatory CType type) {
-        return unwrap(type).getTypename() instanceof CFunction function
+        return typeUnwrapper.unwrap(type).getTypename() instanceof CFunction function
             && function.getName() != null;
-    }
-
-    private @Mandatory CDataType unwrap(@Mandatory CType type) {
-        while (type instanceof CWrapperType wrapper) {
-            type = wrapper.getType();
-        }
-
-        if (type == null) {
-            throw new IllegalStateException("Missing inner type for wrapper type.");
-        }
-
-        if (type instanceof CDataType dataType) {
-            return dataType;
-        } else {
-            throw new IllegalStateException("Last wrapped inner type should be data type.");
-        }
     }
 }
