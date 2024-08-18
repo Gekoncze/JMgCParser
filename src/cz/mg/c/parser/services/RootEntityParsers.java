@@ -4,6 +4,8 @@ import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.c.entities.CEntity;
 import cz.mg.c.entities.CModifier;
+import cz.mg.c.entities.types.CDataType;
+import cz.mg.c.entities.types.CWrapperType;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.entities.CFunction;
 import cz.mg.c.entities.types.CType;
@@ -51,29 +53,29 @@ public @Service class RootEntityParsers {
         while (reader.has()) {
             if (isSemicolon(reader)) {
                 reader.read();
-            } else if (isTypedef(reader)) {
+            } else if (isTypedefDeclaration(reader)) {
                 entities.addLast(typedefParser.parse(reader));
                 reader.read(";", SymbolToken.class);
             } else if (reader.has()) {
                 CType type = typeParser.parse(reader);
-                if (isFunction(reader)) {
+                if (isFunctionDeclaration(reader)) {
                     entities.addLast(functionParser.parse(reader, type));
-                } else if (isVariable(reader)) {
+                } else if (isVariableDeclaration(reader)) {
                     entities.addLast(variableParser.parse(reader, type));
                     reader.read(";", SymbolToken.class);
-                } else if (isPlainType(type)) {
-                    entities.addLast(type.getTypename());
+                } else if (isTypenameDeclaration(type)) {
+                    CDataType dataType = (CDataType) type;
+                    entities.addLast(dataType.getTypename());
                     reader.read(";", SymbolToken.class);
-                } else if (isFunctionPointer(type)) {
+                } else if (isFunctionVariableDeclaration(type)) {
+                    CDataType dataType = (CDataType) type;
                     CVariable variable = new CVariable();
-                    variable.setName(type.getTypename().getName());
-                    variable.setType(type);
+                    variable.setName(dataType.getTypename().getName());
+                    variable.setType(dataType);
                     entities.addLast(variable);
                     reader.read(";", SymbolToken.class);
                 } else {
-                    throw new UnsupportedOperationException(
-                        "Unsupported type '" + type.getTypename().getName() + "'."
-                    );
+                    throw new UnsupportedOperationException("Unsupported declaration.");
                 }
             }
         }
@@ -84,28 +86,42 @@ public @Service class RootEntityParsers {
         return reader.has(";", SymbolToken.class);
     }
 
-    private boolean isTypedef(@Mandatory TokenReader reader) {
+    private boolean isTypedefDeclaration(@Mandatory TokenReader reader) {
         return reader.has("typedef", WordToken.class);
     }
 
-    private boolean isFunction(@Mandatory TokenReader reader) {
+    private boolean isFunctionDeclaration(@Mandatory TokenReader reader) {
         return reader.has(WordToken.class) && reader.hasNext(RoundBrackets.class);
     }
 
-    private boolean isVariable(@Mandatory TokenReader reader) {
+    private boolean isVariableDeclaration(@Mandatory TokenReader reader) {
         return reader.has(WordToken.class)
             || (reader.has(RoundBrackets.class) && reader.hasNext(SquareBrackets.class));
     }
 
-    private boolean isPlainType(@Mandatory CType type) {
-        return type.getArrays().isEmpty()
-            && type.getPointers().isEmpty()
-            && !type.getModifiers().contains(CModifier.CONST);
+    private boolean isTypenameDeclaration(@Mandatory CType type) {
+        return type instanceof CDataType dataType
+            && !dataType.getModifiers().contains(CModifier.CONST);
     }
 
-    private boolean isFunctionPointer(@Mandatory CType type) {
-        return type.getTypename() instanceof CFunction
-            && type.getPointers().count() > 0
-            && type.getTypename().getName() != null;
+    private boolean isFunctionVariableDeclaration(@Mandatory CType type) {
+        return unwrap(type).getTypename() instanceof CFunction function
+            && function.getName() != null;
+    }
+
+    private @Mandatory CDataType unwrap(@Mandatory CType type) {
+        while (type instanceof CWrapperType wrapper) {
+            type = wrapper.getType();
+        }
+
+        if (type == null) {
+            throw new IllegalStateException("Missing inner type for wrapper type.");
+        }
+
+        if (type instanceof CDataType dataType) {
+            return dataType;
+        } else {
+            throw new IllegalStateException("Last wrapped inner type should be data type.");
+        }
     }
 }
