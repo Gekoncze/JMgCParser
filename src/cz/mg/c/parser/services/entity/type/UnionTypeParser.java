@@ -3,9 +3,12 @@ package cz.mg.c.parser.services.entity.type;
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.c.entities.CModifier;
+import cz.mg.c.entities.types.CDataType;
+import cz.mg.c.entities.types.CPointerType;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.entities.types.CType;
 import cz.mg.c.parser.services.entity.UnionParser;
+import cz.mg.collections.pair.Pair;
 import cz.mg.collections.set.Set;
 import cz.mg.collections.set.Sets;
 
@@ -20,6 +23,7 @@ public @Service class UnionTypeParser implements InlineTypeParser {
                     instance.modifiersParser = ModifiersParser.getInstance();
                     instance.pointerTypeParser = PointerTypeParser.getInstance();
                     instance.unionParser = UnionParser.getInstance();
+                    instance.typeConnector = TypeConnector.getInstance();
                 }
             }
         }
@@ -29,17 +33,20 @@ public @Service class UnionTypeParser implements InlineTypeParser {
     private @Service ModifiersParser modifiersParser;
     private @Service PointerTypeParser pointerTypeParser;
     private @Service UnionParser unionParser;
+    private @Service TypeConnector typeConnector;
 
     private UnionTypeParser() {
     }
 
     @Override
     public @Mandatory CType parse(@Mandatory TokenReader reader) {
-        CType type = new CType();
+        CDataType dataType = new CDataType();
         Set<CModifier> modifiers = modifiersParser.parse(reader);
-        type.setTypename(unionParser.parse(reader));
-        type.setModifiers(Sets.union(modifiers, modifiersParser.parse(reader)));
-        type.setPointers(pointerTypeParser.parse(reader));
-        return type;
+        dataType.setTypename(unionParser.parse(reader));
+        dataType.setModifiers(Sets.union(modifiers, modifiersParser.parse(reader)));
+
+        Pair<CPointerType, CPointerType> pointerTypes = pointerTypeParser.parse(reader);
+
+        return typeConnector.connect(pointerTypes, dataType);
     }
 }

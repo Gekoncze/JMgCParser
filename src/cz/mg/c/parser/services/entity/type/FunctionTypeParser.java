@@ -2,7 +2,6 @@ package cz.mg.c.parser.services.entity.type;
 
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
-import cz.mg.annotations.requirement.Optional;
 import cz.mg.c.entities.types.*;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.entities.CFunction;
@@ -24,6 +23,7 @@ public @Service class FunctionTypeParser {
                     instance.pointerTypeParser = PointerTypeParser.getInstance();
                     instance.arrayTypeParser = ArrayTypeParser.getInstance();
                     instance.variableListParser = VariableListParser.getInstance();
+                    instance.typeConnector = TypeConnector.getInstance();
                 }
             }
         }
@@ -33,6 +33,7 @@ public @Service class FunctionTypeParser {
     private @Service PointerTypeParser pointerTypeParser;
     private @Service ArrayTypeParser arrayTypeParser;
     private @Service VariableListParser variableListParser;
+    private @Service TypeConnector typeConnector;
 
     private FunctionTypeParser() {
     }
@@ -54,10 +55,10 @@ public @Service class FunctionTypeParser {
 
         TokenReader bracketReader = new TokenReader(reader.read(RoundBrackets.class).getTokens());
 
-        Pair<CPointerType, CPointerType> pointerPair = pointerTypeParser.parse(bracketReader);
+        Pair<CPointerType, CPointerType> pointerTypes = pointerTypeParser.parse(bracketReader);
         function.setName(bracketReader.read(WordToken.class).getText());
 
-        Pair<CArrayType, CArrayType> arrayPair = arrayTypeParser.parse(bracketReader);
+        Pair<CArrayType, CArrayType> arrayTypes = arrayTypeParser.parse(bracketReader);
         function.setInput(variableListParser.parse(reader.read(RoundBrackets.class)));
 
         CDataType dataType = new CDataType();
@@ -65,26 +66,6 @@ public @Service class FunctionTypeParser {
 
         bracketReader.readEnd();
 
-        return connect(arrayPair, pointerPair, dataType);
-    }
-
-    private CType connect(
-        @Optional Pair<CArrayType, CArrayType> arrayPair,
-        @Optional Pair<CPointerType, CPointerType> pointerPair,
-        @Mandatory CDataType type
-    ) {
-        if (arrayPair != null && pointerPair != null) {
-            arrayPair.getValue().setType(pointerPair.getKey());
-            pointerPair.getValue().setType(type);
-            return arrayPair.getKey();
-        } else if (arrayPair != null) {
-            arrayPair.getValue().setType(type);
-            return arrayPair.getKey();
-        } else if (pointerPair != null) {
-            pointerPair.getValue().setType(type);
-            return pointerPair.getKey();
-        } else {
-            return type;
-        }
+        return typeConnector.connect(arrayTypes, pointerTypes, dataType);
     }
 }
