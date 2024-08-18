@@ -2,9 +2,11 @@ package cz.mg.c.parser.services.entity.type;
 
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
+import cz.mg.annotations.requirement.Optional;
+import cz.mg.c.entities.types.*;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.entities.CFunction;
-import cz.mg.c.entities.types.CType;
+import cz.mg.collections.pair.Pair;
 import cz.mg.token.tokens.brackets.RoundBrackets;
 import cz.mg.c.parser.services.entity.VariableListParser;
 import cz.mg.token.Token;
@@ -36,28 +38,53 @@ public @Service class FunctionTypeParser {
     }
 
     public boolean matches(@Mandatory Token token) {
-        if (token instanceof RoundBrackets) {
-            RoundBrackets brackets = (RoundBrackets) token;
+        if (token instanceof RoundBrackets brackets) {
             if (!brackets.getTokens().isEmpty()) {
                 token = brackets.getTokens().getFirst();
-                return token instanceof SymbolToken && token.getText().startsWith("*");
+                return token instanceof SymbolToken
+                    && token.getText().startsWith("*");
             }
         }
-
         return false;
     }
 
     public @Mandatory CType parse(@Mandatory TokenReader reader, @Mandatory CType output) {
-        TokenReader bracketReader = new TokenReader(reader.read(RoundBrackets.class).getTokens());
         CFunction function = new CFunction();
         function.setOutput(output);
-        CType type = new CType();
-        type.setTypename(function);
-        type.setPointers(pointerTypeParser.parse(bracketReader));
+
+        TokenReader bracketReader = new TokenReader(reader.read(RoundBrackets.class).getTokens());
+
+        Pair<CPointerType, CPointerType> pointerPair = pointerTypeParser.parse(bracketReader);
         function.setName(bracketReader.read(WordToken.class).getText());
-        type.setArrays(arrayTypeParser.parse(bracketReader));
+
+        Pair<CArrayType, CArrayType> arrayPair = arrayTypeParser.parse(bracketReader);
         function.setInput(variableListParser.parse(reader.read(RoundBrackets.class)));
+
+        CDataType dataType = new CDataType();
+        dataType.setTypename(function);
+
         bracketReader.readEnd();
-        return type;
+
+        return connect(arrayPair, pointerPair, dataType);
+    }
+
+    private CType connect(
+        @Optional Pair<CArrayType, CArrayType> arrayPair,
+        @Optional Pair<CPointerType, CPointerType> pointerPair,
+        @Mandatory CDataType type
+    ) {
+        if (arrayPair != null && pointerPair != null) {
+            arrayPair.getValue().setType(pointerPair.getKey());
+            pointerPair.getValue().setType(type);
+            return arrayPair.getKey();
+        } else if (arrayPair != null) {
+            arrayPair.getValue().setType(type);
+            return arrayPair.getKey();
+        } else if (pointerPair != null) {
+            pointerPair.getValue().setType(type);
+            return pointerPair.getKey();
+        } else {
+            return type;
+        }
     }
 }
