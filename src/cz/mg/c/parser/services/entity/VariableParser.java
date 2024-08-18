@@ -8,6 +8,7 @@ import cz.mg.c.entities.types.CType;
 import cz.mg.c.entities.CVariable;
 import cz.mg.c.parser.services.CEntityParser;
 import cz.mg.c.parser.services.entity.type.ArrayTypeParser;
+import cz.mg.c.parser.services.entity.type.TypeConnector;
 import cz.mg.token.tokens.NumberToken;
 import cz.mg.token.tokens.SymbolToken;
 
@@ -22,6 +23,7 @@ public @Service class VariableParser implements CEntityParser {
                 instance.arrayTypeParser = ArrayTypeParser.getInstance();
                 instance.nameParser = NameParser.getInstance();
                 instance.initializerParser = InitializerParser.getInstance();
+                instance.typeConnector = TypeConnector.getInstance();
             }
         }
         return instance;
@@ -31,18 +33,15 @@ public @Service class VariableParser implements CEntityParser {
     private @Service ArrayTypeParser arrayTypeParser;
     private @Service NameParser nameParser;
     private @Service InitializerParser initializerParser;
+    private @Service TypeConnector typeConnector;
 
     @Override
     public @Mandatory CVariable parse(@Mandatory TokenReader reader) {
-        return parse(reader, typeParser.parse(reader));
-    }
+        CType type = typeParser.parse(reader);
 
-    public @Mandatory CVariable parse(@Mandatory TokenReader reader, @Mandatory CType type) {
-        // TODO - might need to add pointers to type
         CVariable variable = new CVariable();
-        variable.setType(type);
         variable.setName(nameParser.parse(reader));
-        variable.getType().setArrays(arrayTypeParser.parse(reader));
+        variable.setType(typeConnector.connect(arrayTypeParser.parse(reader), type));
         variable.setBit(readBitField(reader));
         variable.setExpression(initializerParser.parse(reader));
         return variable;

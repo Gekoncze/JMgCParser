@@ -5,12 +5,10 @@ import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.c.entities.CModifier;
 import cz.mg.c.entities.CTypename;
 import cz.mg.c.entities.types.CDataType;
-import cz.mg.c.entities.types.CPointerType;
 import cz.mg.c.entities.types.CType;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.parser.services.CEntityParser;
 import cz.mg.c.parser.services.entity.type.*;
-import cz.mg.collections.pair.Pair;
 import cz.mg.collections.set.Set;
 import cz.mg.collections.set.Sets;
 import cz.mg.token.tokens.WordToken;
@@ -55,8 +53,6 @@ public @Service class TypeParser implements CEntityParser {
         CDataType dataType = new CDataType();
         dataType.setTypename(new CTypename(reader.read(WordToken.class).getText()));
         dataType.setModifiers(Sets.union(modifiers, modifiersParser.parse(reader)));
-
-        Pair<CPointerType, CPointerType> pointerTypes = pointerTypeParser.parse(reader);
-        return typeConnector.connect(pointerTypes, dataType);
+        return typeConnector.connect(pointerTypeParser.parse(reader), dataType);
     }
 }
