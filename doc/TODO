@@ -5,5 +5,11 @@
     add test for TypeConnector
     add test for TypeUnwrapper
 
+    check if following is covered by type parser test
+        struct {int a; int b;}*
+
+    check if following is covered by variable parser test
+        struct {int a; int b;}* foo[2];
+
 ### LATER ###
     vararg support for functions and function pointers

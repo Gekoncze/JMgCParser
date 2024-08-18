@@ -20,6 +20,7 @@ public @Service class InlineTypeParsers {
                     instance.structTypeParser = StructTypeParser.getInstance();
                     instance.unionTypeParser = UnionTypeParser.getInstance();
                     instance.enumTypeParser = EnumTypeParser.getInstance();
+                    instance.typeUnwrapper = TypeUnwrapper.getInstance();
                 }
             }
         }
@@ -29,6 +30,7 @@ public @Service class InlineTypeParsers {
     private @Service StructTypeParser structTypeParser;
     private @Service UnionTypeParser unionTypeParser;
     private @Service EnumTypeParser enumTypeParser;
+    private @Service TypeUnwrapper typeUnwrapper;
 
     private InlineTypeParsers() {
     }
@@ -36,7 +38,7 @@ public @Service class InlineTypeParsers {
     public @Optional CType parse(@Mandatory TokenReader reader, @Mandatory Set<CModifier> modifiers) {
         CType type = parse(reader);
         if (type != null) {
-            type.setModifiers(modifiers);
+            typeUnwrapper.unwrap(type).getModifiers().setCollection(modifiers);
         }
         return type;
     }
