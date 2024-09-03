@@ -2,19 +2,23 @@ package cz.mg.c.parser.services.entity.type;
 
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
-import cz.mg.c.entities.CArray;
+import cz.mg.annotations.requirement.Optional;
+import cz.mg.c.entities.types.CArrayType;
+import cz.mg.c.entities.types.CType;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.parser.test.BracketFactory;
 import cz.mg.collections.list.List;
+import cz.mg.collections.pair.Pair;
 import cz.mg.test.Assert;
+import cz.mg.test.exceptions.AssertException;
 import cz.mg.token.Token;
 import cz.mg.tokenizer.test.TokenFactory;
 
-public @Test class ArrayParserTest {
+public @Test class ArrayTypeParserTest {
     public static void main(String[] args) {
-        System.out.print("Running " + ArrayParserTest.class.getSimpleName() + " ... ");
+        System.out.print("Running " + ArrayTypeParserTest.class.getSimpleName() + " ... ");
 
-        ArrayParserTest test = new ArrayParserTest();
+        ArrayTypeParserTest test = new ArrayTypeParserTest();
         test.testParseEmpty();
         test.testParseSingle();
         test.testParseMultiple();
@@ -28,16 +32,17 @@ public @Test class ArrayParserTest {
     private final @Service TokenFactory f = TokenFactory.getInstance();
 
     private void testParseEmpty() {
-        Assert.assertEquals(true, parser.parse(new TokenReader(new List<>())).isEmpty());
-        Assert.assertEquals(true, parser.parse(new TokenReader(new List<>(f.word("foo")))).isEmpty());
+        Assert.assertNull(parser.parse(new TokenReader(new List<>())));
+        Assert.assertNull(parser.parse(new TokenReader(new List<>(f.word("foo")))));
     }
 
     private void testParseSingle() {
         List<Token> tokens = new List<>(b.squareBrackets(f.number("5")));
-        List<CArray> arrays = parser.parse(new TokenReader(tokens));
-        Assert.assertEquals(1, arrays.count());
-        Assert.assertEquals(1, arrays.getFirst().getExpression().count());
-        Assert.assertEquals("5", arrays.getFirst().getExpression().getFirst().getText());
+        Pair<CArrayType, CArrayType> arrays = parser.parse(new TokenReader(tokens));
+        Assert.assertNotNull(arrays);
+        Assert.assertSame(arrays.getKey(), arrays.getValue());
+        Assert.assertEquals(1, arrays.getKey().getExpression().count());
+        Assert.assertEquals("5", arrays.getKey().getExpression().getFirst().getText());
     }
 
     private void testParseMultiple() {
@@ -50,7 +55,7 @@ public @Test class ArrayParserTest {
                 f.number("3")
             )
         );
-        List<CArray> arrays = parser.parse(new TokenReader(tokens));
+        List<CArrayType> arrays = flatten(parser.parse(new TokenReader(tokens)));
         Assert.assertEquals(3, arrays.count());
         Assert.assertEquals(0, arrays.get(0).getExpression().count());
         Assert.assertEquals(1, arrays.get(1).getExpression().count());
@@ -63,5 +68,22 @@ public @Test class ArrayParserTest {
         parser.parse(reader);
         Assert.assertEquals(true, reader.has());
         Assert.assertEquals("foo", reader.read().getText());
+    }
+
+    private List<CArrayType> flatten(@Optional Pair<CArrayType, CArrayType> pointers) {
+        List<CArrayType> pointerList = new List<>();
+        CType current = pointers == null ? null : pointers.getKey();
+        while (current != null) {
+            if (current instanceof CArrayType array) {
+                pointerList.addLast(array);
+                current = array.getType();
+            } else {
+                throw new AssertException(
+                    "Expected instance of type " + CArrayType.class.getSimpleName()
+                        + ", but got " + current.getClass().getSimpleName() + "."
+                );
+            }
+        }
+        return pointerList;
     }
 }
