@@ -5,10 +5,10 @@ import cz.mg.annotations.classes.Test;
 import cz.mg.annotations.requirement.Optional;
 import cz.mg.c.entities.types.CArrayType;
 import cz.mg.c.entities.types.CType;
+import cz.mg.c.parser.components.CTypeChain;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.parser.test.BracketFactory;
 import cz.mg.collections.list.List;
-import cz.mg.collections.pair.Pair;
 import cz.mg.test.Assert;
 import cz.mg.test.exceptions.AssertException;
 import cz.mg.token.Token;
@@ -38,11 +38,10 @@ public @Test class ArrayTypeParserTest {
 
     private void testParseSingle() {
         List<Token> tokens = new List<>(b.squareBrackets(f.number("5")));
-        Pair<CArrayType, CArrayType> arrays = parser.parse(new TokenReader(tokens));
-        Assert.assertNotNull(arrays);
-        Assert.assertSame(arrays.getKey(), arrays.getValue());
-        Assert.assertEquals(1, arrays.getKey().getExpression().count());
-        Assert.assertEquals("5", arrays.getKey().getExpression().getFirst().getText());
+        List<CArrayType> arrays = flatten(parser.parse(new TokenReader(tokens)));
+        Assert.assertEquals(1, arrays.count());
+        Assert.assertEquals(1, arrays.getFirst().getExpression().count());
+        Assert.assertEquals("5", arrays.getFirst().getExpression().getFirst().getText());
     }
 
     private void testParseMultiple() {
@@ -70,9 +69,9 @@ public @Test class ArrayTypeParserTest {
         Assert.assertEquals("foo", reader.read().getText());
     }
 
-    private List<CArrayType> flatten(@Optional Pair<CArrayType, CArrayType> pointers) {
+    private List<CArrayType> flatten(@Optional CTypeChain pointers) {
         List<CArrayType> pointerList = new List<>();
-        CType current = pointers == null ? null : pointers.getKey();
+        CType current = pointers == null ? null : pointers.getFirst();
         while (current != null) {
             if (current instanceof CArrayType array) {
                 pointerList.addLast(array);

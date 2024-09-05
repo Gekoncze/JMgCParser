@@ -2,13 +2,19 @@ package cz.mg.c.parser.services.entity;
 
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
+import cz.mg.c.entities.CFunction;
 import cz.mg.c.entities.CModifier;
 import cz.mg.c.entities.CStruct;
+import cz.mg.c.entities.types.CArrayType;
+import cz.mg.c.entities.types.CBaseType;
+import cz.mg.c.entities.types.CPointerType;
 import cz.mg.c.entities.types.CType;
 import cz.mg.c.entities.CVariable;
+import cz.mg.c.parser.components.CTypeChain;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.c.parser.test.BracketFactory;
+import cz.mg.c.parser.test.TypeUtils;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
 import cz.mg.token.tokens.SymbolToken;
@@ -23,6 +29,9 @@ public @Test class VariableParserTest {
         test.testParseEmpty();
         test.testParseSimple();
         test.testParseAnonymous();
+        test.testParsePointer();
+        test.testParseFunctionPointer();
+        test.testParseFunctionPointers();
         test.testParseArray();
         test.testParseArrays();
         test.testParseArrayExpression();
@@ -55,10 +64,7 @@ public @Test class VariableParserTest {
         CVariable variable = parser.parse(reader);
 
         Assert.assertEquals("foo", variable.getName());
-        Assert.assertEquals(true, variable.getType().getArrays().isEmpty());
-        Assert.assertEquals(false, variable.getType().getModifiers().contains(CModifier.CONST));
-        Assert.assertEquals("int", variable.getType().getTypename().getName());
-        Assert.assertEquals(true, variable.getType().getPointers().isEmpty());
+        Assert.assertEquals("int", ((CBaseType)variable.getType()).getTypename().getName());
         Assert.assertNull(variable.getExpression());
         reader.readEnd();
     }
@@ -69,12 +75,70 @@ public @Test class VariableParserTest {
         CVariable variable = parser.parse(reader);
 
         Assert.assertNull(variable.getName());
-        Assert.assertEquals(true, variable.getType().getArrays().isEmpty());
-        Assert.assertEquals(false, variable.getType().getModifiers().contains(CModifier.CONST));
-        Assert.assertEquals("int", variable.getType().getTypename().getName());
-        Assert.assertEquals(true, variable.getType().getPointers().isEmpty());
+        Assert.assertEquals("int", ((CBaseType)variable.getType()).getTypename().getName());
         Assert.assertNull(variable.getExpression());
         reader.readEnd();
+    }
+
+    private void testParsePointer() {
+        TokenReader reader = new TokenReader(new List<>(
+            f.word("float"),
+            f.symbol("*"),
+            f.word("bar")
+        ));
+
+        CVariable variable = parser.parse(reader);
+        List<CType> types = TypeUtils.flatten(variable.getType());
+
+        Assert.assertEquals("bar", variable.getName());
+        Assert.assertEquals(CPointerType.class, types.get(0).getClass());
+        Assert.assertEquals(CBaseType.class, types.get(1).getClass());
+        Assert.assertEquals("float", ((CBaseType)types.get(1)).getTypename().getName());
+        reader.readEnd();
+    }
+
+    private void testParseFunctionPointer() {
+        TokenReader reader = new TokenReader(new List<>(
+            f.word("float"),
+            b.roundBrackets(
+                f.symbol("*"),
+                f.word("bar")
+            ),
+            b.roundBrackets()
+        ));
+
+        CVariable variable = parser.parse(reader);
+        List<CType> types = TypeUtils.flatten(variable.getType());
+
+        Assert.assertEquals("bar", variable.getName());
+        Assert.assertEquals(CPointerType.class, types.get(0).getClass());
+        Assert.assertEquals(CBaseType.class, types.get(1).getClass());
+        Assert.assertEquals(CFunction.class, ((CBaseType)types.get(1)).getTypename().getClass());
+        CFunction function = (CFunction) ((CBaseType)types.get(1)).getTypename();
+        Assert.assertEquals("float", ((CBaseType)function.getOutput()).getTypename().getName());
+        Assert.assertEquals(true, function.getInput().isEmpty());
+        reader.readEnd();
+    }
+
+    private void testParseFunctionPointers() {
+        TokenReader reader = new TokenReader(new List<>(
+            f.word("float"),
+            b.roundBrackets(
+                f.symbol("*"),
+                f.symbol("*"),
+                f.word("bar")
+            ),
+            b.roundBrackets()
+        ));
+
+        CVariable variable = parser.parse(reader);
+        List<CType> types = TypeUtils.flatten(variable.getType());
+
+        Assert.assertEquals("bar", variable.getName());
+        Assert.assertEquals(CPointerType.class, types.get(0).getClass());
+        Assert.assertEquals(CPointerType.class, types.get(1).getClass());
+        Assert.assertEquals(CBaseType.class, types.get(2).getClass());
+        Assert.assertEquals(CFunction.class, ((CBaseType)types.get(2)).getTypename().getClass());
     }
 
     private void testParseArray() {
@@ -87,16 +151,16 @@ public @Test class VariableParserTest {
         ));
 
         CVariable variable = parser.parse(reader);
+        List<CType> types = TypeUtils.flatten(variable.getType());
 
         Assert.assertEquals("bar", variable.getName());
-        Assert.assertEquals(1, variable.getType().getArrays().count());
+        Assert.assertEquals(CArrayType.class, types.get(0).getClass());
+        Assert.assertEquals(CBaseType.class, types.get(1).getClass());
         tokenValidator.assertEquals(
             new List<>(f.number("12")),
-            variable.getType().getArrays().getFirst().getExpression()
+            ((CArrayType)types.get(0)).getExpression()
         );
-        Assert.assertEquals(false, variable.getType().getModifiers().contains(CModifier.CONST));
-        Assert.assertEquals("float", variable.getType().getTypename().getName());
-        Assert.assertEquals(true, variable.getType().getPointers().isEmpty());
+        Assert.assertEquals("float", ((CBaseType)types.get(1)).getTypename().getName());
         reader.readEnd();
     }
 
@@ -116,24 +180,28 @@ public @Test class VariableParserTest {
         ));
 
         CVariable variable = parser.parse(reader);
+        List<CType> types = TypeUtils.flatten(variable.getType());
 
         Assert.assertEquals("foobar", variable.getName());
-        Assert.assertEquals(3, variable.getType().getArrays().count());
+        Assert.assertEquals(CArrayType.class, types.get(0).getClass());
+        Assert.assertEquals(CArrayType.class, types.get(1).getClass());
+        Assert.assertEquals(CArrayType.class, types.get(2).getClass());
+        Assert.assertEquals(CBaseType.class, types.get(3).getClass());
         tokenValidator.assertEquals(
             new List<>(f.number("9")),
-            variable.getType().getArrays().get(0).getExpression()
+            ((CArrayType)types.get(0)).getExpression()
         );
         tokenValidator.assertEquals(
             new List<>(f.number("3")),
-            variable.getType().getArrays().get(1).getExpression()
+            ((CArrayType)types.get(1)).getExpression()
+
         );
         tokenValidator.assertEquals(
             new List<>(f.number("1")),
-            variable.getType().getArrays().get(2).getExpression()
+            ((CArrayType)types.get(2)).getExpression()
         );
         Assert.assertEquals(false, variable.getType().getModifiers().contains(CModifier.CONST));
-        Assert.assertEquals("double", variable.getType().getTypename().getName());
-        Assert.assertEquals(true, variable.getType().getPointers().isEmpty());
+        Assert.assertEquals("double", ((CBaseType)types.get(3)).getTypename().getName());
         reader.readEnd();
     }
 
@@ -149,20 +217,18 @@ public @Test class VariableParserTest {
         ));
 
         CVariable variable = parser.parse(reader);
+        List<CType> types = TypeUtils.flatten(variable.getType());
 
         Assert.assertEquals("bar", variable.getName());
-        Assert.assertEquals(1, variable.getType().getArrays().count());
         tokenValidator.assertEquals(
             new List<>(
                 f.number("12"),
                 f.symbol("+"),
                 f.number("1.5")
             ),
-            variable.getType().getArrays().getFirst().getExpression()
+            ((CArrayType)types.get(0)).getExpression()
         );
-        Assert.assertEquals(false, variable.getType().getModifiers().contains(CModifier.CONST));
-        Assert.assertEquals("float", variable.getType().getTypename().getName());
-        Assert.assertEquals(true, variable.getType().getPointers().isEmpty());
+        Assert.assertEquals("float", ((CBaseType)types.get(1)).getTypename().getName());
         reader.readEnd();
     }
 
@@ -181,21 +247,23 @@ public @Test class VariableParserTest {
         ));
 
         CVariable variable = parser.parse(reader);
+        List<CType> types = TypeUtils.flatten(variable.getType());
 
         Assert.assertEquals("bar", variable.getName());
-        Assert.assertEquals(1, variable.getType().getArrays().count());
+        Assert.assertEquals(CArrayType.class, types.get(0).getClass());
+        Assert.assertEquals(CPointerType.class, types.get(1).getClass());
+        Assert.assertEquals(CBaseType.class, types.get(2).getClass());
         tokenValidator.assertEquals(
             new List<>(
                 f.number("12"),
                 f.symbol("+"),
                 f.number("1.5")
             ),
-            variable.getType().getArrays().getFirst().getExpression()
+            ((CArrayType)types.get(0)).getExpression()
         );
-        Assert.assertEquals(true, variable.getType().getModifiers().contains(CModifier.CONST));
-        Assert.assertEquals("float", variable.getType().getTypename().getName());
-        Assert.assertEquals(1, variable.getType().getPointers().count());
-        Assert.assertEquals(true, variable.getType().getPointers().getFirst().isConstant());
+        Assert.assertEquals(true, types.get(1).getModifiers().contains(CModifier.CONST));
+        Assert.assertEquals(true, types.get(2).getModifiers().contains(CModifier.CONST));
+        Assert.assertEquals("float", ((CBaseType)types.get(2)).getTypename().getName());
         reader.readEnd();
     }
 
@@ -216,20 +284,22 @@ public @Test class VariableParserTest {
         ));
 
         CVariable variable = parser.parse(reader);
+        List<CType> types = TypeUtils.flatten(variable.getType());
 
         Assert.assertEquals("foobar", variable.getName());
-        Assert.assertEquals(1, variable.getType().getArrays().count());
-        Assert.assertEquals(1, variable.getType().getPointers().count());
-        Assert.assertEquals(true, variable.getType().getModifiers().contains(CModifier.CONST));
-        Assert.assertEquals(true, variable.getType().getTypename() instanceof CStruct);
-        Assert.assertNull(variable.getType().getTypename().getName());
+        Assert.assertEquals(CArrayType.class, types.get(0).getClass());
+        Assert.assertEquals(CPointerType.class, types.get(1).getClass());
+        Assert.assertEquals(CBaseType.class, types.get(2).getClass());
+        Assert.assertEquals(true, types.get(2).getModifiers().contains(CModifier.CONST));
+        Assert.assertEquals(CStruct.class, ((CBaseType)types.get(2)).getTypename().getClass());
+        Assert.assertNull(((CBaseType)types.get(2)).getTypename().getName());
     }
 
     private void testParseWithType() {
         TokenReader reader = new TokenReader(new List<>(f.word("foo")));
-        CType type = new CType();
+        CType type = new CBaseType();
 
-        CVariable variable = parser.parse(reader, type);
+        CVariable variable = parser.parse(reader, new CTypeChain(type));
 
         Assert.assertEquals("foo", variable.getName());
         Assert.assertSame(type, variable.getType());
@@ -250,7 +320,7 @@ public @Test class VariableParserTest {
         CVariable variable = parser.parse(reader);
 
         Assert.assertEquals("foo", variable.getName());
-        Assert.assertEquals("int", variable.getType().getTypename().getName());
+        Assert.assertEquals("int", ((CBaseType)variable.getType()).getTypename().getName());
         Assert.assertNotNull(variable.getExpression());
         tokenValidator.assertEquals(
             new List<>(f.number("1"), f.symbol("+"), f.number("2")),
@@ -269,9 +339,9 @@ public @Test class VariableParserTest {
             f.number("2")
         ));
 
-        CType type = new CType();
+        CType type = new CBaseType();
 
-        CVariable variable = parser.parse(reader, type);
+        CVariable variable = parser.parse(reader, new CTypeChain(type));
 
         Assert.assertEquals("foo", variable.getName());
         Assert.assertSame(type, variable.getType());
@@ -291,10 +361,8 @@ public @Test class VariableParserTest {
         CVariable variable = parser.parse(reader);
 
         Assert.assertEquals("foo", variable.getName());
-        Assert.assertEquals(true, variable.getType().getArrays().isEmpty());
         Assert.assertEquals(false, variable.getType().getModifiers().contains(CModifier.CONST));
-        Assert.assertEquals("int", variable.getType().getTypename().getName());
-        Assert.assertEquals(true, variable.getType().getPointers().isEmpty());
+        Assert.assertEquals("int", ((CBaseType)variable.getType()).getTypename().getName());
         Assert.assertEquals(8, variable.getBit());
         Assert.assertNull(variable.getExpression());
         reader.readEnd();

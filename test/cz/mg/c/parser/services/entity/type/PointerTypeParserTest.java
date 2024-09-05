@@ -2,13 +2,14 @@ package cz.mg.c.parser.services.entity.type;
 
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
+import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.annotations.requirement.Optional;
 import cz.mg.c.entities.CModifier;
 import cz.mg.c.entities.types.CPointerType;
 import cz.mg.c.entities.types.CType;
+import cz.mg.c.parser.components.CTypeChain;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.collections.list.List;
-import cz.mg.collections.pair.Pair;
 import cz.mg.test.Assert;
 import cz.mg.test.exceptions.AssertException;
 import cz.mg.token.Token;
@@ -44,19 +45,16 @@ public @Test class PointerTypeParserTest {
 
     private void testParseSingle() {
         List<Token> tokens = new List<>(f.symbol("*"));
-        Pair<CPointerType, CPointerType> pointers = parser.parse(new TokenReader(tokens));
-        Assert.assertNotNull(pointers);
-        Assert.assertSame(pointers.getKey(), pointers.getValue());
-        Assert.assertNull(pointers.getKey().getType());
-        Assert.assertEquals(true, pointers.getKey().getModifiers().isEmpty());
+        List<CPointerType> pointers = flatten(parser.parse(new TokenReader(tokens)));
+        Assert.assertEquals(1, pointers.count());
+        Assert.assertEquals(true, pointers.getFirst().getModifiers().isEmpty());
     }
 
     private void testParseSingleConst() {
         List<Token> tokens = new List<>(f.symbol("*"), f.word("const"));
-        Pair<CPointerType, CPointerType> pointers = parser.parse(new TokenReader(tokens));
-        Assert.assertNotNull(pointers);
-        Assert.assertSame(pointers.getKey(), pointers.getValue());
-        Assert.assertEquals(true, pointers.getKey().getModifiers().contains(CModifier.CONST));
+        List<CPointerType> pointers = flatten(parser.parse(new TokenReader(tokens)));
+        Assert.assertEquals(1, pointers.count());
+        Assert.assertEquals(true, pointers.getFirst().getModifiers().contains(CModifier.CONST));
     }
 
     private void testParseSingleGroup() {
@@ -130,9 +128,9 @@ public @Test class PointerTypeParserTest {
         Assert.assertEquals(true, reader.has());
     }
 
-    private List<CPointerType> flatten(@Optional Pair<CPointerType, CPointerType> pointers) {
+    private @Mandatory List<CPointerType> flatten(@Optional CTypeChain pointers) {
         List<CPointerType> pointerList = new List<>();
-        CType current = pointers == null ? null : pointers.getKey();
+        CType current = pointers == null ? null : pointers.getFirst();
         while (current != null) {
             if (current instanceof CPointerType pointer) {
                 pointerList.addLast(pointer);

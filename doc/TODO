@@ -1,9 +1,15 @@
 ### NOW ###
-    adapt to changes in type entity model
+    ...
 
 ### SOON ###
-    add test for TypeConnector
-    add test for TypeUnwrapper
+    finish to do in InlineTypeParsersTest
+
+    check if order of arrays after parsing is correct
+        int[1][2]
+        should outer type be the one with 1 or 2 size?
+
+    add test for CTypeChain
+        add also test that after exceptions thrown state is not changed
 
     check if following is covered by type parser test
         struct {int a; int b;}*
@@ -11,5 +17,19 @@
     check if following is covered by variable parser test
         struct {int a; int b;}* foo[2];
 
+    check if global function variable declaration is covered by tests
+
 ### LATER ###
+    check if inline return type of function pointer type is covered by tests if supported by C
+
+    check if function pointer inside variable is covered by tests if supported by C
+        struct foo { void (*bar)(int), ... }
+
+    check if immediate struct variables are covered by test if supported by C
+        struct {} foo, bar;
+        check if it should declare the struct type at the same time
+        check if can be combined with typedef
+
+    check if typedef of array of pointers to arrays is covered by tests if supported by C
+
     vararg support for functions and function pointers

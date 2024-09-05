@@ -3,16 +3,16 @@ package cz.mg.c.parser.services;
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.c.entities.CEntity;
-import cz.mg.c.entities.CModifier;
-import cz.mg.c.entities.types.CDataType;
+import cz.mg.c.entities.types.CBaseType;
+import cz.mg.c.entities.types.CPointerType;
+import cz.mg.c.parser.components.CTypeChain;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.entities.CFunction;
-import cz.mg.c.entities.types.CType;
 import cz.mg.c.entities.CVariable;
-import cz.mg.c.parser.services.entity.type.TypeUnwrapper;
+import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.token.tokens.brackets.RoundBrackets;
 import cz.mg.c.parser.services.entity.FunctionParser;
-import cz.mg.c.parser.services.entity.TypeParser;
+import cz.mg.c.parser.services.entity.type.TypeParser;
 import cz.mg.c.parser.services.entity.TypedefParser;
 import cz.mg.c.parser.services.entity.VariableParser;
 import cz.mg.collections.list.List;
@@ -21,17 +21,18 @@ import cz.mg.token.tokens.SymbolToken;
 import cz.mg.token.tokens.WordToken;
 import cz.mg.token.tokens.brackets.SquareBrackets;
 
-public @Service class RootEntityParsers {
-    private static volatile @Service RootEntityParsers instance;
+import java.util.Objects;
 
-    public static @Service RootEntityParsers getInstance() {
+public @Service class FileParser {
+    private static volatile @Service FileParser instance;
+
+    public static @Service FileParser getInstance() {
         if (instance == null) {
             synchronized (Service.class) {
                 if (instance == null) {
-                    instance = new RootEntityParsers();
+                    instance = new FileParser();
                     instance.typedefParser = TypedefParser.getInstance();
                     instance.typeParser = TypeParser.getInstance();
-                    instance.typeUnwrapper = TypeUnwrapper.getInstance();
                     instance.variableParser = VariableParser.getInstance();
                     instance.functionParser = FunctionParser.getInstance();
                 }
@@ -42,11 +43,10 @@ public @Service class RootEntityParsers {
 
     private TypedefParser typedefParser;
     private TypeParser typeParser;
-    private TypeUnwrapper typeUnwrapper;
     private VariableParser variableParser;
     private FunctionParser functionParser;
 
-    private RootEntityParsers() {
+    private FileParser() {
     }
 
     public List<CEntity> parse(@Mandatory List<Token> tokens) {
@@ -59,25 +59,26 @@ public @Service class RootEntityParsers {
                 entities.addLast(typedefParser.parse(reader));
                 reader.read(";", SymbolToken.class);
             } else if (reader.has()) {
-                CType type = typeParser.parse(reader);
+                int position = Objects.requireNonNull(reader.getItem()).get().getPosition();
+                CTypeChain types = typeParser.parse(reader);
                 if (isFunctionDeclaration(reader)) {
-                    entities.addLast(functionParser.parse(reader, type));
+                    entities.addLast(functionParser.parse(reader, types));
                 } else if (isVariableDeclaration(reader)) {
-                    entities.addLast(variableParser.parse(reader, type));
+                    entities.addLast(variableParser.parse(reader, types));
                     reader.read(";", SymbolToken.class);
-                } else if (isTypenameDeclaration(type)) {
-                    CDataType dataType = (CDataType) type;
-                    entities.addLast(dataType.getTypename());
+                } else if (isTypenameDeclaration(types)) {
+                    CBaseType baseType = (CBaseType) types.getFirst();
+                    entities.addLast(baseType.getTypename());
                     reader.read(";", SymbolToken.class);
-                } else if (isFunctionVariableDeclaration(type)) {
-                    CDataType dataType = (CDataType) type;
+                } else if (isFunctionVariableDeclaration(types)) {
+                    CBaseType baseType = (CBaseType) types.getLast();
                     CVariable variable = new CVariable();
-                    variable.setName(dataType.getTypename().getName());
-                    variable.setType(dataType);
+                    variable.setName(baseType.getTypename().getName());
+                    variable.setType(types.getFirst());
                     entities.addLast(variable);
                     reader.read(";", SymbolToken.class);
                 } else {
-                    throw new UnsupportedOperationException("Unsupported declaration.");
+                    throw new ParseException(position, "Unsupported declaration.");
                 }
             }
         }
@@ -101,13 +102,17 @@ public @Service class RootEntityParsers {
             || (reader.has(RoundBrackets.class) && reader.hasNext(SquareBrackets.class));
     }
 
-    private boolean isTypenameDeclaration(@Mandatory CType type) {
-        return type instanceof CDataType dataType
-            && !dataType.getModifiers().contains(CModifier.CONST);
+    private boolean isTypenameDeclaration(@Mandatory CTypeChain types) {
+        return types.getFirst() == types.getLast()
+            && types.getFirst() instanceof CBaseType baseType
+            && baseType.getTypename().getName() != null
+            && baseType.getModifiers().isEmpty();
     }
 
-    private boolean isFunctionVariableDeclaration(@Mandatory CType type) {
-        return typeUnwrapper.unwrap(type).getTypename() instanceof CFunction function
+    private boolean isFunctionVariableDeclaration(@Mandatory CTypeChain types) {
+        return types.getFirst() instanceof CPointerType
+            && types.getLast() instanceof CBaseType baseType
+            && baseType.getTypename() instanceof CFunction function
             && function.getName() != null;
     }
 }

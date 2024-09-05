@@ -5,6 +5,7 @@ import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.entities.CEnum;
 import cz.mg.c.entities.CEnumEntry;
+import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.token.tokens.brackets.CurlyBrackets;
 import cz.mg.c.parser.services.list.ListParser;
 import cz.mg.collections.list.List;
@@ -36,11 +37,13 @@ public @Service class EnumParser {
     }
 
     public @Mandatory CEnum parse(@Mandatory TokenReader reader) {
-        reader.read("enum", WordToken.class);
+        int position = reader.read("enum", WordToken.class).getPosition();
         CEnum enom = new CEnum();
         enom.setName(nameParser.parse(reader));
         if (reader.has(CurlyBrackets.class)) {
             enom.setEntries(readEntries(reader.read(CurlyBrackets.class)));
+        } else if (enom.getName() == null) {
+            throw new ParseException(position, "Invalid enum declaration.");
         }
         return enom;
     }

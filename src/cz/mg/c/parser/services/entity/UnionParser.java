@@ -5,6 +5,7 @@ import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.entities.CUnion;
 import cz.mg.c.entities.CVariable;
+import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.token.tokens.brackets.CurlyBrackets;
 import cz.mg.c.parser.services.list.SemicolonParser;
 import cz.mg.collections.list.List;
@@ -36,11 +37,13 @@ public @Service class UnionParser {
     }
 
     public @Mandatory CUnion parse(@Mandatory TokenReader reader) {
-        reader.read("union", WordToken.class);
+        int position = reader.read("union", WordToken.class).getPosition();
         CUnion union = new CUnion();
         union.setName(nameParser.parse(reader));
         if (reader.has(CurlyBrackets.class)) {
             union.setVariables(readVariables(reader.read(CurlyBrackets.class)));
+        } else if (union.getName() == null) {
+            throw new ParseException(position, "Invalid union declaration.");
         }
         return union;
     }

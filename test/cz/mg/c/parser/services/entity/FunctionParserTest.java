@@ -2,13 +2,20 @@ package cz.mg.c.parser.services.entity;
 
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
+import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.c.entities.CFunction;
-import cz.mg.c.entities.CModifier;
+import cz.mg.c.entities.CTypename;
+import cz.mg.c.entities.types.CArrayType;
+import cz.mg.c.entities.types.CBaseType;
+import cz.mg.c.entities.types.CPointerType;
 import cz.mg.c.entities.types.CType;
+import cz.mg.c.parser.components.CTypeChain;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.c.parser.test.BracketFactory;
+import cz.mg.c.parser.test.TypeUtils;
 import cz.mg.collections.list.List;
+import cz.mg.collections.set.Set;
 import cz.mg.test.Assert;
 import cz.mg.token.Token;
 import cz.mg.tokenizer.test.TokenFactory;
@@ -19,9 +26,8 @@ public @Test class FunctionParserTest {
 
         FunctionParserTest test = new FunctionParserTest();
         test.testEmpty();
-        test.testNoOutput();
-        test.testInterfaceAnonymous();
         test.testInterfaceNoInput();
+        test.testInterfaceAnonymous();
         test.testInterfaceSingleInput();
         test.testInterfaceSingleInputArray();
         test.testInterfaceMultipleInput();
@@ -30,7 +36,6 @@ public @Test class FunctionParserTest {
         test.testInterfaceInvalidInput();
         test.testFunctionEmpty();
         test.testFunction();
-        test.testParseWithType();
 
         System.out.println("OK");
     }
@@ -41,18 +46,21 @@ public @Test class FunctionParserTest {
 
     private void testEmpty() {
         Assert.assertThatCode(() -> {
-            parser.parse(new TokenReader(new List<>()));
+            parser.parse(new TokenReader(new List<>()), createVoid());
         }).throwsException(ParseException.class);
     }
 
-    private void testNoOutput() {
+    private void testInterfaceNoInput() {
         List<Token> input = new List<>(
-            f.word("void"),
             f.word("foo"),
             b.roundBrackets()
         );
-        CFunction function = parser.parse(new TokenReader(input));
-        Assert.assertEquals("void", function.getOutput().getTypename().getName());
+
+        CTypeChain output = createVoid();
+
+        CFunction function = parser.parse(new TokenReader(input), output);
+
+        Assert.assertSame(output.getFirst(), function.getOutput());
         Assert.assertEquals("foo", function.getName());
         Assert.assertEquals(true, function.getInput().isEmpty());
         Assert.assertNull(function.getImplementation());
@@ -60,56 +68,41 @@ public @Test class FunctionParserTest {
 
     private void testInterfaceAnonymous() {
         List<Token> input = new List<>(
-            f.word("void"),
             b.roundBrackets()
         );
-        CFunction function = parser.parse(new TokenReader(input));
-        Assert.assertEquals("void", function.getOutput().getTypename().getName());
-        Assert.assertNull(function.getName());
-        Assert.assertEquals(true, function.getInput().isEmpty());
-        Assert.assertNull(function.getImplementation());
-    }
 
-    private void testInterfaceNoInput() {
-        List<Token> input = new List<>(
-            f.word("int"),
-            f.symbol("*"),
-            f.word("foobar"),
-            b.roundBrackets()
-        );
-        CFunction function = parser.parse(new TokenReader(input));
-        Assert.assertEquals("int", function.getOutput().getTypename().getName());
-        Assert.assertEquals(1, function.getOutput().getPointers().count());
-        Assert.assertEquals("foobar", function.getName());
+        CTypeChain output = createVoid();
+
+        CFunction function = parser.parse(new TokenReader(input), output);
+
+        Assert.assertSame(output.getFirst(), function.getOutput());
+        Assert.assertNull(function.getName());
         Assert.assertEquals(true, function.getInput().isEmpty());
         Assert.assertNull(function.getImplementation());
     }
 
     private void testInterfaceSingleInput() {
         List<Token> input = new List<>(
-            f.word("int"),
-            f.word("const"),
             f.word("constantin"),
             b.roundBrackets(
                 f.word("float"),
                 f.word("floating")
             )
         );
-        CFunction function = parser.parse(new TokenReader(input));
-        Assert.assertEquals("int", function.getOutput().getTypename().getName());
-        Assert.assertEquals(true, function.getOutput().getModifiers().contains(CModifier.CONST));
+
+        CFunction function = parser.parse(new TokenReader(input), createVoid());
+
         Assert.assertEquals("constantin", function.getName());
         Assert.assertEquals(1, function.getInput().count());
-        Assert.assertEquals("float", function.getInput().getFirst().getType().getTypename().getName());
         Assert.assertEquals("floating", function.getInput().getFirst().getName());
+        Assert.assertEquals(CBaseType.class, function.getInput().getFirst().getType().getClass());
+        Assert.assertEquals("float", ((CBaseType)function.getInput().getFirst().getType()).getTypename().getName());
         Assert.assertNull(function.getImplementation());
     }
 
 
     private void testInterfaceSingleInputArray() {
         List<Token> input = new List<>(
-            f.word("int"),
-            f.word("const"),
             f.word("constantin"),
             b.roundBrackets(
                 f.word("float"),
@@ -119,20 +112,22 @@ public @Test class FunctionParserTest {
                 )
             )
         );
-        CFunction function = parser.parse(new TokenReader(input));
-        Assert.assertEquals("int", function.getOutput().getTypename().getName());
-        Assert.assertEquals(true, function.getOutput().getModifiers().contains(CModifier.CONST));
+
+        CFunction function = parser.parse(new TokenReader(input), createVoid());
+
         Assert.assertEquals("constantin", function.getName());
         Assert.assertEquals(1, function.getInput().count());
-        Assert.assertEquals("float", function.getInput().getFirst().getType().getTypename().getName());
         Assert.assertEquals("floating", function.getInput().getFirst().getName());
-        Assert.assertEquals(1, function.getInput().getFirst().getType().getArrays().count());
+
+        List<CType> types = TypeUtils.flatten(function.getInput().getFirst().getType());
+        Assert.assertEquals(CArrayType.class, types.get(0).getClass());
+        Assert.assertEquals(CBaseType.class, types.get(1).getClass());
+        Assert.assertEquals("float", ((CBaseType)types.get(1)).getTypename().getName());
         Assert.assertNull(function.getImplementation());
     }
 
     private void testInterfaceMultipleInput() {
         List<Token> input = new List<>(
-            f.word("void"),
             f.word("foobar"),
             b.roundBrackets(
                 f.word("float"),
@@ -147,23 +142,26 @@ public @Test class FunctionParserTest {
                 f.word("voiding")
             )
         );
-        CFunction function = parser.parse(new TokenReader(input));
-        Assert.assertEquals("void", function.getOutput().getTypename().getName());
+
+        CFunction function = parser.parse(new TokenReader(input), createVoid());
+
         Assert.assertEquals("foobar", function.getName());
         Assert.assertEquals(3, function.getInput().count());
-        Assert.assertEquals("float", function.getInput().get(0).getType().getTypename().getName());
+        Assert.assertEquals("float", ((CBaseType)function.getInput().get(0).getType()).getTypename().getName());
         Assert.assertEquals("floating", function.getInput().get(0).getName());
-        Assert.assertEquals("double", function.getInput().get(1).getType().getTypename().getName());
+        Assert.assertEquals("double", ((CBaseType)function.getInput().get(1).getType()).getTypename().getName());
         Assert.assertEquals("doubling", function.getInput().get(1).getName());
-        Assert.assertEquals("void", function.getInput().get(2).getType().getTypename().getName());
-        Assert.assertEquals(2, function.getInput().get(2).getType().getPointers().count());
+        List<CType> types = TypeUtils.flatten(function.getInput().get(2).getType());
+        Assert.assertEquals(CPointerType.class, types.get(0).getClass());
+        Assert.assertEquals(CPointerType.class, types.get(1).getClass());
+        Assert.assertEquals(CBaseType.class, types.get(2).getClass());
+        Assert.assertEquals("void", ((CBaseType)types.get(2)).getTypename().getName());
         Assert.assertEquals("voiding", function.getInput().get(2).getName());
         Assert.assertNull(function.getImplementation());
     }
 
     private void testInterfaceAnonymousInput() {
         List<Token> input = new List<>(
-            f.word("void"),
             b.roundBrackets(
                 f.word("float"),
                 f.symbol(","),
@@ -174,24 +172,26 @@ public @Test class FunctionParserTest {
                 f.symbol("*")
             )
         );
-        CFunction function = parser.parse(new TokenReader(input));
-        Assert.assertEquals("void", function.getOutput().getTypename().getName());
+
+        CFunction function = parser.parse(new TokenReader(input), createVoid());
+
         Assert.assertNull(function.getName());
         Assert.assertEquals(3, function.getInput().count());
-        Assert.assertEquals("float", function.getInput().get(0).getType().getTypename().getName());
+        Assert.assertEquals("float", ((CBaseType)function.getInput().get(0).getType()).getTypename().getName());
         Assert.assertNull(function.getInput().get(0).getName());
-        Assert.assertEquals("double", function.getInput().get(1).getType().getTypename().getName());
+        Assert.assertEquals("double", ((CBaseType)function.getInput().get(1).getType()).getTypename().getName());
         Assert.assertNull(function.getInput().get(1).getName());
-        Assert.assertEquals("void", function.getInput().get(2).getType().getTypename().getName());
-        Assert.assertEquals(2, function.getInput().get(2).getType().getPointers().count());
+        List<CType> types = TypeUtils.flatten(function.getInput().get(2).getType());
+        Assert.assertEquals(CPointerType.class, types.get(0).getClass());
+        Assert.assertEquals(CPointerType.class, types.get(1).getClass());
+        Assert.assertEquals(CBaseType.class, types.get(2).getClass());
+        Assert.assertEquals("void", ((CBaseType)types.get(2)).getTypename().getName());
         Assert.assertNull(function.getInput().get(2).getName());
         Assert.assertNull(function.getImplementation());
     }
 
     private void testInterfaceAnonymousInputArray() {
         List<Token> input = new List<>(
-            f.word("int"),
-            f.word("const"),
             f.word("constantin"),
             b.roundBrackets(
                 f.word("float"),
@@ -200,21 +200,24 @@ public @Test class FunctionParserTest {
                 )
             )
         );
-        CFunction function = parser.parse(new TokenReader(input));
-        Assert.assertEquals("int", function.getOutput().getTypename().getName());
-        Assert.assertEquals(true, function.getOutput().getModifiers().contains(CModifier.CONST));
+
+        CFunction function = parser.parse(new TokenReader(input), createVoid());
+
         Assert.assertEquals("constantin", function.getName());
         Assert.assertEquals(1, function.getInput().count());
-        Assert.assertEquals("float", function.getInput().getFirst().getType().getTypename().getName());
         Assert.assertNull(function.getInput().getFirst().getName());
-        Assert.assertEquals(1, function.getInput().getFirst().getType().getArrays().count());
+
+        List<CType> types = TypeUtils.flatten(function.getInput().getFirst().getType());
+        Assert.assertEquals(CArrayType.class, types.get(0).getClass());
+        Assert.assertEquals(CBaseType.class, types.get(1).getClass());
+        Assert.assertEquals(1, ((CArrayType)types.get(0)).getExpression().count());
+        Assert.assertEquals("float", ((CBaseType)types.get(1)).getTypename().getName());
         Assert.assertNull(function.getImplementation());
     }
 
     private void testInterfaceInvalidInput() {
         Assert.assertThatCode(() -> {
             List<Token> input = new List<>(
-                f.word("void"),
                 f.word("foobar"),
                 b.roundBrackets(
                     f.word("float"),
@@ -223,19 +226,19 @@ public @Test class FunctionParserTest {
                     f.word("doubling")
                 )
             );
-            parser.parse(new TokenReader(input));
+            parser.parse(new TokenReader(input), createVoid());
         }).throwsException(ParseException.class);
     }
 
     private void testFunctionEmpty() {
         List<Token> input = new List<>(
-            f.word("void"),
             f.word("space"),
             b.roundBrackets(),
             b.curlyBrackets()
         );
-        CFunction function = parser.parse(new TokenReader(input));
-        Assert.assertEquals("void", function.getOutput().getTypename().getName());
+
+        CFunction function = parser.parse(new TokenReader(input), createVoid());
+
         Assert.assertEquals("space", function.getName());
         Assert.assertEquals(true, function.getInput().isEmpty());
         Assert.assertNotNull(function.getImplementation());
@@ -244,8 +247,6 @@ public @Test class FunctionParserTest {
 
     private void testFunction() {
         List<Token> input = new List<>(
-            f.word("void"),
-            f.symbol("*"),
             f.word("foobar"),
             b.roundBrackets(
                 f.word("float"),
@@ -262,14 +263,20 @@ public @Test class FunctionParserTest {
                 f.symbol(";")
             )
         );
-        CFunction function = parser.parse(new TokenReader(input));
-        Assert.assertEquals("void", function.getOutput().getTypename().getName());
-        Assert.assertEquals(1, function.getOutput().getPointers().count());
+
+        CFunction function = parser.parse(new TokenReader(input), createVoid());
+
         Assert.assertEquals("foobar", function.getName());
         Assert.assertEquals(2, function.getInput().count());
-        Assert.assertEquals("float", function.getInput().get(0).getType().getTypename().getName());
+        List<CType> typesFirst = TypeUtils.flatten(function.getInput().getFirst().getType());
+        List<CType> typesSecond = TypeUtils.flatten(function.getInput().getLast().getType());
+        Assert.assertEquals(CPointerType.class, typesFirst.get(0).getClass());
+        Assert.assertEquals(CBaseType.class, typesFirst.get(1).getClass());
+        Assert.assertEquals(CPointerType.class, typesSecond.get(0).getClass());
+        Assert.assertEquals(CBaseType.class, typesSecond.get(1).getClass());
+        Assert.assertEquals("float", ((CBaseType)typesFirst.get(1)).getTypename().getName());
         Assert.assertEquals("floating", function.getInput().get(0).getName());
-        Assert.assertEquals("double", function.getInput().get(1).getType().getTypename().getName());
+        Assert.assertEquals("double", ((CBaseType)typesSecond.get(1)).getTypename().getName());
         Assert.assertEquals("doubling", function.getInput().get(1).getName());
         Assert.assertNotNull(function.getImplementation());
         Assert.assertEquals(3, function.getImplementation().count());
@@ -278,18 +285,7 @@ public @Test class FunctionParserTest {
         Assert.assertEquals(";", function.getImplementation().get(2).getText());
     }
 
-    private void testParseWithType() {
-        List<Token> input = new List<>(
-            f.word("space"),
-            b.roundBrackets(),
-            b.curlyBrackets()
-        );
-        CType type = new CType();
-        CFunction function = parser.parse(new TokenReader(input), type);
-        Assert.assertSame(type, function.getOutput());
-        Assert.assertEquals("space", function.getName());
-        Assert.assertEquals(true, function.getInput().isEmpty());
-        Assert.assertNotNull(function.getImplementation());
-        Assert.assertEquals(true, function.getImplementation().isEmpty());
+    private @Mandatory CTypeChain createVoid() {
+        return new CTypeChain(new CBaseType(new CTypename("void"), new Set<>()));
     }
 }

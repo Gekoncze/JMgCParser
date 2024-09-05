@@ -4,6 +4,11 @@ import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.c.entities.*;
+import cz.mg.c.entities.types.CArrayType;
+import cz.mg.c.entities.types.CBaseType;
+import cz.mg.c.entities.types.CPointerType;
+import cz.mg.c.entities.types.CType;
+import cz.mg.c.parser.test.TypeUtils;
 import cz.mg.token.tokens.brackets.CurlyBrackets;
 import cz.mg.token.tokens.brackets.RoundBrackets;
 import cz.mg.token.tokens.brackets.SquareBrackets;
@@ -64,14 +69,13 @@ public @Test class CParserTest {
         Assert.assertEquals(true, entities.get(5) instanceof CFunction);
 
         CTypedef typedef = (CTypedef) entities.get(0);
-        Assert.assertEquals(true, typedef.getType().getTypename() instanceof CFunction);
-        Assert.assertEquals(0, typedef.getType().getArrays().count());
-        Assert.assertEquals(1, typedef.getType().getPointers().count());
-        Assert.assertEquals(false, typedef.getType().getModifiers().contains(CModifier.CONST));
-        Assert.assertEquals(false, typedef.getType().getPointers().getFirst().isConstant());
+        List<CType> typedefTypes = TypeUtils.flatten(typedef.getType());
+        Assert.assertEquals(CPointerType.class, typedefTypes.get(0).getClass());
+        Assert.assertEquals(CBaseType.class, typedefTypes.get(1).getClass());
+        Assert.assertEquals(CFunction.class, ((CBaseType)typedefTypes.get(1)).getTypename().getClass());
 
-        CFunction functionPointer = (CFunction) typedef.getType().getTypename();
-        Assert.assertEquals("void", functionPointer.getOutput().getTypename().getName());
+        CFunction functionPointer = (CFunction) ((CBaseType)typedefTypes.get(1)).getTypename();
+        Assert.assertEquals("void", ((CBaseType)functionPointer.getOutput()).getTypename().getName());
         Assert.assertEquals(0, functionPointer.getInput().count());
 
         CEnum enom = (CEnum) entities.get(1);
@@ -91,14 +95,13 @@ public @Test class CParserTest {
         Assert.assertNotNull(union.getVariables());
         Assert.assertEquals(2, union.getVariables().count());
         Assert.assertEquals("i", union.getVariables().getFirst().getName());
-        Assert.assertEquals("int", union.getVariables().getFirst().getType().getTypename().getName());
+        Assert.assertEquals("int", ((CBaseType)union.getVariables().getFirst().getType()).getTypename().getName());
         Assert.assertEquals("c", union.getVariables().getLast().getName());
-        Assert.assertEquals("char", union.getVariables().getLast().getType().getTypename().getName());
-        Assert.assertEquals(1, union.getVariables().getLast().getType().getArrays().count());
-        Assert.assertEquals(
-            "4",
-            union.getVariables().getLast().getType().getArrays().getFirst().getExpression().getFirst().getText()
-        );
+        List<CType> unionTypes = TypeUtils.flatten(union.getVariables().getLast().getType());
+        Assert.assertEquals(CArrayType.class, unionTypes.get(0).getClass());
+        Assert.assertEquals(CBaseType.class, unionTypes.get(1).getClass());
+        Assert.assertEquals("char", ((CBaseType)unionTypes.get(1)).getTypename().getName());
+        Assert.assertEquals("4", ((CArrayType)unionTypes.get(0)).getExpression().getFirst().getText());
 
         CStruct struct = (CStruct) entities.get(3);
         Assert.assertEquals("FooBar", struct.getName());
@@ -107,46 +110,45 @@ public @Test class CParserTest {
         Assert.assertEquals("f", struct.getVariables().get(0).getName());
         Assert.assertEquals("d", struct.getVariables().get(1).getName());
         Assert.assertEquals("c", struct.getVariables().get(2).getName());
-        Assert.assertEquals("Function", struct.getVariables().get(0).getType().getTypename().getName());
-        Assert.assertEquals("Day", struct.getVariables().get(1).getType().getTypename().getName());
-        Assert.assertEquals("Color", struct.getVariables().get(2).getType().getTypename().getName());
-        Assert.assertEquals(CTypename.class, struct.getVariables().get(0).getType().getTypename().getClass());
-        Assert.assertEquals(CEnum.class, struct.getVariables().get(1).getType().getTypename().getClass());
-        Assert.assertEquals(CUnion.class, struct.getVariables().get(2).getType().getTypename().getClass());
+        Assert.assertEquals("Function", ((CBaseType)struct.getVariables().get(0).getType()).getTypename().getName());
+        Assert.assertEquals("Day", ((CBaseType)struct.getVariables().get(1).getType()).getTypename().getName());
+        Assert.assertEquals("Color", ((CBaseType)struct.getVariables().get(2).getType()).getTypename().getName());
+        Assert.assertEquals(CTypename.class, ((CBaseType)struct.getVariables().get(0).getType()).getTypename().getClass());
+        Assert.assertEquals(CEnum.class, ((CBaseType)struct.getVariables().get(1).getType()).getTypename().getClass());
+        Assert.assertEquals(CUnion.class, ((CBaseType)struct.getVariables().get(2).getType()).getTypename().getClass());
 
         CVariable variable = (CVariable) entities.get(4);
+        List<CType> variableTypes = TypeUtils.flatten(variable.getType());
+        Assert.assertEquals(CArrayType.class, variableTypes.get(0).getClass());
+        Assert.assertEquals(CArrayType.class, variableTypes.get(1).getClass());
+        Assert.assertEquals(CPointerType.class, variableTypes.get(2).getClass());
+        Assert.assertEquals(CBaseType.class, variableTypes.get(3).getClass());
         Assert.assertEquals("variable", variable.getName());
-        Assert.assertEquals("FooBar", variable.getType().getTypename().getName());
-        Assert.assertEquals(CStruct.class, variable.getType().getTypename().getClass());
-        Assert.assertEquals(1, variable.getType().getPointers().count());
-        Assert.assertEquals(2, variable.getType().getArrays().count());
-        Assert.assertEquals(true, variable.getType().getModifiers().contains(CModifier.CONST));
-        Assert.assertEquals(true, variable.getType().getPointers().getFirst().isConstant());
-        Assert.assertEquals(1, variable.getType().getArrays().getFirst().getExpression().count());
-        Assert.assertEquals(3, variable.getType().getArrays().getLast().getExpression().count());
-        Assert.assertEquals("2", variable.getType().getArrays().getFirst().getExpression().getFirst().getText());
-        Assert.assertEquals("5", variable.getType().getArrays().getLast().getExpression().get(0).getText());
-        Assert.assertEquals("+", variable.getType().getArrays().getLast().getExpression().get(1).getText());
-        Assert.assertEquals("1", variable.getType().getArrays().getLast().getExpression().get(2).getText());
+        Assert.assertEquals("FooBar", ((CBaseType)variableTypes.get(3)).getTypename().getName());
+        Assert.assertEquals(CStruct.class, ((CBaseType)variableTypes.get(3)).getTypename().getClass());
+        Assert.assertEquals(false, variableTypes.get(0).getModifiers().contains(CModifier.CONST));
+        Assert.assertEquals(false, variableTypes.get(1).getModifiers().contains(CModifier.CONST));
+        Assert.assertEquals(true, variableTypes.get(2).getModifiers().contains(CModifier.CONST));
+        Assert.assertEquals(true, variableTypes.get(3).getModifiers().contains(CModifier.CONST));
+        Assert.assertEquals(1, ((CArrayType)variableTypes.get(0)).getExpression().count());
+        Assert.assertEquals(3, ((CArrayType)variableTypes.get(1)).getExpression().count());
+        Assert.assertEquals("2", ((CArrayType)variableTypes.get(0)).getExpression().getFirst().getText());
+        Assert.assertEquals("5", ((CArrayType)variableTypes.get(1)).getExpression().get(0).getText());
+        Assert.assertEquals("+", ((CArrayType)variableTypes.get(1)).getExpression().get(1).getText());
+        Assert.assertEquals("1", ((CArrayType)variableTypes.get(1)).getExpression().get(2).getText());
 
         CFunction function = (CFunction) entities.get(5);
-        Assert.assertEquals("main", function.getName());
-        Assert.assertEquals("int", function.getOutput().getTypename().getName());
-        Assert.assertEquals(true, function.getOutput().getArrays().isEmpty());
-        Assert.assertEquals(true, function.getOutput().getPointers().isEmpty());
-        Assert.assertEquals(false, function.getOutput().getModifiers().contains(CModifier.CONST));
         Assert.assertEquals(2, function.getInput().count());
+        List<CType> functionTypes = TypeUtils.flatten(function.getInput().getLast().getType());
+        Assert.assertEquals("main", function.getName());
+        Assert.assertEquals("int", ((CBaseType)function.getOutput()).getTypename().getName());
+        Assert.assertEquals(false, function.getOutput().getModifiers().contains(CModifier.CONST));
+        Assert.assertEquals(CPointerType.class, functionTypes.get(0).getClass());
+        Assert.assertEquals(CBaseType.class, functionTypes.get(1).getClass());
         Assert.assertEquals("argc", function.getInput().getFirst().getName());
         Assert.assertEquals("argv", function.getInput().getLast().getName());
-        Assert.assertEquals("int", function.getInput().getFirst().getType().getTypename().getName());
-        Assert.assertEquals("char", function.getInput().getLast().getType().getTypename().getName());
-        Assert.assertEquals(0, function.getInput().getFirst().getType().getPointers().count());
-        Assert.assertEquals(1, function.getInput().getLast().getType().getPointers().count());
-        Assert.assertEquals(0, function.getInput().getFirst().getType().getArrays().count());
-        Assert.assertEquals(0, function.getInput().getLast().getType().getArrays().count());
-        Assert.assertEquals(false, function.getInput().getFirst().getType().getModifiers().contains(CModifier.CONST));
-        Assert.assertEquals(false, function.getInput().getLast().getType().getModifiers().contains(CModifier.CONST));
-        Assert.assertEquals(false, function.getInput().getLast().getType().getPointers().getFirst().isConstant());
+        Assert.assertEquals("int", ((CBaseType)function.getInput().getFirst().getType()).getTypename().getName());
+        Assert.assertEquals("char", ((CBaseType)functionTypes.get(1)).getTypename().getName());
         Assert.assertNotNull(function.getImplementation());
         Assert.assertEquals("printf", function.getImplementation().getFirst().getText());
     }
@@ -184,9 +186,9 @@ public @Test class CParserTest {
         CFunction function = (CFunction) entities.get(3);
         Assert.assertEquals("myFunction", function.getName());
         Assert.assertNull(function.getImplementation());
-        Assert.assertEquals("void", function.getOutput().getTypename().getName());
-        Assert.assertEquals("float", function.getInput().getFirst().getType().getTypename().getName());
-        Assert.assertEquals("double", function.getInput().getLast().getType().getTypename().getName());
+        Assert.assertEquals("void", ((CBaseType)function.getOutput()).getTypename().getName());
+        Assert.assertEquals("float", ((CBaseType)function.getInput().getFirst().getType()).getTypename().getName());
+        Assert.assertEquals("double", ((CBaseType)function.getInput().getLast().getType()).getTypename().getName());
         Assert.assertNull(function.getInput().getFirst().getName());
         Assert.assertNull(function.getInput().getLast().getName());
     }
@@ -287,7 +289,8 @@ public @Test class CParserTest {
 
         Position position = positionService.find(file.getContent(), exception.getPosition());
         Assert.assertEquals(18, position.getRow());
-        Assert.assertEquals(8, position.getColumn());
+        Assert.assertEquals(1, position.getColumn());
+        Assert.assertEquals(true, exception.getMessage().contains("Invalid struct declaration."));
     }
 
     private @Mandatory String concat(@Mandatory List<Token> tokens) {

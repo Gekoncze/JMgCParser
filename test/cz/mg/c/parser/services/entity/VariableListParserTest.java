@@ -3,8 +3,12 @@ package cz.mg.c.parser.services.entity;
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
 import cz.mg.c.entities.CVariable;
+import cz.mg.c.entities.types.CBaseType;
+import cz.mg.c.entities.types.CPointerType;
+import cz.mg.c.entities.types.CType;
 import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.c.parser.test.BracketFactory;
+import cz.mg.c.parser.test.TypeUtils;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
 import cz.mg.tokenizer.test.TokenFactory;
@@ -42,8 +46,9 @@ public @Test class VariableListParserTest {
         List<CVariable> variables = parser.parse(b.roundBrackets(
             f.word("int")
         ));
+
         Assert.assertEquals(1, variables.count());
-        Assert.assertEquals("int", variables.getFirst().getType().getTypename().getName());
+        Assert.assertEquals("int", ((CBaseType)variables.getFirst().getType()).getTypename().getName());
         Assert.assertNull(variables.getFirst().getName());
     }
 
@@ -52,8 +57,9 @@ public @Test class VariableListParserTest {
             f.word("int"),
             f.word("a")
         ));
+
         Assert.assertEquals(1, variables.count());
-        Assert.assertEquals("int", variables.getFirst().getType().getTypename().getName());
+        Assert.assertEquals("int", ((CBaseType)variables.getFirst().getType()).getTypename().getName());
         Assert.assertEquals("a", variables.getFirst().getName());
     }
 
@@ -66,12 +72,14 @@ public @Test class VariableListParserTest {
             f.word("float"),
             f.word("b")
         ));
+
         Assert.assertEquals(2, variables.count());
-        Assert.assertEquals("int", variables.getFirst().getType().getTypename().getName());
         Assert.assertEquals("a", variables.getFirst().getName());
-        Assert.assertEquals(1, variables.getFirst().getType().getPointers().count());
-        Assert.assertEquals("float", variables.getLast().getType().getTypename().getName());
         Assert.assertEquals("b", variables.getLast().getName());
-        Assert.assertEquals(0, variables.getLast().getType().getPointers().count());
+
+        List<CType> types = TypeUtils.flatten(variables.getFirst().getType());
+        Assert.assertEquals(CPointerType.class, types.get(0).getClass());
+        Assert.assertEquals("int", ((CBaseType)types.get(1)).getTypename().getName());
+        Assert.assertEquals("float", ((CBaseType)variables.getLast().getType()).getTypename().getName());
     }
 }

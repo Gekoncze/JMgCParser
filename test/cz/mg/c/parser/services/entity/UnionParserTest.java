@@ -5,9 +5,13 @@ import cz.mg.annotations.classes.Test;
 import cz.mg.c.entities.CModifier;
 import cz.mg.c.entities.CUnion;
 import cz.mg.c.entities.CVariable;
+import cz.mg.c.entities.types.CBaseType;
+import cz.mg.c.entities.types.CPointerType;
+import cz.mg.c.entities.types.CType;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.c.parser.test.BracketFactory;
+import cz.mg.c.parser.test.TypeUtils;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
 import cz.mg.token.Token;
@@ -90,9 +94,11 @@ public @Test class UnionParserTest {
         Assert.assertEquals(1, union.getVariables().count());
         Assert.assertEquals("bar", union.getVariables().getFirst().getName());
         CVariable variable = union.getVariables().getFirst();
-        Assert.assertEquals("int", variable.getType().getTypename().getName());
-        Assert.assertEquals(true, variable.getType().getModifiers().contains(CModifier.CONST));
-        Assert.assertEquals(1, union.getVariables().getFirst().getType().getPointers().count());
+        List<CType> variableTypes = TypeUtils.flatten(variable.getType());
+        Assert.assertEquals(CPointerType.class, variableTypes.get(0).getClass());
+        Assert.assertEquals(CBaseType.class, variableTypes.get(1).getClass());
+        Assert.assertEquals("int", ((CBaseType)variableTypes.get(1)).getTypename().getName());
+        Assert.assertEquals(true, variableTypes.get(1).getModifiers().contains(CModifier.CONST));
     }
 
     private void testMultipleVariables() {

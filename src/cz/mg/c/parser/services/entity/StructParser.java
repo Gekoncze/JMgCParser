@@ -5,6 +5,7 @@ import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.entities.CStruct;
 import cz.mg.c.entities.CVariable;
+import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.token.tokens.brackets.CurlyBrackets;
 import cz.mg.c.parser.services.list.SemicolonParser;
 import cz.mg.collections.list.List;
@@ -36,11 +37,13 @@ public @Service class StructParser {
     }
 
     public @Mandatory CStruct parse(@Mandatory TokenReader reader) {
-        reader.read("struct", WordToken.class);
+        int position = reader.read("struct", WordToken.class).getPosition();
         CStruct struct = new CStruct();
         struct.setName(nameParser.parse(reader));
         if (reader.has(CurlyBrackets.class)) {
             struct.setVariables(readVariables(reader.read(CurlyBrackets.class)));
+        } else if (struct.getName() == null) {
+            throw new ParseException(position, "Invalid struct declaration.");
         }
         return struct;
     }

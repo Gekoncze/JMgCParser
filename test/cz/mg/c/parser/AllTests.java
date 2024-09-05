@@ -1,7 +1,7 @@
 package cz.mg.c.parser;
 
 import cz.mg.annotations.classes.Test;
-import cz.mg.c.parser.services.RootEntityParsersTest;
+import cz.mg.c.parser.services.FileParserTest;
 import cz.mg.c.parser.services.bracket.*;
 import cz.mg.c.parser.services.entity.*;
 import cz.mg.c.parser.services.entity.type.*;
@@ -18,14 +18,10 @@ public @Test class AllTests {
         SquareBracketParserTest.main(args);
 
         // cz.mg.c.parser.services.entity.type
-        ArrayParserTest.main(args);
+        ArrayTypeParserTest.main(args);
         TypeModifiersParserTest.main(args);
-        EnumTypeParserTest.main(args);
         FunctionTypeParserTest.main(args);
-        InlineTypeParsersTest.main(args);
-        PointerParserTest.main(args);
-        StructTypeParserTest.main(args);
-        UnionTypeParserTest.main(args);
+        PointerTypeParserTest.main(args);
 
         // cz.mg.c.parser.services.entity
         EnumEntryParserTest.main(args);
@@ -44,7 +40,7 @@ public @Test class AllTests {
         SemicolonParserTest.main(args);
 
         // cz.mg.c.parser.services
-        RootEntityParsersTest.main(args);
+        FileParserTest.main(args);
 
         // cz.mg.c.parser
         CParserTest.main(args);

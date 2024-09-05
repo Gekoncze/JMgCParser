@@ -5,9 +5,13 @@ import cz.mg.annotations.classes.Test;
 import cz.mg.c.entities.CModifier;
 import cz.mg.c.entities.CStruct;
 import cz.mg.c.entities.CVariable;
+import cz.mg.c.entities.types.CBaseType;
+import cz.mg.c.entities.types.CPointerType;
+import cz.mg.c.entities.types.CType;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.c.parser.test.BracketFactory;
+import cz.mg.c.parser.test.TypeUtils;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
 import cz.mg.token.Token;
@@ -84,15 +88,21 @@ public @Test class StructParserTest {
                 f.symbol(";")
             )
         );
+
         CStruct struct = parser.parse(new TokenReader(input));
+
         Assert.assertEquals("Foo", struct.getName());
         Assert.assertNotNull(struct.getVariables());
         Assert.assertEquals(1, struct.getVariables().count());
-        Assert.assertEquals("bar", struct.getVariables().getFirst().getName());
+
         CVariable variable = struct.getVariables().getFirst();
-        Assert.assertEquals("int", variable.getType().getTypename().getName());
-        Assert.assertEquals(true, variable.getType().getModifiers().contains(CModifier.CONST));
-        Assert.assertEquals(1, struct.getVariables().getFirst().getType().getPointers().count());
+        List<CType> types = TypeUtils.flatten(variable.getType());
+
+        Assert.assertEquals("bar", variable.getName());
+        Assert.assertEquals(true, types.get(0) instanceof CPointerType);
+        Assert.assertEquals(true, types.get(1).getModifiers().contains(CModifier.CONST));
+        Assert.assertEquals(true, types.get(1) instanceof CBaseType);
+        Assert.assertEquals("int", ((CBaseType)types.get(1)).getTypename().getName());
     }
 
     private void testMultipleVariables() {
@@ -111,7 +121,9 @@ public @Test class StructParserTest {
                 f.symbol(";")
             )
         );
+
         CStruct struct = parser.parse(new TokenReader(input));
+
         Assert.assertEquals("Bar", struct.getName());
         Assert.assertNotNull(struct.getVariables());
         Assert.assertEquals(3, struct.getVariables().count());
