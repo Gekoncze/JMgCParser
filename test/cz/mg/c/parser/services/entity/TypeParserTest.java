@@ -3,8 +3,10 @@ package cz.mg.c.parser.services.entity;
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
 import cz.mg.annotations.requirement.Mandatory;
+import cz.mg.c.entities.CEnum;
 import cz.mg.c.entities.CModifier;
 import cz.mg.c.entities.CStruct;
+import cz.mg.c.entities.CUnion;
 import cz.mg.c.entities.types.CBaseType;
 import cz.mg.c.entities.types.CPointerType;
 import cz.mg.c.entities.types.CType;
@@ -15,8 +17,11 @@ import cz.mg.c.parser.services.entity.type.TypeParser;
 import cz.mg.c.parser.test.BracketFactory;
 import cz.mg.c.parser.test.TypeUtils;
 import cz.mg.collections.list.List;
+import cz.mg.collections.set.Set;
+import cz.mg.collections.set.Sets;
 import cz.mg.test.Assert;
 import cz.mg.token.Token;
+import cz.mg.token.tokens.brackets.CurlyBrackets;
 import cz.mg.tokenizer.test.TokenFactory;
 
 public @Test class TypeParserTest {
@@ -34,6 +39,15 @@ public @Test class TypeParserTest {
         test.testParsePointersConst();
         test.testParsePointersInvalid();
         test.testParseInlineType();
+        test.testParseStruct();
+        test.testParseConstStruct();
+        test.testParseAnonymousStruct();
+        test.testParseUnion();
+        test.testParseConstUnion();
+        test.testParseAnonymousUnion();
+        test.testParseEnum();
+        test.testParseConstEnum();
+        test.testParseAnonymousEnum();
 
         System.out.println("OK");
     }
@@ -257,5 +271,158 @@ public @Test class TypeParserTest {
         Assert.assertEquals(CBaseType.class, typeChain.getFirst().getClass());
         Assert.assertEquals(CStruct.class, ((CBaseType)typeChain.getFirst()).getTypename().getClass());
         Assert.assertNull(((CBaseType)typeChain.getFirst()).getTypename().getName());
+    }
+
+    private void testParseStruct() {
+        List<Token> input = new List<>(
+            f.word("struct"),
+            f.word("FooBar"),
+            new CurlyBrackets()
+        );
+
+        CTypeChain typeChain = parser.parse(new TokenReader(input));
+        List<CType> types = TypeUtils.flatten(typeChain);
+
+        Assert.assertEquals(1, types.count());
+        Assert.assertEquals(true, types.get(0) instanceof CBaseType);
+        Assert.assertEquals(true, types.get(0).getModifiers().isEmpty());
+        Assert.assertEquals(true, ((CBaseType)types.get(0)).getTypename() instanceof CStruct);
+        Assert.assertEquals("FooBar", ((CBaseType)types.get(0)).getTypename().getName());
+    }
+
+    private void testParseConstStruct() {
+        List<Token> input = new List<>(
+            f.word("const"),
+            f.word("struct"),
+            f.word("FooBar"),
+            new CurlyBrackets()
+        );
+
+        CTypeChain typeChain = parser.parse(new TokenReader(input));
+        List<CType> types = TypeUtils.flatten(typeChain);
+
+        Assert.assertEquals(1, types.count());
+        Assert.assertEquals(true, types.get(0) instanceof CBaseType);
+        Assert.assertEquals(true, types.get(0).getModifiers().contains(CModifier.CONST));
+        Assert.assertEquals(true, ((CBaseType)types.get(0)).getTypename() instanceof CStruct);
+        Assert.assertEquals("FooBar", ((CBaseType)types.get(0)).getTypename().getName());
+    }
+
+    private void testParseAnonymousStruct() {
+        List<Token> input = new List<>(
+            f.word("struct"),
+            new CurlyBrackets()
+        );
+
+        CTypeChain typeChain = parser.parse(new TokenReader(input));
+        List<CType> types = TypeUtils.flatten(typeChain);
+
+        Assert.assertEquals(1, types.count());
+        Assert.assertEquals(true, types.get(0) instanceof CBaseType);
+        Assert.assertEquals(true, types.get(0).getModifiers().isEmpty());
+        Assert.assertEquals(true, ((CBaseType)types.get(0)).getTypename() instanceof CStruct);
+        Assert.assertEquals(null, ((CBaseType)types.get(0)).getTypename().getName());
+    }
+
+    private void testParseUnion() {
+        List<Token> input = new List<>(
+            f.word("union"),
+            f.word("FooBar"),
+            new CurlyBrackets()
+        );
+
+        CTypeChain typeChain = parser.parse(new TokenReader(input));
+        List<CType> types = TypeUtils.flatten(typeChain);
+
+        Assert.assertEquals(1, types.count());
+        Assert.assertEquals(true, types.get(0) instanceof CBaseType);
+        Assert.assertEquals(true, types.get(0).getModifiers().isEmpty());
+        Assert.assertEquals(true, ((CBaseType)types.get(0)).getTypename() instanceof CUnion);
+        Assert.assertEquals("FooBar", ((CBaseType)types.get(0)).getTypename().getName());
+    }
+
+    private void testParseConstUnion() {
+        List<Token> input = new List<>(
+            f.word("const"),
+            f.word("union"),
+            f.word("FooBar"),
+            new CurlyBrackets()
+        );
+
+        CTypeChain typeChain = parser.parse(new TokenReader(input));
+        List<CType> types = TypeUtils.flatten(typeChain);
+
+        Assert.assertEquals(1, types.count());
+        Assert.assertEquals(true, types.get(0) instanceof CBaseType);
+        Assert.assertEquals(true, types.get(0).getModifiers().contains(CModifier.CONST));
+        Assert.assertEquals(true, ((CBaseType)types.get(0)).getTypename() instanceof CUnion);
+        Assert.assertEquals("FooBar", ((CBaseType)types.get(0)).getTypename().getName());
+    }
+
+    private void testParseAnonymousUnion() {
+        List<Token> input = new List<>(
+            f.word("union"),
+            new CurlyBrackets()
+        );
+
+        CTypeChain typeChain = parser.parse(new TokenReader(input));
+        List<CType> types = TypeUtils.flatten(typeChain);
+
+        Assert.assertEquals(1, types.count());
+        Assert.assertEquals(true, types.get(0) instanceof CBaseType);
+        Assert.assertEquals(true, types.get(0).getModifiers().isEmpty());
+        Assert.assertEquals(true, ((CBaseType)types.get(0)).getTypename() instanceof CUnion);
+        Assert.assertEquals(null, ((CBaseType)types.get(0)).getTypename().getName());
+    }
+
+    private void testParseEnum() {
+        List<Token> input = new List<>(
+            f.word("enum"),
+            f.word("FooBar"),
+            new CurlyBrackets()
+        );
+
+        CTypeChain typeChain = parser.parse(new TokenReader(input));
+        List<CType> types = TypeUtils.flatten(typeChain);
+
+        Assert.assertEquals(1, types.count());
+        Assert.assertEquals(true, types.get(0) instanceof CBaseType);
+        Assert.assertEquals(true, types.get(0).getModifiers().isEmpty());
+        Assert.assertEquals(true, ((CBaseType)types.get(0)).getTypename() instanceof CEnum);
+        Assert.assertEquals("FooBar", ((CBaseType)types.get(0)).getTypename().getName());
+    }
+
+    private void testParseConstEnum() {
+        List<Token> input = new List<>(
+            f.word("const"),
+            f.word("enum"),
+            f.word("FooBar"),
+            new CurlyBrackets()
+        );
+
+        CTypeChain typeChain = parser.parse(new TokenReader(input));
+        List<CType> types = TypeUtils.flatten(typeChain);
+
+        Assert.assertEquals(1, types.count());
+        Assert.assertEquals(true, types.get(0) instanceof CBaseType);
+        Assert.assertEquals(true, types.get(0).getModifiers().contains(CModifier.CONST));
+        Assert.assertEquals(true, ((CBaseType)types.get(0)).getTypename() instanceof CEnum);
+        Assert.assertEquals("FooBar", ((CBaseType)types.get(0)).getTypename().getName());
+    }
+
+    private void testParseAnonymousEnum() {
+        List<Token> input = new List<>(
+            f.word("enum"),
+            new CurlyBrackets()
+        );
+
+        CTypeChain typeChain = parser.parse(new TokenReader(input));
+        List<CType> types = TypeUtils.flatten(typeChain);
+
+        Assert.assertEquals(1, types.count());
+        Assert.assertEquals(true, types.get(0) instanceof CBaseType);
+        Assert.assertEquals(true, types.get(0).getModifiers().isEmpty());
+        Assert.assertEquals(true, ((CBaseType)types.get(0)).getTypename() instanceof CEnum);
+        Assert.assertEquals(null, ((CBaseType)types.get(0)).getTypename().getName());
     }
 }
