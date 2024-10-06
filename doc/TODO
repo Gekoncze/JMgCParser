@@ -2,10 +2,6 @@
     ...
 
 ### SOON ###
-    check if order of arrays after parsing is correct
-        int[1][2]
-        should outer type be the one with 1 or 2 size?
-
     add test for CTypeChain
         add also test that after exceptions thrown state is not changed
 
