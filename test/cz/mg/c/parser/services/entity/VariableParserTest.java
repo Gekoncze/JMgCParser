@@ -35,6 +35,7 @@ public @Test class VariableParserTest {
         test.testParseArray();
         test.testParseArrays();
         test.testParseArrayExpression();
+        test.testParseArrayOfInlineType();
         test.testParseComplex();
         test.testParseInlineType();
         test.testParseWithType();
@@ -229,6 +230,40 @@ public @Test class VariableParserTest {
             ((CArrayType)types.get(0)).getExpression()
         );
         Assert.assertEquals("float", ((CBaseType)types.get(1)).getTypename().getName());
+        reader.readEnd();
+    }
+
+    private void testParseArrayOfInlineType() {
+        // struct {int a; int b;}* foo[2];
+        TokenReader reader = new TokenReader(new List<>(
+            f.word("struct"),
+            b.curlyBrackets(
+                f.word("int"),
+                f.word("a"),
+                f.symbol(";"),
+                f.word("int"),
+                f.word("b"),
+                f.symbol(";")
+            ),
+            f.symbol("*"),
+            f.word("foo"),
+            b.squareBrackets(
+                f.number("2")
+            )
+        ));
+
+        CVariable variable = parser.parse(reader);
+        List<CType> types = TypeUtils.flatten(variable.getType());
+
+        Assert.assertEquals("foo", variable.getName());
+        Assert.assertEquals(CArrayType.class, types.get(0).getClass());
+        Assert.assertEquals(CPointerType.class, types.get(1).getClass());
+        Assert.assertEquals(CBaseType.class, types.get(2).getClass());
+        tokenValidator.assertEquals(
+            new List<>(f.number("2")),
+            ((CArrayType)types.get(0)).getExpression()
+        );
+        Assert.assertEquals(true, ((CBaseType)types.get(2)).getTypename() instanceof CStruct);
         reader.readEnd();
     }
 
