@@ -33,12 +33,12 @@ public @Test class FileParserTest {
         System.out.println("OK");
     }
 
-    private final @Service FileParser parsers = FileParser.getInstance();
+    private final @Service FileParser parser = FileParser.getInstance();
     private final @Service TokenFactory f = TokenFactory.getInstance();
     private final @Service BracketFactory b = BracketFactory.getInstance();
 
     private void testParseEmpty() {
-        List<CEntity> entities = parsers.parse(new List<>());
+        List<CEntity> entities = parser.parse(new List<>());
         Assert.assertEquals(true, entities.isEmpty());
     }
 
@@ -49,7 +49,7 @@ public @Test class FileParserTest {
             f.symbol(";")
         );
 
-        List<CEntity> entities = parsers.parse(input);
+        List<CEntity> entities = parser.parse(input);
         Assert.assertEquals(true, entities.isEmpty());
     }
 
@@ -63,7 +63,7 @@ public @Test class FileParserTest {
             f.symbol(";")
         );
 
-        List<CEntity> entities = parsers.parse(input);
+        List<CEntity> entities = parser.parse(input);
         Assert.assertEquals(1, entities.count());
         Assert.assertEquals(true, entities.getFirst() instanceof CTypedef);
 
@@ -89,7 +89,7 @@ public @Test class FileParserTest {
             f.symbol(";")
         );
 
-        List<CEntity> entities = parsers.parse(input);
+        List<CEntity> entities = parser.parse(input);
         Assert.assertEquals(1, entities.count());
         Assert.assertEquals(true, entities.getFirst() instanceof CVariable);
 
@@ -124,7 +124,7 @@ public @Test class FileParserTest {
             )
         );
 
-        List<CEntity> entities = parsers.parse(input);
+        List<CEntity> entities = parser.parse(input);
         Assert.assertEquals(1, entities.count());
         Assert.assertEquals(true, entities.getFirst() instanceof CFunction);
 
@@ -159,7 +159,7 @@ public @Test class FileParserTest {
             f.symbol(";")
         );
 
-        List<CEntity> entities = parsers.parse(input);
+        List<CEntity> entities = parser.parse(input);
         Assert.assertEquals(1, entities.count());
         Assert.assertEquals(true, entities.getFirst() instanceof CStruct);
 
@@ -191,7 +191,7 @@ public @Test class FileParserTest {
             f.symbol(";")
         );
 
-        List<CEntity> entities = parsers.parse(input);
+        List<CEntity> entities = parser.parse(input);
         Assert.assertEquals(1, entities.count());
         Assert.assertEquals(true, entities.getFirst() instanceof CUnion);
 
@@ -228,7 +228,7 @@ public @Test class FileParserTest {
             f.symbol(";")
         );
 
-        List<CEntity> entities = parsers.parse(input);
+        List<CEntity> entities = parser.parse(input);
         Assert.assertEquals(1, entities.count());
         Assert.assertEquals(true, entities.getFirst() instanceof CEnum);
 
@@ -261,7 +261,7 @@ public @Test class FileParserTest {
             f.symbol(";")
         );
 
-        List<CEntity> entities = parsers.parse(input);
+        List<CEntity> entities = parser.parse(input);
         Assert.assertEquals(1, entities.count());
         Assert.assertEquals(true, entities.getFirst() instanceof CVariable);
 
@@ -325,7 +325,7 @@ public @Test class FileParserTest {
             f.symbol(";")
         );
 
-        List<CEntity> entities = parsers.parse(input);
+        List<CEntity> entities = parser.parse(input);
         Assert.assertEquals(4, entities.count());
         Assert.assertEquals(true, entities.get(0) instanceof CTypedef);
         Assert.assertEquals(true, entities.get(1) instanceof CFunction);
