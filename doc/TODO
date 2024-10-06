@@ -5,9 +5,6 @@
     add test for CTypeChain
         add also test that after exceptions thrown state is not changed
 
-    check if following is covered by type parser test
-        struct {int a; int b;}*
-
     check if following is covered by variable parser test
         struct {int a; int b;}* foo[2];
 

@@ -3,10 +3,7 @@ package cz.mg.c.parser.services.entity;
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
 import cz.mg.annotations.requirement.Mandatory;
-import cz.mg.c.entities.CEnum;
-import cz.mg.c.entities.CModifier;
-import cz.mg.c.entities.CStruct;
-import cz.mg.c.entities.CUnion;
+import cz.mg.c.entities.*;
 import cz.mg.c.entities.types.CBaseType;
 import cz.mg.c.entities.types.CPointerType;
 import cz.mg.c.entities.types.CType;
@@ -17,11 +14,8 @@ import cz.mg.c.parser.services.entity.type.TypeParser;
 import cz.mg.c.parser.test.BracketFactory;
 import cz.mg.c.parser.test.TypeUtils;
 import cz.mg.collections.list.List;
-import cz.mg.collections.set.Set;
-import cz.mg.collections.set.Sets;
 import cz.mg.test.Assert;
 import cz.mg.token.Token;
-import cz.mg.token.tokens.brackets.CurlyBrackets;
 import cz.mg.tokenizer.test.TokenFactory;
 
 public @Test class TypeParserTest {
@@ -48,6 +42,7 @@ public @Test class TypeParserTest {
         test.testParseEnum();
         test.testParseConstEnum();
         test.testParseAnonymousEnum();
+        test.testParseComplexType();
 
         System.out.println("OK");
     }
@@ -277,7 +272,7 @@ public @Test class TypeParserTest {
         List<Token> input = new List<>(
             f.word("struct"),
             f.word("FooBar"),
-            new CurlyBrackets()
+            b.curlyBrackets()
         );
 
         CTypeChain typeChain = parser.parse(new TokenReader(input));
@@ -295,7 +290,7 @@ public @Test class TypeParserTest {
             f.word("const"),
             f.word("struct"),
             f.word("FooBar"),
-            new CurlyBrackets()
+            b.curlyBrackets()
         );
 
         CTypeChain typeChain = parser.parse(new TokenReader(input));
@@ -311,7 +306,7 @@ public @Test class TypeParserTest {
     private void testParseAnonymousStruct() {
         List<Token> input = new List<>(
             f.word("struct"),
-            new CurlyBrackets()
+            b.curlyBrackets()
         );
 
         CTypeChain typeChain = parser.parse(new TokenReader(input));
@@ -328,7 +323,7 @@ public @Test class TypeParserTest {
         List<Token> input = new List<>(
             f.word("union"),
             f.word("FooBar"),
-            new CurlyBrackets()
+            b.curlyBrackets()
         );
 
         CTypeChain typeChain = parser.parse(new TokenReader(input));
@@ -346,7 +341,7 @@ public @Test class TypeParserTest {
             f.word("const"),
             f.word("union"),
             f.word("FooBar"),
-            new CurlyBrackets()
+            b.curlyBrackets()
         );
 
         CTypeChain typeChain = parser.parse(new TokenReader(input));
@@ -362,7 +357,7 @@ public @Test class TypeParserTest {
     private void testParseAnonymousUnion() {
         List<Token> input = new List<>(
             f.word("union"),
-            new CurlyBrackets()
+            b.curlyBrackets()
         );
 
         CTypeChain typeChain = parser.parse(new TokenReader(input));
@@ -379,7 +374,7 @@ public @Test class TypeParserTest {
         List<Token> input = new List<>(
             f.word("enum"),
             f.word("FooBar"),
-            new CurlyBrackets()
+            b.curlyBrackets()
         );
 
         CTypeChain typeChain = parser.parse(new TokenReader(input));
@@ -397,7 +392,7 @@ public @Test class TypeParserTest {
             f.word("const"),
             f.word("enum"),
             f.word("FooBar"),
-            new CurlyBrackets()
+            b.curlyBrackets()
         );
 
         CTypeChain typeChain = parser.parse(new TokenReader(input));
@@ -413,7 +408,7 @@ public @Test class TypeParserTest {
     private void testParseAnonymousEnum() {
         List<Token> input = new List<>(
             f.word("enum"),
-            new CurlyBrackets()
+            b.curlyBrackets()
         );
 
         CTypeChain typeChain = parser.parse(new TokenReader(input));
@@ -424,5 +419,37 @@ public @Test class TypeParserTest {
         Assert.assertEquals(true, types.get(0).getModifiers().isEmpty());
         Assert.assertEquals(true, ((CBaseType)types.get(0)).getTypename() instanceof CEnum);
         Assert.assertEquals(null, ((CBaseType)types.get(0)).getTypename().getName());
+    }
+
+    private void testParseComplexType() {
+        // struct {int a; int b;}*
+        List<Token> input = new List<>(
+            f.word("struct"),
+            b.curlyBrackets(
+                f.word("int"),
+                f.word("a"),
+                f.symbol(";"),
+                f.word("int"),
+                f.word("b"),
+                f.symbol(";")
+            ),
+            f.symbol("*")
+        );
+
+        CTypeChain typeChain = parser.parse(new TokenReader(input));
+        List<CType> types = TypeUtils.flatten(typeChain);
+
+        Assert.assertEquals(2, types.count());
+        Assert.assertEquals(true, types.get(0) instanceof CPointerType);
+        Assert.assertEquals(true, types.get(1) instanceof CBaseType);
+        Assert.assertEquals(true, types.get(1).getModifiers().isEmpty());
+        Assert.assertEquals(true, ((CBaseType)types.get(1)).getTypename() instanceof CStruct);
+        Assert.assertEquals(null, ((CBaseType)types.get(1)).getTypename().getName());
+
+        List<CVariable> variables = ((CStruct)((CBaseType)types.get(1)).getTypename()).getVariables();
+        Assert.assertNotNull(variables);
+        Assert.assertEquals(2, variables.count());
+        Assert.assertEquals("a", variables.get(0).getName());
+        Assert.assertEquals("b", variables.get(1).getName());
     }
 }
