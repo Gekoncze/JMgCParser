@@ -2,8 +2,7 @@
     ...
 
 ### SOON ###
-    add test for CTypeChain
-        add also test that after exceptions thrown state is not changed
+    ...
 
 ### LATER ###
     check if inline return type of function pointer type is covered by tests if supported by C

@@ -32,11 +32,15 @@ public @Component class CTypeChain {
 
     public void addLast(@Mandatory CType type) {
         if (last instanceof CWrapperType wrapper) {
+            if (wrapper.getType() != null) {
+                throw new IllegalArgumentException("Append chained types is not yet supported.");
+            }
+
             if (wrapper.getType() == null) {
                 wrapper.setType(type);
                 last = type;
             } else {
-                throw new IllegalArgumentException(
+                throw new IllegalStateException(
                     "Cannot append " + type.getClass().getSimpleName()
                         + " to " + last.getClass().getSimpleName()
                         + " because slot is already occupied."
