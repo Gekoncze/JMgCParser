@@ -5,11 +5,6 @@
     ...
 
 ### LATER ###
-    check if immediate struct variables are covered by test if supported by C
-        struct {} foo, bar;
-        check if it should declare the struct type at the same time
-        check if can be combined with typedef
-
+    check if array variable initializer covered by tests
     check if typedef of array of pointers to arrays is covered by tests if supported by C
-
-    vararg support for functions and function pointers
+    add vararg support for functions and function pointers

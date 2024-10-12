@@ -32,7 +32,7 @@ public @Service class VariableListParser {
         if (!empty(entries)) {
             for (List<Token> entry : entries) {
                 TokenReader reader = new TokenReader(entry);
-                variables.addLast(variableParser.parse(reader));
+                variables.addCollectionLast(variableParser.parse(reader));
                 reader.readEnd();
             }
         }

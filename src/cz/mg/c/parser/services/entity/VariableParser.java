@@ -9,13 +9,15 @@ import cz.mg.c.entities.types.CPointerType;
 import cz.mg.c.parser.components.CTypeChain;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.entities.CVariable;
-import cz.mg.c.parser.services.CEntityParser;
+import cz.mg.c.parser.services.CEntitiesParser;
 import cz.mg.c.parser.services.entity.type.ArrayTypeParser;
 import cz.mg.c.parser.services.entity.type.TypeParser;
+import cz.mg.collections.list.List;
+import cz.mg.token.Token;
 import cz.mg.token.tokens.NumberToken;
 import cz.mg.token.tokens.SymbolToken;
 
-public @Service class VariableParser implements CEntityParser {
+public @Service class VariableParser implements CEntitiesParser<CVariable> {
     private static volatile @Service VariableParser instance;
 
     public static @Service VariableParser getInstance() {
@@ -37,20 +39,43 @@ public @Service class VariableParser implements CEntityParser {
     private @Service InitializerParser initializerParser;
 
     @Override
-    public @Mandatory CVariable parse(@Mandatory TokenReader reader) {
+    public @Mandatory List<CVariable> parse(@Mandatory TokenReader reader) {
         return parse(reader, typeParser.parse(reader));
     }
 
-    public @Mandatory CVariable parse(@Mandatory TokenReader reader, @Mandatory CTypeChain typeChain) {
-        CVariable variable = new CVariable();
-        if (!isFunctionPointer(typeChain)) {
+    public @Mandatory List<CVariable> parse(@Mandatory TokenReader reader, @Mandatory CTypeChain typeChain) {
+        if (isFunctionPointer(typeChain)) {
+            return new List<>(parseFunctionPointerVariable(reader, typeChain));
+        }
+
+        List<CVariable> variables = new List<>();
+        while (true) {
+            CVariable variable = new CVariable();
             variable.setName(nameParser.parse(reader));
             typeChain.addFirst(arrayTypeParser.parse(reader));
-        } else {
-            variable.setName(((CBaseType)typeChain.getLast()).getTypename().getName());
+            variable.setType(typeChain.getFirst());
+            variable.setBit(readBitField(reader));
+            variables.addLast(variable);
+
+            if (reader.has(",", SymbolToken.class)) {
+                reader.read();
+            } else {
+                break;
+            }
         }
+
+        List<Token> initializer = initializerParser.parse(reader);
+        if (initializer != null) {
+            variables.getLast().setExpression(initializer);
+        }
+
+        return variables;
+    }
+
+    public @Mandatory CVariable parseFunctionPointerVariable(@Mandatory TokenReader reader, @Mandatory CTypeChain typeChain) {
+        CVariable variable = new CVariable();
+        variable.setName(((CBaseType)typeChain.getLast()).getTypename().getName());
         variable.setType(typeChain.getFirst());
-        variable.setBit(readBitField(reader));
         variable.setExpression(initializerParser.parse(reader));
         return variable;
     }

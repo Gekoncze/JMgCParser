@@ -64,7 +64,7 @@ public @Service class FileParser {
                 if (isFunctionDeclaration(reader)) {
                     entities.addLast(functionParser.parse(reader, types));
                 } else if (isVariableDeclaration(reader)) {
-                    entities.addLast(variableParser.parse(reader, types));
+                    entities.addCollectionLast(variableParser.parse(reader, types));
                     reader.read(";", SymbolToken.class);
                 } else if (isTypenameDeclaration(types)) {
                     CBaseType baseType = (CBaseType) types.getFirst();

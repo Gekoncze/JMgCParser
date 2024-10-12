@@ -53,7 +53,7 @@ public @Service class StructParser {
         List<CVariable> variables = new List<>();
         for (List<Token> group : groups) {
             TokenReader reader = new TokenReader(group);
-            variables.addLast(variableParser.parse(reader));
+            variables.addCollectionLast(variableParser.parse(reader));
             reader.readEnd();
         }
         return variables;
