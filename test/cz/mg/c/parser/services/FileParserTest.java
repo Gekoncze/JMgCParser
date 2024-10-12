@@ -24,6 +24,7 @@ public @Test class FileParserTest {
         test.testParseTypedef();
         test.testParseVariable();
         test.testParseFunction();
+        test.testParseFunctionReturningInlineType();
         test.testParseStruct();
         test.testParseUnion();
         test.testParseEnum();
@@ -142,6 +143,49 @@ public @Test class FileParserTest {
         Assert.assertEquals(true, function.getInput().getLast().getType().getModifiers().contains(CModifier.CONST));
         Assert.assertNotNull(function.getImplementation());
         Assert.assertEquals(3, function.getImplementation().count());
+    }
+
+    private void testParseFunctionReturningInlineType() {
+        // struct {int a; int b;} foo(){...}
+        List<Token> input = new List<>(
+            f.word("struct"),
+            b.curlyBrackets(
+                f.word("int"),
+                f.word("a"),
+                f.symbol(";"),
+                f.word("int"),
+                f.word("b"),
+                f.symbol(";")
+            ),
+            f.word("surprise"),
+            b.roundBrackets(),
+            b.curlyBrackets(
+                f.word("typeof"),
+                b.roundBrackets(
+                    f.word("surprise"),
+                    b.roundBrackets()
+                ),
+                f.word("s"),
+                f.symbol(";"),
+                f.word("return"),
+                f.word("s"),
+                f.symbol(";")
+            )
+        );
+
+        List<CEntity> entities = parser.parse(input);
+        Assert.assertEquals(1, entities.count());
+        Assert.assertEquals(true, entities.getFirst() instanceof CFunction);
+
+        CFunction function = (CFunction) entities.getFirst();
+        List<CType> outputTypes = TypeUtils.flatten(function.getOutput());
+        Assert.assertEquals("surprise", function.getName());
+        Assert.assertEquals(CBaseType.class, outputTypes.get(0).getClass());
+        Assert.assertEquals(true, ((CBaseType)outputTypes.get(0)).getTypename() instanceof CStruct);
+        Assert.assertEquals(null, ((CBaseType)outputTypes.get(0)).getTypename().getName());
+        Assert.assertEquals(0, function.getInput().count());
+        Assert.assertNotNull(function.getImplementation());
+        Assert.assertEquals(7, function.getImplementation().count());
     }
 
     private void testParseStruct() {

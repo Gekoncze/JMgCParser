@@ -5,8 +5,6 @@
     ...
 
 ### LATER ###
-    check if inline return type of function pointer type is covered by tests if supported by C
-
     check if function pointer inside variable is covered by tests if supported by C
         struct foo { void (*bar)(int), ... }
 
