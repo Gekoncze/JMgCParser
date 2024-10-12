@@ -2,6 +2,7 @@ package cz.mg.c.parser.services.entity;
 
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
+import cz.mg.c.entities.CFunction;
 import cz.mg.c.entities.CModifier;
 import cz.mg.c.entities.CStruct;
 import cz.mg.c.entities.CVariable;
@@ -29,6 +30,7 @@ public @Test class StructParserTest {
         test.testSingleVariable();
         test.testMultipleVariables();
         test.testInvalid();
+        test.testFunctionVariable();
 
         System.out.println("OK");
     }
@@ -145,5 +147,41 @@ public @Test class StructParserTest {
                 )
             )));
         }).throwsException(ParseException.class);
+    }
+
+    private void testFunctionVariable() {
+        // struct Foo {
+        //     void (*foo)();
+        // };
+
+        List<Token> input = new List<>(
+            f.word("struct"),
+            f.word("Foo"),
+            b.curlyBrackets(
+                f.word("void"),
+                b.roundBrackets(
+                    f.symbol("*"),
+                    f.word("foo")
+                ),
+                b.roundBrackets(),
+                f.symbol(";")
+            ),
+            f.symbol(";")
+        );
+
+        CStruct struct = parser.parse(new TokenReader(input));
+
+        Assert.assertEquals("Foo", struct.getName());
+        Assert.assertNotNull(struct.getVariables());
+        Assert.assertEquals(1, struct.getVariables().count());
+
+        CVariable variable = struct.getVariables().getFirst();
+        List<CType> types = TypeUtils.flatten(variable.getType());
+
+        Assert.assertEquals("foo", variable.getName());
+        Assert.assertEquals(true, types.get(0) instanceof CPointerType);
+        Assert.assertEquals(true, types.get(1) instanceof CBaseType);
+        Assert.assertEquals("foo", ((CBaseType)types.get(1)).getTypename().getName());
+        Assert.assertEquals(true, ((CBaseType)types.get(1)).getTypename() instanceof CFunction);
     }
 }

@@ -5,9 +5,6 @@
     ...
 
 ### LATER ###
-    check if function pointer inside variable is covered by tests if supported by C
-        struct foo { void (*bar)(int), ... }
-
     check if immediate struct variables are covered by test if supported by C
         struct {} foo, bar;
         check if it should declare the struct type at the same time
