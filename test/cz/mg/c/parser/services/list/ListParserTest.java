@@ -7,7 +7,7 @@ import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
 import cz.mg.token.Token;
 import cz.mg.tokenizer.test.TokenFactory;
-import cz.mg.tokenizer.test.TokenValidator;
+import cz.mg.tokenizer.test.TokenAssertions;
 
 public @Test class ListParserTest {
     public static void main(String[] args) {
@@ -23,7 +23,7 @@ public @Test class ListParserTest {
     }
 
     private final @Service ListParser parser = ListParser.getInstance();
-    private final @Service TokenValidator validator = TokenValidator.getInstance();
+    private final @Service TokenAssertions assertions = TokenAssertions.getInstance();
     private final @Service TokenFactory f = TokenFactory.getInstance();
 
     private void testParseEmpty() {
@@ -54,14 +54,14 @@ public @Test class ListParserTest {
         );
         List<List<Token>> output = parser.parse(new TokenReader(input));
         Assert.assertEquals(3, output.count());
-        validator.assertEquals(new List<>(
+        assertions.assertEquals(new List<>(
             f.word("foo"),
             f.word("bar")
         ), output.get(0));
-        validator.assertEquals(new List<>(
+        assertions.assertEquals(new List<>(
             f.symbol(".")
         ), output.get(1));
-        validator.assertEquals(new List<>(
+        assertions.assertEquals(new List<>(
             f.number("11"),
             f.symbol("+"),
             f.number("0")

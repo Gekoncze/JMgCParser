@@ -7,7 +7,7 @@ import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
 import cz.mg.token.Token;
 import cz.mg.tokenizer.test.TokenFactory;
-import cz.mg.tokenizer.test.TokenValidator;
+import cz.mg.tokenizer.test.TokenAssertions;
 
 public @Test class BracketParsersTest {
     public static void main(String[] args) {
@@ -24,7 +24,7 @@ public @Test class BracketParsersTest {
     private final @Service BracketParsers parsers = BracketParsers.getInstance();
     private final @Service TokenFactory f = TokenFactory.getInstance();
     private final @Service BracketFactory b = BracketFactory.getInstance();
-    private final @Service TokenValidator validator = TokenValidator.getInstance();
+    private final @Service TokenAssertions assertions = TokenAssertions.getInstance();
 
     private void testParseEmpty() {
         List<Token> tokens = parsers.parse(new List<>());
@@ -38,7 +38,7 @@ public @Test class BracketParsersTest {
         );
 
         List<Token> output = parsers.parse(input);
-        validator.assertEquals(
+        assertions.assertEquals(
             new List<>(b.curlyBrackets()),
             output
         );
@@ -65,7 +65,7 @@ public @Test class BracketParsersTest {
         );
 
         List<Token> output = parsers.parse(input);
-        validator.assertEquals(
+        assertions.assertEquals(
             new List<>(
                 f.word("void"),
                 f.word("fooBar"),
