@@ -2,7 +2,10 @@
     ...
 
 ### SOON ###
-    ...
+    consider adding support for blacklisted and whitelisted elements
+        non-conforming elements will be skipped during parsing
+        skip might be either until semicolon or curly bracket end is reached
+        this will allow for partial library support for faster deliveries
 
 ### LATER ###
     check if array variable initializer covered by tests
