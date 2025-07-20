@@ -10,7 +10,7 @@ import cz.mg.collections.set.Set;
 import cz.mg.collections.set.Sets;
 import cz.mg.test.Assert;
 import cz.mg.token.Token;
-import cz.mg.tokenizer.test.TokenFactory;
+import cz.mg.token.test.TokenFactory;
 
 public @Test class TypeModifiersParserTest {
     public static void main(String[] args) {

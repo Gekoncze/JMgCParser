@@ -6,8 +6,8 @@ import cz.mg.c.parser.components.TokenReader;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
 import cz.mg.token.Token;
-import cz.mg.tokenizer.test.TokenFactory;
-import cz.mg.tokenizer.test.TokenAssertions;
+import cz.mg.token.test.TokenFactory;
+import cz.mg.token.test.TokenAssertions;
 
 public @Test class ListParserTest {
     public static void main(String[] args) {

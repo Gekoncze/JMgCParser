@@ -19,8 +19,8 @@ import cz.mg.c.parser.test.TypeUtils;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
 import cz.mg.token.tokens.SymbolToken;
-import cz.mg.tokenizer.test.TokenFactory;
-import cz.mg.tokenizer.test.TokenAssertions;
+import cz.mg.token.test.TokenFactory;
+import cz.mg.token.test.TokenAssertions;
 
 public @Test class VariableParserTest {
     public static void main(String[] args) {

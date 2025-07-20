@@ -11,7 +11,7 @@ import cz.mg.c.parser.test.BracketFactory;
 import cz.mg.c.parser.test.TypeUtils;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
-import cz.mg.tokenizer.test.TokenFactory;
+import cz.mg.token.test.TokenFactory;
 
 public @Test class VariableListParserTest {
     public static void main(String[] args) {
