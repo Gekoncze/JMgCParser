@@ -7,7 +7,7 @@ import cz.mg.c.entities.types.CArrayType;
 import cz.mg.c.entities.types.CType;
 import cz.mg.c.parser.components.CTypeChain;
 import cz.mg.c.parser.components.TokenReader;
-import cz.mg.c.parser.test.BracketFactory;
+import cz.mg.token.test.BracketFactory;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
 import cz.mg.test.exceptions.AssertException;

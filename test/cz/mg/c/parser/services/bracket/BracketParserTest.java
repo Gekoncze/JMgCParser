@@ -5,7 +5,7 @@ import cz.mg.annotations.classes.Test;
 import cz.mg.token.tokens.brackets.Brackets;
 import cz.mg.token.tokens.brackets.RoundBrackets;
 import cz.mg.c.parser.exceptions.ParseException;
-import cz.mg.c.parser.test.BracketFactory;
+import cz.mg.token.test.BracketFactory;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
 import cz.mg.token.Token;
