@@ -11,7 +11,7 @@ import cz.mg.test.Assert;
 import cz.mg.token.Token;
 import cz.mg.token.tokens.SymbolToken;
 import cz.mg.token.tokens.WordToken;
-import cz.mg.token.tokens.quote.DoubleQuoteToken;
+import cz.mg.token.tokens.quotes.DoubleQuoteToken;
 
 public @Test class BracketParserTest {
     public static void main(String[] args) {
