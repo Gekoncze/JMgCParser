@@ -4,23 +4,25 @@ import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
 import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.c.entities.*;
+import cz.mg.c.entities.macro.Macro;
+import cz.mg.c.entities.macro.Macros;
 import cz.mg.c.entities.types.CArrayType;
 import cz.mg.c.entities.types.CBaseType;
 import cz.mg.c.entities.types.CPointerType;
 import cz.mg.c.entities.types.CType;
-import cz.mg.c.parser.test.TypeUtils;
-import cz.mg.token.tokens.brackets.CurlyBrackets;
-import cz.mg.token.tokens.brackets.RoundBrackets;
-import cz.mg.token.tokens.brackets.SquareBrackets;
-import cz.mg.c.entities.macro.Macro;
-import cz.mg.c.entities.macro.Macros;
 import cz.mg.c.parser.exceptions.ParseException;
+import cz.mg.c.parser.test.TypeUtils;
 import cz.mg.collections.list.List;
 import cz.mg.file.File;
 import cz.mg.test.Assert;
+import cz.mg.test.Assertions;
+import cz.mg.test.BiAssertions;
 import cz.mg.token.Position;
 import cz.mg.token.Token;
 import cz.mg.token.tokens.WordToken;
+import cz.mg.token.tokens.brackets.CurlyBrackets;
+import cz.mg.token.tokens.brackets.RoundBrackets;
+import cz.mg.token.tokens.brackets.SquareBrackets;
 import cz.mg.tokenizer.services.PositionService;
 
 import java.io.BufferedReader;
@@ -213,7 +215,7 @@ public @Test class CParserTest {
             }
         }
 
-        Assert.assertThatCollections(
+        BiAssertions.assertThat(
             new List<>(
                 "missing",
                 "internalTrue",
@@ -230,7 +232,7 @@ public @Test class CParserTest {
             macroNames.addLast(macro.getName().getText());
         }
 
-        Assert.assertThatCollections(
+        BiAssertions.assertThat(
             new List<>(
                 "EXTERNAL_CONDITION",
                 "INTERNAL_CONDITION",
@@ -283,7 +285,7 @@ public @Test class CParserTest {
         Macros macros = new Macros();
         CParser parser = new CParser(macros);
 
-        ParseException exception = Assert.assertThatCode(() -> {
+        ParseException exception = Assertions.assertThatCode(() -> {
             parser.parse(file);
         }).throwsException(ParseException.class);
 

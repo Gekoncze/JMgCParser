@@ -6,6 +6,7 @@ import cz.mg.c.entities.types.CBaseType;
 import cz.mg.c.entities.types.CPointerType;
 import cz.mg.c.entities.types.CType;
 import cz.mg.test.Assert;
+import cz.mg.test.Assertions;
 
 public @Test class CTypeChainTest {
     public static void main(String[] args) {
@@ -41,7 +42,7 @@ public @Test class CTypeChainTest {
         Assert.assertSame(baseType, chain.getFirst());
         Assert.assertSame(baseType, chain.getLast());
 
-        Assert.assertThatCode(() -> {
+        Assertions.assertThatCode(() -> {
             chain.addLast(new CBaseType());
         }).throwsException(IllegalArgumentException.class);
 

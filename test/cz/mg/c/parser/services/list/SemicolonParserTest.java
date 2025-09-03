@@ -5,6 +5,7 @@ import cz.mg.annotations.classes.Test;
 import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
+import cz.mg.test.Assertions;
 import cz.mg.token.Token;
 import cz.mg.token.test.TokenFactory;
 
@@ -71,7 +72,7 @@ public @Test class SemicolonParserTest {
     }
 
     private void testParseMissingSemicolon() {
-        Assert.assertThatCode(() -> {
+        Assertions.assertThatCode(() -> {
             List<Token> input = new List<>(
                 f.word("foo"),
                 f.word("bar")
@@ -81,7 +82,7 @@ public @Test class SemicolonParserTest {
     }
 
     private void testParseFakeSemicolon() {
-        Assert.assertThatCode(() -> {
+        Assertions.assertThatCode(() -> {
             List<Token> input = new List<>(
                 f.word("foo"),
                 f.word("bar"),

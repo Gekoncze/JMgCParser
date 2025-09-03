@@ -12,12 +12,13 @@ import cz.mg.c.entities.types.CType;
 import cz.mg.c.parser.components.CTypeChain;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.parser.exceptions.ParseException;
-import cz.mg.token.test.BracketFactory;
 import cz.mg.c.parser.test.TypeUtils;
 import cz.mg.collections.list.List;
 import cz.mg.collections.set.Set;
 import cz.mg.test.Assert;
+import cz.mg.test.Assertions;
 import cz.mg.token.Token;
+import cz.mg.token.test.BracketFactory;
 import cz.mg.token.test.TokenFactory;
 
 public @Test class FunctionParserTest {
@@ -45,7 +46,7 @@ public @Test class FunctionParserTest {
     private final @Service TokenFactory f = TokenFactory.getInstance();
 
     private void testEmpty() {
-        Assert.assertThatCode(() -> {
+        Assertions.assertThatCode(() -> {
             parser.parse(new TokenReader(new List<>()), createVoid());
         }).throwsException(ParseException.class);
     }
@@ -216,7 +217,7 @@ public @Test class FunctionParserTest {
     }
 
     private void testInterfaceInvalidInput() {
-        Assert.assertThatCode(() -> {
+        Assertions.assertThatCode(() -> {
             List<Token> input = new List<>(
                 f.word("foobar"),
                 b.roundBrackets(

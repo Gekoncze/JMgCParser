@@ -9,10 +9,11 @@ import cz.mg.c.entities.types.CPointerType;
 import cz.mg.c.entities.types.CType;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.parser.exceptions.ParseException;
-import cz.mg.token.test.BracketFactory;
 import cz.mg.c.parser.test.TypeUtils;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
+import cz.mg.test.Assertions;
+import cz.mg.token.test.BracketFactory;
 import cz.mg.token.test.TokenFactory;
 
 public @Test class TypedefParserTest {
@@ -37,7 +38,7 @@ public @Test class TypedefParserTest {
     private final @Service BracketFactory b = BracketFactory.getInstance();
 
     private void testEmpty() {
-        Assert.assertThatCode(() -> {
+        Assertions.assertThatCode(() -> {
             parser.parse(new TokenReader(new List<>()));
         }).throwsException(ParseException.class);
     }

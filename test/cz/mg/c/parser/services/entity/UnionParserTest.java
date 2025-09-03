@@ -10,6 +10,7 @@ import cz.mg.c.entities.types.CPointerType;
 import cz.mg.c.entities.types.CType;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.parser.exceptions.ParseException;
+import cz.mg.test.Assertions;
 import cz.mg.token.test.BracketFactory;
 import cz.mg.c.parser.test.TypeUtils;
 import cz.mg.collections.list.List;
@@ -38,7 +39,7 @@ public @Test class UnionParserTest {
     private final @Service TokenFactory f = TokenFactory.getInstance();
 
     private void testEmpty() {
-        Assert.assertThatCode(() -> {
+        Assertions.assertThatCode(() -> {
             parser.parse(new TokenReader(new List<>()));
         }).throwsException(ParseException.class);
     }
@@ -127,7 +128,7 @@ public @Test class UnionParserTest {
     }
 
     private void testInvalid() {
-        Assert.assertThatCode(() -> {
+        Assertions.assertThatCode(() -> {
             parser.parse(new TokenReader(new List<>(
                 f.word("union"),
                 f.word("FooBar"),

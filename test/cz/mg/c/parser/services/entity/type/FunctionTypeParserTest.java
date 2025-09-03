@@ -10,6 +10,7 @@ import cz.mg.c.entities.types.*;
 import cz.mg.c.parser.components.CTypeChain;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.parser.exceptions.ParseException;
+import cz.mg.test.Assertions;
 import cz.mg.token.test.BracketFactory;
 import cz.mg.c.parser.test.TypeUtils;
 import cz.mg.collections.list.List;
@@ -35,7 +36,7 @@ public @Test class FunctionTypeParserTest {
     private final @Service TokenFactory f = TokenFactory.getInstance();
 
     private void testParseEmpty() {
-        Assert.assertThatCode(() -> {
+        Assertions.assertThatCode(() -> {
             parser.parse(new TokenReader(new List<>()), createVoid());
         }).throwsException(ParseException.class);
     }

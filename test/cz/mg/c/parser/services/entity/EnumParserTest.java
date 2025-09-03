@@ -5,6 +5,7 @@ import cz.mg.annotations.classes.Test;
 import cz.mg.c.entities.CEnum;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.parser.exceptions.ParseException;
+import cz.mg.test.Assertions;
 import cz.mg.token.test.BracketFactory;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
@@ -32,7 +33,7 @@ public @Test class EnumParserTest {
     private final @Service TokenFactory f = TokenFactory.getInstance();
 
     private void testEmpty() {
-        Assert.assertThatCode(() -> {
+        Assertions.assertThatCode(() -> {
             parser.parse(new TokenReader(new List<>()));
         }).throwsException(ParseException.class);
     }
@@ -110,7 +111,7 @@ public @Test class EnumParserTest {
     }
 
     private void testIllegalEntry() {
-        Assert.assertThatCode(() -> {
+        Assertions.assertThatCode(() -> {
             parser.parse(new TokenReader(new List<>(
                 f.word("enum"),
                 f.word("NomNom"),

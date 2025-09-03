@@ -2,12 +2,12 @@ package cz.mg.c.parser.services.bracket;
 
 import cz.mg.annotations.classes.Service;
 import cz.mg.annotations.classes.Test;
-import cz.mg.token.test.BracketFactory;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
 import cz.mg.token.Token;
-import cz.mg.token.test.TokenFactory;
+import cz.mg.token.test.BracketFactory;
 import cz.mg.token.test.TokenAssertions;
+import cz.mg.token.test.TokenFactory;
 
 public @Test class BracketParsersTest {
     public static void main(String[] args) {

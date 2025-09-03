@@ -7,6 +7,7 @@ import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.parser.exceptions.ParseException;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
+import cz.mg.test.Assertions;
 import cz.mg.token.Token;
 import cz.mg.token.test.TokenFactory;
 
@@ -26,7 +27,7 @@ public @Test class EnumEntryParserTest {
     private final @Service TokenFactory f = TokenFactory.getInstance();
 
     private void testEmpty() {
-        Assert.assertThatCode(() -> {
+        Assertions.assertThatCode(() -> {
             parser.parse(new TokenReader(new List<>()));
         }).throwsException(ParseException.class);
     }

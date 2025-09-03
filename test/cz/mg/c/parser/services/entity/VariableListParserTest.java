@@ -7,6 +7,7 @@ import cz.mg.c.entities.types.CBaseType;
 import cz.mg.c.entities.types.CPointerType;
 import cz.mg.c.entities.types.CType;
 import cz.mg.c.parser.exceptions.ParseException;
+import cz.mg.test.Assertions;
 import cz.mg.token.test.BracketFactory;
 import cz.mg.c.parser.test.TypeUtils;
 import cz.mg.collections.list.List;
@@ -37,7 +38,7 @@ public @Test class VariableListParserTest {
     }
 
     private void testParseIllegalList() {
-        Assert.assertThatCode(() -> {
+        Assertions.assertThatCode(() -> {
             parser.parse(b.roundBrackets(f.symbol(",")));
         }).throwsException(ParseException.class);
     }
