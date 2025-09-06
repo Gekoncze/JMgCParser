@@ -6,8 +6,8 @@ import cz.mg.c.parser.components.TokenReader;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
 import cz.mg.token.Token;
+import cz.mg.token.test.TokenAssert;
 import cz.mg.token.test.TokenFactory;
-import cz.mg.token.test.TokenAssertions;
 
 public @Test class ListParserTest {
     public static void main(String[] args) {
@@ -23,7 +23,6 @@ public @Test class ListParserTest {
     }
 
     private final @Service ListParser parser = ListParser.getInstance();
-    private final @Service TokenAssertions assertions = TokenAssertions.getInstance();
     private final @Service TokenFactory f = TokenFactory.getInstance();
 
     private void testParseEmpty() {
@@ -54,14 +53,14 @@ public @Test class ListParserTest {
         );
         List<List<Token>> output = parser.parse(new TokenReader(input));
         Assert.assertEquals(3, output.count());
-        assertions.assertEquals(new List<>(
+        TokenAssert.assertEquals(new List<>(
             f.word("foo"),
             f.word("bar")
         ), output.get(0));
-        assertions.assertEquals(new List<>(
+        TokenAssert.assertEquals(new List<>(
             f.symbol(".")
         ), output.get(1));
-        assertions.assertEquals(new List<>(
+        TokenAssert.assertEquals(new List<>(
             f.number("11"),
             f.symbol("+"),
             f.number("0")

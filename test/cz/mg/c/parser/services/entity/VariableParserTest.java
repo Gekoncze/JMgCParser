@@ -6,22 +6,22 @@ import cz.mg.annotations.requirement.Mandatory;
 import cz.mg.c.entities.CFunction;
 import cz.mg.c.entities.CModifier;
 import cz.mg.c.entities.CStruct;
+import cz.mg.c.entities.CVariable;
 import cz.mg.c.entities.types.CArrayType;
 import cz.mg.c.entities.types.CBaseType;
 import cz.mg.c.entities.types.CPointerType;
 import cz.mg.c.entities.types.CType;
-import cz.mg.c.entities.CVariable;
 import cz.mg.c.parser.components.CTypeChain;
 import cz.mg.c.parser.components.TokenReader;
 import cz.mg.c.parser.exceptions.ParseException;
-import cz.mg.test.Assertions;
-import cz.mg.token.test.BracketFactory;
 import cz.mg.c.parser.test.TypeUtils;
 import cz.mg.collections.list.List;
 import cz.mg.test.Assert;
-import cz.mg.token.tokens.SymbolToken;
+import cz.mg.test.Assertions;
+import cz.mg.token.test.BracketFactory;
+import cz.mg.token.test.TokenAssert;
 import cz.mg.token.test.TokenFactory;
-import cz.mg.token.test.TokenAssertions;
+import cz.mg.token.tokens.SymbolToken;
 
 public @Test class VariableParserTest {
     public static void main(String[] args) {
@@ -54,7 +54,6 @@ public @Test class VariableParserTest {
     }
 
     private final @Service VariableParser parser = VariableParser.getInstance();
-    private final @Service TokenAssertions assertions = TokenAssertions.getInstance();
     private final @Service BracketFactory b = BracketFactory.getInstance();
     private final @Service TokenFactory f = TokenFactory.getInstance();
 
@@ -169,7 +168,7 @@ public @Test class VariableParserTest {
         Assert.assertEquals("bar", variable.getName());
         Assert.assertEquals(CArrayType.class, types.get(0).getClass());
         Assert.assertEquals(CBaseType.class, types.get(1).getClass());
-        assertions.assertEquals(
+        TokenAssert.assertEquals(
             new List<>(f.number("12")),
             ((CArrayType)types.get(0)).getExpression()
         );
@@ -200,16 +199,16 @@ public @Test class VariableParserTest {
         Assert.assertEquals(CArrayType.class, types.get(1).getClass());
         Assert.assertEquals(CArrayType.class, types.get(2).getClass());
         Assert.assertEquals(CBaseType.class, types.get(3).getClass());
-        assertions.assertEquals(
+        TokenAssert.assertEquals(
             new List<>(f.number("9")),
             ((CArrayType)types.get(0)).getExpression()
         );
-        assertions.assertEquals(
+        TokenAssert.assertEquals(
             new List<>(f.number("3")),
             ((CArrayType)types.get(1)).getExpression()
 
         );
-        assertions.assertEquals(
+        TokenAssert.assertEquals(
             new List<>(f.number("1")),
             ((CArrayType)types.get(2)).getExpression()
         );
@@ -233,7 +232,7 @@ public @Test class VariableParserTest {
         List<CType> types = TypeUtils.flatten(variable.getType());
 
         Assert.assertEquals("bar", variable.getName());
-        assertions.assertEquals(
+        TokenAssert.assertEquals(
             new List<>(
                 f.number("12"),
                 f.symbol("+"),
@@ -271,7 +270,7 @@ public @Test class VariableParserTest {
         Assert.assertEquals(CArrayType.class, types.get(0).getClass());
         Assert.assertEquals(CPointerType.class, types.get(1).getClass());
         Assert.assertEquals(CBaseType.class, types.get(2).getClass());
-        assertions.assertEquals(
+        TokenAssert.assertEquals(
             new List<>(f.number("2")),
             ((CArrayType)types.get(0)).getExpression()
         );
@@ -300,7 +299,7 @@ public @Test class VariableParserTest {
         Assert.assertEquals(CArrayType.class, types.get(0).getClass());
         Assert.assertEquals(CPointerType.class, types.get(1).getClass());
         Assert.assertEquals(CBaseType.class, types.get(2).getClass());
-        assertions.assertEquals(
+        TokenAssert.assertEquals(
             new List<>(
                 f.number("12"),
                 f.symbol("+"),
@@ -370,7 +369,7 @@ public @Test class VariableParserTest {
         Assert.assertEquals("foo", variable.getName());
         Assert.assertEquals("int", ((CBaseType)variable.getType()).getTypename().getName());
         Assert.assertNotNull(variable.getExpression());
-        assertions.assertEquals(
+        TokenAssert.assertEquals(
             new List<>(f.number("1"), f.symbol("+"), f.number("2")),
             variable.getExpression()
         );
@@ -394,7 +393,7 @@ public @Test class VariableParserTest {
         Assert.assertEquals("foo", variable.getName());
         Assert.assertSame(type, variable.getType());
         Assert.assertNotNull(variable.getExpression());
-        assertions.assertEquals(
+        TokenAssert.assertEquals(
             new List<>(f.number("1"), f.symbol("+"), f.number("2")),
             variable.getExpression()
         );
@@ -480,11 +479,11 @@ public @Test class VariableParserTest {
         Assert.assertEquals("bar", variables.get(1).getName());
         Assert.assertEquals(true, variables.get(0).getType() instanceof CArrayType);
         Assert.assertEquals(true, variables.get(1).getType() instanceof CArrayType);
-        assertions.assertEquals(
+        TokenAssert.assertEquals(
             new List<>(f.number("2")),
             ((CArrayType)variables.get(0).getType()).getExpression()
         );
-        assertions.assertEquals(
+        TokenAssert.assertEquals(
             new List<>(f.number("3")),
             ((CArrayType)variables.get(1).getType()).getExpression()
         );

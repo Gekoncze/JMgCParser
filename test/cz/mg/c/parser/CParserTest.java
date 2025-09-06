@@ -16,7 +16,6 @@ import cz.mg.collections.list.List;
 import cz.mg.file.File;
 import cz.mg.test.Assert;
 import cz.mg.test.Assertions;
-import cz.mg.test.BiAssertions;
 import cz.mg.token.Position;
 import cz.mg.token.Token;
 import cz.mg.token.tokens.WordToken;
@@ -215,34 +214,31 @@ public @Test class CParserTest {
             }
         }
 
-        BiAssertions.assertThat(
-            new List<>(
+        Assertions.assertThatCollection(entityNames)
+            .withDetails(", ")
+            .isEqualTo(new List<>(
                 "missing",
                 "internalTrue",
                 "externalTrue",
                 "allDefined",
                 "correct",
                 "main"
-            ),
-            entityNames
-        ).verbose(", ").areEqual();
+            ));
 
         List<String> macroNames = new List<>();
         for (Macro macro : macros.getDefinitions()) {
             macroNames.addLast(macro.getName().getText());
         }
 
-        BiAssertions.assertThat(
-            new List<>(
+        Assertions.assertThatCollection(macroNames)
+            .withDetails(", ")
+            .isEqualTo(new List<>(
                 "EXTERNAL_CONDITION",
                 "INTERNAL_CONDITION",
                 "AVERAGE",
                 "FALSE",
                 "TRUE"
-            ),
-            macroNames
-        ).verbose(", ").areEqual();
-
+            ));
 
         Assert.assertSame(externalCondition, macros.getDefinitions().get(0));
 
